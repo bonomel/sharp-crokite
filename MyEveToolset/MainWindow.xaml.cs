@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using MyEveToolset.Data;
 using MyEveToolset.Data.Queries;
 using MyEveToolset.PriceUpdater;
@@ -30,7 +32,6 @@ namespace MyEveToolset
                 return harvestables;
             }
         }
-
 
         public MainWindow()
         {
@@ -82,6 +83,15 @@ namespace MyEveToolset
             priceUpdateController.DeleteAllPrices();
 
             ReloadGrid();
+        }
+
+        private void OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            DataGridRow row = sender as DataGridRow;
+            if (row != null)
+            {
+                row.DetailsVisibility = row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            }
         }
 
         private void ReloadGrid()

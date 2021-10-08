@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyEveToolset.Data;
 
 namespace MyEveToolset.Data.Migrations
 {
     [DbContext(typeof(MyEveToolDbContext))]
-    partial class MyEveToolDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211008171137_AddIcons")]
+    partial class AddIcons
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

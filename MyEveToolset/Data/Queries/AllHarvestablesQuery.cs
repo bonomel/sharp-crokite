@@ -25,8 +25,9 @@ namespace MyEveToolset.Data.Queries
                 harvestableViewModels.Add(new HarvestableViewModel
                 {
                     HarvestableId = harvestable.HarvestableId,
-                    Price = harvestable.Prices.FirstOrDefault() != null ? harvestable.Prices.First().SellMax : 0,
+                    Icon = harvestable.Icon,
                     Name = harvestable.Name,
+                    Price = harvestable.Prices.FirstOrDefault() != null ? harvestable.Prices.First().SellMax : 0,
                     MaterialContents = MaterialContentsAsString(harvestable.MaterialContents),
                     Description = harvestable.Description,
                     IsCompressedVariantOfType = harvestable.IsCompressedVariantOfType
@@ -45,7 +46,10 @@ namespace MyEveToolset.Data.Queries
                 materialContentStringBuilder.Append($"{dbContext.Materials.Find(material.MaterialId).Name}: {material.Quantity}\n");
             }
 
-            return materialContentStringBuilder.ToString();
+            string materialContentString = materialContentStringBuilder.ToString();
+            string materialContentStringTrimmed = materialContentString.Substring(0, materialContentString.Length - 2);
+
+            return materialContentStringTrimmed;
         }
 
         //private IList<MaterialContentViewModel> FindMaterialContentsForHarvestable(int harvestableId)

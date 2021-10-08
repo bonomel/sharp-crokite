@@ -1,6 +1,7 @@
 ﻿using MyEveToolset.Data;
 using MyEveToolset.Data.Models;
 using MyEveToolset.StaticDataUpdater.JSONModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -47,14 +48,17 @@ namespace MyEveToolset.StaticDataUpdater
             foreach(Material material in materials)
             {
                 Material existingMaterial = dbContext.Materials.Find(material.MaterialId);
+                byte[] icon = dataRetriever.GetIconForTypeId(material.MaterialId);
 
                 if (existingMaterial != null)
                 {
                     existingMaterial.Name = material.Name;
                     existingMaterial.Description = material.Description;
+                    existingMaterial.Icon = icon;
                 }
                 else
                 {
+                    material.Icon = icon;
                     dbContext.Add(material);
                 }
             }
@@ -62,6 +66,7 @@ namespace MyEveToolset.StaticDataUpdater
             foreach (Harvestable harvestable in harvestables)
             {
                 Harvestable existingHarvestable = dbContext.Harvestables.Find(harvestable.HarvestableId);
+                byte[] icon = dataRetriever.GetIconForTypeId(harvestable.HarvestableId);
 
                 if (existingHarvestable != null)
                 {
@@ -69,9 +74,11 @@ namespace MyEveToolset.StaticDataUpdater
                     existingHarvestable.Description = harvestable.Description;
                     existingHarvestable.IsCompressedVariantOfType = harvestable.IsCompressedVariantOfType;
                     existingHarvestable.MaterialContents = harvestable.MaterialContents;
+                    existingHarvestable.Icon = icon;
                 }
                 else
                 {
+                    harvestable.Icon = icon;
                     dbContext.Add(harvestable);
                 }
             }

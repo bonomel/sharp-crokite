@@ -24,18 +24,18 @@ namespace MyEveToolset.PriceUpdater
 
             IList<string> batchedUrls = CreateBatchedUrls(batches);
 
-            IEnumerable<EveMarketerPricesJson> priceJson = RetrievePricesAsJson(batchedUrls);
+            IEnumerable<EveMarketerPricesJSON> priceJson = RetrievePricesAsJson(batchedUrls);
 
             IList<PriceDto> priceDtos = TransformToPriceDtos(priceJson);
 
             return priceDtos;
         }
 
-        private IList<PriceDto> TransformToPriceDtos(IEnumerable<EveMarketerPricesJson> priceJson)
+        private IList<PriceDto> TransformToPriceDtos(IEnumerable<EveMarketerPricesJSON> priceJson)
         {
             List<PriceDto> priceDtos = new();
 
-            foreach(EveMarketerPricesJson json in priceJson)
+            foreach(EveMarketerPricesJSON json in priceJson)
             {
                 priceDtos.Add(new PriceDto()
                 {
@@ -52,11 +52,11 @@ namespace MyEveToolset.PriceUpdater
             return priceDtos;
         }
 
-        private IEnumerable<EveMarketerPricesJson> RetrievePricesAsJson(IList<string> batchedUrls)
+        private IEnumerable<EveMarketerPricesJSON> RetrievePricesAsJson(IList<string> batchedUrls)
         {
             using HttpClient client = new();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            List<EveMarketerPricesJson> priceJson = new();
+            List<EveMarketerPricesJSON> priceJson = new();
             foreach(string url in batchedUrls)
             {
                 HttpResponseMessage response = client.GetAsync(url).Result;
@@ -65,7 +65,7 @@ namespace MyEveToolset.PriceUpdater
                 {
                     string responseString = response.Content.ReadAsStringAsync().Result;
 
-                    List<EveMarketerPricesJson> batchJsonResult = JsonSerializer.Deserialize<List<EveMarketerPricesJson>>(responseString);
+                    List<EveMarketerPricesJSON> batchJsonResult = JsonSerializer.Deserialize<List<EveMarketerPricesJSON>>(responseString);
 
                     priceJson.AddRange(batchJsonResult);
                 }
