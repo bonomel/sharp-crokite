@@ -16,10 +16,12 @@ namespace MyEveToolset.StaticDataUpdater
     {
         private const string EsiBaseUrl = "https://esi.evetech.net/latest/";
         private const string MaterialContentUrl = "http://sde.zzeve.com/invTypeMaterials.json";
+        private const string EveTechBaseUrl = "https://images.evetech.net/types/";
         private const string UniverseRoute = "universe/";
         private const string CategoriesRoutePart = "categories/";
         private const string GroupsRoutePart = "groups/";
         private const string TypesRoutePart = "types/";
+        private const string IconRoutePart = "icon/";
 
         private List<ICategoryJSON> categories;
         private int maxTries = 3;
@@ -75,6 +77,16 @@ namespace MyEveToolset.StaticDataUpdater
             }
 
             return materialTypesPerGroup;
+        }
+
+        internal byte[] GetIconForTypeId(int typeId)
+        {
+            using WebClient client = new();
+            Uri uri = new($"{EveTechBaseUrl}{typeId}/{IconRoutePart}");
+
+            byte[] responseStream = client.DownloadData(uri.AbsoluteUri);
+
+            return responseStream;
         }
 
         public IEnumerable<IMaterialContentJSON> RetrieveMaterialContent()

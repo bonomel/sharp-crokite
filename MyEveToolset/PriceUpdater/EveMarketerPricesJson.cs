@@ -1,6 +1,6 @@
 ﻿namespace MyEveToolset.PriceUpdater
 {
-    public class EveMarketerPricesJson
+    public class EveMarketerPricesJSON
     { 
         public Buy buy { get; set; }
         public Sell sell { get; set; }

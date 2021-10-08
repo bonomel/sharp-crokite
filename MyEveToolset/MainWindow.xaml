@@ -15,14 +15,61 @@
             </TabItem>
             <TabItem Header="Market Data">
                 <Grid>
-                    <StackPanel Orientation="Horizontal" Height="45
-                                " VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal" Height="45" VerticalAlignment="Top">
                         <Button Content="Update Static Data" Name="UpdateStaticDataButton" Click="UpdateStaticDataButton_Click" Width="160" Margin="10,10,0,5"/>
                         <Button Content="Delete Static Data" Name="DeleteStaticDataButton" Click="DeleteStaticDataButton_Click" Width="160" Margin="5,10,0,5"/>
                         <Button Content="Update Prices" Name="UpdatePriceDataButton" Click="UpdatePriceDataButton_Click" Width="160" Margin="5,10,0,5"/>
                         <Button Content="Delete Prices" Name="DeletePriceDataButton" Click="DeletePriceDataButton_Click" Width="160" Margin="5,10,0,5"/>
                     </StackPanel>
-                    <DataGrid Name="HarvestablesDataGrid" Margin="10,50,10,10" IsReadOnly="true" />
+                    <DataGrid Name="HarvestablesDataGrid" Margin="10,50,10,10" IsReadOnly="true" AutoGenerateColumns="False" 
+                              HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray"
+                              CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False"
+                              HeadersVisibility="Column" CanUserReorderColumns="False">
+                        <DataGrid.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.CellStyle>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn  Header="Icon">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding Icon}" Width="48" Height="48" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="100" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="240">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Margin" Value="5,5,5,5" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Price" Binding="{Binding Price}"  Width="160">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Margin" Value="5,5,5,5" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Material Content" Binding="{Binding MaterialContents}" Width="240">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Margin" Value="5,5,5,5" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
             <TabItem Header="Settings">
