@@ -7,9 +7,9 @@ namespace MyEveToolset.PriceUpdater
 {
     public class PriceUpdater
     {
-        private readonly MyEveToolDbContext dbContext;
+        private readonly SharpCrokiteDbContext dbContext;
 
-        public PriceUpdater(MyEveToolDbContext dbContext)
+        public PriceUpdater(SharpCrokiteDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

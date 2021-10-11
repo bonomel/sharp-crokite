@@ -5,9 +5,9 @@ namespace MyEveToolset.Data.Queries
 {
     public class AllMaterialIdsQuery
     {
-        private readonly MyEveToolDbContext dbContext;
+        private readonly SharpCrokiteDbContext dbContext;
 
-        public AllMaterialIdsQuery(MyEveToolDbContext dbContext)
+        public AllMaterialIdsQuery(SharpCrokiteDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

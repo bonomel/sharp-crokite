@@ -14,9 +14,9 @@ namespace MyEveToolset
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class SharpCrokiteMainWindow : Window
     {
-        private readonly MyEveToolDbContext dbContext;
+        private readonly SharpCrokiteDbContext dbContext;
 
         private IEnumerable<HarvestableViewModel> harvestables;
 
@@ -33,12 +33,12 @@ namespace MyEveToolset
             }
         }
 
-        public MainWindow()
+        public SharpCrokiteMainWindow()
         {
             InitializeComponent();
         }
 
-        public MainWindow(MyEveToolDbContext dbContext) : this()
+        public SharpCrokiteMainWindow(SharpCrokiteDbContext dbContext) : this()
         {
             this.dbContext = dbContext;
 

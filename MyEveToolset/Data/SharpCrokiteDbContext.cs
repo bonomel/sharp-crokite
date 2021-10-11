@@ -3,7 +3,7 @@ using MyEveToolset.Data.Models;
 
 namespace MyEveToolset.Data
 {
-    public class MyEveToolDbContext : DbContext
+    public class SharpCrokiteDbContext : DbContext
     {
         public DbSet<Harvestable> Harvestables { get; set; }
         public DbSet<MaterialContent> MaterialContents { get; set; }
@@ -12,7 +12,7 @@ namespace MyEveToolset.Data
 
         public string DbPath { get; set; }
 
-        public MyEveToolDbContext()
+        public SharpCrokiteDbContext()
         {
             DbPath = @"C:\Projects\sharp-crokite\MyEveToolset\Data\myevetool.db";
         }
