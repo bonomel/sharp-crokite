@@ -14,7 +14,7 @@ namespace MyEveToolset.Data
 
         public SharpCrokiteDbContext()
         {
-            DbPath = @"C:\Projects\sharp-crokite\MyEveToolset\Data\myevetool.db";
+            DbPath = @"C:\Projects\sharp-crokite\SharpCrokite.Core\Data\myevetool.db";
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
