@@ -10,12 +10,10 @@ namespace MyEveToolset
     {
         private void Startup_App(object sender, StartupEventArgs e)
         {
-            MyEveToolDbContext dbContext = new();
-            MainWindow window = new MainWindow(dbContext);
+            SharpCrokiteDbContext dbContext = new();
+            SharpCrokiteMainWindow sharpCrokiteMainWindow = new SharpCrokiteMainWindow(dbContext);
 
-            window.Title = "My EVE Tool";
-
-            window.Show();
+            sharpCrokiteMainWindow.Show();
         }
     }
 }

@@ -9,11 +9,11 @@ namespace MyEveToolset.StaticDataUpdater
 {
     public class StaticDataUpdateController
     {
-        private readonly MyEveToolDbContext dbContext;
+        private readonly SharpCrokiteDbContext dbContext;
         private readonly StaticDataRetriever dataRetriever;
         private readonly EsiJSONToDataModelConverter converter;
 
-        public StaticDataUpdateController(MyEveToolDbContext dbContext, StaticDataRetriever dataRetriever, EsiJSONToDataModelConverter converter)
+        public StaticDataUpdateController(SharpCrokiteDbContext dbContext, StaticDataRetriever dataRetriever, EsiJSONToDataModelConverter converter)
         {
             this.dbContext = dbContext;
             this.dataRetriever = dataRetriever;

@@ -5,9 +5,9 @@ namespace MyEveToolset.Data.Queries
 {
     public class AllHarvestableIdsQuery
     {
-        private readonly MyEveToolDbContext dbContext;
+        private readonly SharpCrokiteDbContext dbContext;
 
-        public AllHarvestableIdsQuery(MyEveToolDbContext dbContext)
+        public AllHarvestableIdsQuery(SharpCrokiteDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

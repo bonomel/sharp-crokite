@@ -8,7 +8,7 @@ using MyEveToolset.Data;
 
 namespace MyEveToolset.Data.Migrations
 {
-    [DbContext(typeof(MyEveToolDbContext))]
+    [DbContext(typeof(SharpCrokiteDbContext))]
     [Migration("20211005123222_InitialCreate")]
     partial class InitialCreate
     {

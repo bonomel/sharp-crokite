@@ -7,10 +7,10 @@ namespace MyEveToolset.PriceUpdater
 {
     public class PriceUpdateController
     {
-        private readonly MyEveToolDbContext dbContext;
+        private readonly SharpCrokiteDbContext dbContext;
         private readonly EveMarketerPriceRetriever priceRetriever;
         
-        public PriceUpdateController(MyEveToolDbContext dbContext, EveMarketerPriceRetriever priceRetriever)
+        public PriceUpdateController(SharpCrokiteDbContext dbContext, EveMarketerPriceRetriever priceRetriever)
         {
             this.dbContext = dbContext;
             this.priceRetriever = priceRetriever;

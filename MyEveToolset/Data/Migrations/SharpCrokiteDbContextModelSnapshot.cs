@@ -7,8 +7,8 @@ using MyEveToolset.Data;
 
 namespace MyEveToolset.Data.Migrations
 {
-    [DbContext(typeof(MyEveToolDbContext))]
-    partial class MyEveToolDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(SharpCrokiteDbContext))]
+    partial class SharpCrokiteDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
