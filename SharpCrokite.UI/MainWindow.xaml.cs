@@ -19,14 +19,13 @@ namespace SharpCrokite.UI
         private readonly SharpCrokiteDbContext dbContext;
 
         private IEnumerable<HarvestableViewModel> harvestables;
-
         private IEnumerable<HarvestableViewModel> Harvestables
         {
             get
             {
                 if(harvestables == null)
                 {
-                    var harvestablesQuery = new AllHarvestablesQuery(dbContext);
+                    var harvestablesQuery = new AllHarvestablesQuery(new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
                     harvestables = harvestablesQuery.Execute();
                 }
                 return harvestables;
