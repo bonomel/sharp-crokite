@@ -12,7 +12,7 @@ using SharpCrokite.Core.StaticDataUpdater.JSONModels;
 
 namespace SharpCrokite.Core.StaticDataUpdater
 {
-    public class StaticDataRetriever
+    public class EsiStaticDataRetriever
     {
         private const string EsiBaseUrl = "https://esi.evetech.net/latest/";
         private const string MaterialContentUrl = "http://sde.zzeve.com/invTypeMaterials.json";

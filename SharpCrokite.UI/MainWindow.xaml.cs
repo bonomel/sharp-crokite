@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using SharpCrokite.Core.ViewModels;
 using SharpCrokite.Core.PriceUpdater;
 using SharpCrokite.DataAccess.Queries;
@@ -12,7 +10,7 @@ using SharpCrokite.Infrastructure.Repositories;
 using System;
 
 namespace SharpCrokite.UI
-{ 
+{
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -49,7 +47,7 @@ namespace SharpCrokite.UI
 
         private void UpdateStaticDataButton_Click(object sender, RoutedEventArgs e)
         {
-            var staticDataUpdateController = new StaticDataUpdateController(new StaticDataRetriever(), new EsiJSONToDataModelConverter(),
+            var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(),
                 new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
 
             try
@@ -71,7 +69,7 @@ namespace SharpCrokite.UI
 
         private void DeleteStaticDataButton_Click(object sender, RoutedEventArgs e)
         {
-            var staticDataUpdateController = new StaticDataUpdateController(new StaticDataRetriever(), new EsiJSONToDataModelConverter(), 
+            var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(), 
                 new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
             staticDataUpdateController.DeleteAllStaticData();
 
@@ -80,7 +78,8 @@ namespace SharpCrokite.UI
 
         private void UpdatePriceDataButton_Click(object sender, RoutedEventArgs e)
         {
-            var priceUpdateController = new PriceUpdateController(new EveMarketerPriceRetriever(), new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
+            var priceUpdateController = new PriceUpdateController(new EveMarketerPriceRetriever(), 
+                new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
             priceUpdateController.UpdatePrices();
 
             ReloadGrid();
@@ -88,7 +87,8 @@ namespace SharpCrokite.UI
 
         private void DeletePriceDataButton_Click(object sender, RoutedEventArgs e)
         {
-            var priceUpdateController = new PriceUpdateController(new EveMarketerPriceRetriever(), new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
+            var priceUpdateController = new PriceUpdateController(new EveMarketerPriceRetriever(), 
+                new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
             priceUpdateController.DeleteAllPrices();
 
             ReloadGrid();

@@ -6,9 +6,9 @@ using System.Text.RegularExpressions;
 
 namespace SharpCrokite.Core.StaticDataUpdater
 {
-    public class EsiJSONToDataModelConverter
+    public static class EsiJSONToDataModelConverter
     {
-        internal IEnumerable<Material> CreateMaterialsFromJSON(IEnumerable<IEnumerable<ITypeJSON>> materialTypesPerGroup)
+        internal static IEnumerable<Material> CreateMaterialsFromJSON(IEnumerable<IEnumerable<ITypeJSON>> materialTypesPerGroup)
         {
             List<Material> materials = new();
 
@@ -30,7 +30,8 @@ namespace SharpCrokite.Core.StaticDataUpdater
             return materials;
         }
 
-        internal IEnumerable<Harvestable> CreateHarvestablesFromJSON(IEnumerable<IEnumerable<ITypeJSON>> asteroidTypesPerGroup, IEnumerable<IMaterialContentJSON> materialContent)
+        internal static IEnumerable<Harvestable> CreateHarvestablesFromJSON(IEnumerable<IEnumerable<ITypeJSON>> asteroidTypesPerGroup, 
+            IEnumerable<IMaterialContentJSON> materialContent)
         {
             List<Harvestable> harvestables = new();
             List<IMaterialContentJSON> materials = materialContent.ToList();
@@ -71,7 +72,7 @@ namespace SharpCrokite.Core.StaticDataUpdater
             return Regex.Replace(stringToRemoveFrom, "<.*?>", string.Empty);
         }
 
-        private void SetCompressedVariantIds(List<Harvestable> harvestables)
+        private static void SetCompressedVariantIds(List<Harvestable> harvestables)
         {
             foreach(var harvestable in harvestables)
             {
