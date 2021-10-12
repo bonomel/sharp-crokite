@@ -1,39 +1,49 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SharpCrokite.DataAccess;
+using SharpCrokite.DataAccess.Models;
 using SharpCrokite.DataAccess.Queries;
+using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.PriceUpdater
 {
     public class PriceUpdateController
     {
-        private readonly SharpCrokiteDbContext dbContext;
+        private readonly IRepository<Harvestable> harvestableRepository;
+        private readonly IRepository<Material> materialRepository;
+
         private readonly EveMarketerPriceRetriever priceRetriever;
         
-        public PriceUpdateController(SharpCrokiteDbContext dbContext, EveMarketerPriceRetriever priceRetriever)
+        public PriceUpdateController(EveMarketerPriceRetriever priceRetriever,
+            IRepository<Harvestable> harvestableRepository,
+            IRepository<Material> materialRepository)
         {
-            this.dbContext = dbContext;
             this.priceRetriever = priceRetriever;
+            this.harvestableRepository = harvestableRepository;
+            this.materialRepository = materialRepository;
         }
 
         public void UpdatePrices()
         {
-            IList<int> listOfHarvestableIds = new AllHarvestableIdsQuery(dbContext).Execute();
-            IList<int> listOfMaterialIds = new AllMaterialIdsQuery(dbContext).Execute();
+            IList<int> listOfHarvestableIds = harvestableRepository.All().Select(h => h.HarvestableId).ToList();
+            IList<int> listOfMaterialIds = materialRepository.All().Select(m => m.MaterialId).ToList();
 
             IList<int> allTypeIds = listOfHarvestableIds.Concat(listOfMaterialIds).ToList();
 
             IList<PriceDto> prices = priceRetriever.Retrieve(allTypeIds);
 
-            PriceUpdater priceUpdater = new(dbContext);
+            PriceUpdater priceUpdater = new(harvestableRepository, materialRepository);
 
             priceUpdater.Update(prices);
         }
 
         public void DeleteAllPrices()
         {
-            dbContext.Prices.RemoveRange(dbContext.Prices);
-            dbContext.SaveChanges();
+            harvestableRepository.All().ToList().ForEach(h => h.Prices = new List<Price>());
+            materialRepository.All().ToList().ForEach(m => m.Prices = new List<Price>());
+
+            harvestableRepository.SaveChanges();
+            materialRepository.SaveChanges();
         }
     }
 }

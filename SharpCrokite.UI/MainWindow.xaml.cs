@@ -80,7 +80,7 @@ namespace SharpCrokite.UI
 
         private void UpdatePriceDataButton_Click(object sender, RoutedEventArgs e)
         {
-            var priceUpdateController = new PriceUpdateController(dbContext, new EveMarketerPriceRetriever());
+            var priceUpdateController = new PriceUpdateController(new EveMarketerPriceRetriever(), new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
             priceUpdateController.UpdatePrices();
 
             ReloadGrid();
@@ -88,19 +88,10 @@ namespace SharpCrokite.UI
 
         private void DeletePriceDataButton_Click(object sender, RoutedEventArgs e)
         {
-            var priceUpdateController = new PriceUpdateController(dbContext, new EveMarketerPriceRetriever());
+            var priceUpdateController = new PriceUpdateController(new EveMarketerPriceRetriever(), new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
             priceUpdateController.DeleteAllPrices();
 
             ReloadGrid();
-        }
-
-        private void OnMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            DataGridRow row = sender as DataGridRow;
-            if (row != null)
-            {
-                row.DetailsVisibility = row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-            }
         }
 
         private void ReloadGrid()

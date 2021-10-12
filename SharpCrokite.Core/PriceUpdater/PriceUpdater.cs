@@ -1,25 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using SharpCrokite.DataAccess;
 using SharpCrokite.DataAccess.Models;
+using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.PriceUpdater
 {
     public class PriceUpdater
     {
-        private readonly SharpCrokiteDbContext dbContext;
+        private readonly IRepository<Harvestable> harvestableRepository;
+        private readonly IRepository<Material> materialRepository;
 
-        public PriceUpdater(SharpCrokiteDbContext dbContext)
+        public PriceUpdater(IRepository<Harvestable> harvestableRepository, IRepository<Material> materialRepository)
         {
-            this.dbContext = dbContext;
+            this.harvestableRepository = harvestableRepository;
+            this.materialRepository = materialRepository;
         }
 
         internal void Update(IList<PriceDto> priceDtos)
         {
             foreach(PriceDto dto in priceDtos)
             {
-                Harvestable harvestable = dbContext.Find<Harvestable>(dto.TypeId);
-                Material material = dbContext.Find<Material>(dto.TypeId);
+                Harvestable harvestable = harvestableRepository.Get(dto.TypeId);
+                Material material = materialRepository.Get(dto.TypeId);
 
                 if(harvestable != null)
                 {
@@ -77,7 +79,8 @@ namespace SharpCrokite.Core.PriceUpdater
                 }
             }
 
-            dbContext.SaveChanges();
+            harvestableRepository.SaveChanges();
+            materialRepository.SaveChanges();
         }
     }
 }
