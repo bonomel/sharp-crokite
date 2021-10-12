@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyEveToolset.Data.Models;
+using SharpCrokite.DataAccess.Models;
 
-namespace MyEveToolset.Data
+namespace SharpCrokite.DataAccess
 {
     public class SharpCrokiteDbContext : DbContext
     {
@@ -14,7 +14,7 @@ namespace MyEveToolset.Data
 
         public SharpCrokiteDbContext()
         {
-            DbPath = @"C:\Projects\sharp-crokite\SharpCrokite.Core\Data\myevetool.db";
+            DbPath = @"C:\Projects\sharp-crokite\SharpCrokite.DataAccess\myevetool.db";
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

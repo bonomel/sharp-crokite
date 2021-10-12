@@ -1,4 +1,4 @@
-﻿namespace MyEveToolset.PriceUpdater
+﻿namespace SharpCrokite.Core.PriceUpdater
 {
     internal class PriceDto
     {

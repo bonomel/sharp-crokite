@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyEveToolset.Data.Models;
-using MyEveToolset.ViewModels;
+using SharpCrokite.Core.ViewModels;
+using SharpCrokite.DataAccess.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MyEveToolset.Data.Queries
+namespace SharpCrokite.DataAccess.Queries
 {
     public class AllHarvestablesQuery
     {
@@ -37,7 +37,7 @@ namespace MyEveToolset.Data.Queries
             return harvestableViewModels;
         }
 
-        private string MaterialContentsAsString(List<MaterialContent> materialContents)
+        private string MaterialContentsAsString(IEnumerable<MaterialContent> materialContents)
         {
             StringBuilder materialContentStringBuilder = new();
 

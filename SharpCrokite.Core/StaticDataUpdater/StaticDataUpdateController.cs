@@ -1,11 +1,12 @@
-﻿using MyEveToolset.Data;
-using MyEveToolset.Data.Models;
-using MyEveToolset.StaticDataUpdater.JSONModels;
+﻿using SharpCrokite.Core.StaticDataUpdater;
+using SharpCrokite.Core.StaticDataUpdater.JSONModels;
+using SharpCrokite.DataAccess;
+using SharpCrokite.DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MyEveToolset.StaticDataUpdater
+namespace SharpCrokite.Core.StaticDataUpdater
 {
     public class StaticDataUpdateController
     {

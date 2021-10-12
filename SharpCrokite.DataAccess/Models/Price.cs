@@ -1,4 +1,4 @@
-﻿namespace MyEveToolset.Data.Models
+﻿namespace SharpCrokite.DataAccess.Models
 {
     public class Price
     {

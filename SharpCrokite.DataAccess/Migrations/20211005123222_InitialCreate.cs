@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace MyEveToolset.Data.Migrations
+namespace SharpCrokite.DataAccess.Migrations
 {
     public partial class InitialCreate : Migration
     {

@@ -3,14 +3,14 @@ using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MyEveToolset.Data;
-using MyEveToolset.Data.Queries;
-using MyEveToolset.PriceUpdater;
-using MyEveToolset.StaticDataUpdater;
-using MyEveToolset.ViewModels;
+using SharpCrokite.Core.ViewModels;
+using SharpCrokite.Core.PriceUpdater;
+using SharpCrokite.DataAccess.Queries;
+using SharpCrokite.DataAccess;
+using SharpCrokite.Core.StaticDataUpdater;
 
-namespace MyEveToolset
-{
+namespace SharpCrokite.UI
+{ 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>

@@ -1,4 +1,4 @@
-﻿namespace MyEveToolset.ViewModels
+﻿namespace SharpCrokite.Core.ViewModels
 {
     public class HarvestableViewModel
     {

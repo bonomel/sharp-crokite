@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MyEveToolset.Data.Models
+namespace SharpCrokite.DataAccess.Models
 {
     public class Harvestable
     {

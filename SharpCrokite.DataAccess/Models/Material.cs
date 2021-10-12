@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace MyEveToolset.Data.Models
+namespace SharpCrokite.DataAccess.Models
 {
     public class Material
     {

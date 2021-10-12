@@ -1,7 +1,7 @@
-﻿using MyEveToolset.Data;
+﻿using SharpCrokite.DataAccess;
 using System.Windows;
 
-namespace MyEveToolset
+namespace SharpCrokite.UI
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -10,7 +10,7 @@ namespace MyEveToolset
     {
         private void Startup_App(object sender, StartupEventArgs e)
         {
-            SharpCrokiteDbContext dbContext = new();
+            SharpCrokiteDbContext dbContext = new SharpCrokiteDbContext();
             SharpCrokiteMainWindow sharpCrokiteMainWindow = new SharpCrokiteMainWindow(dbContext);
 
             sharpCrokiteMainWindow.Show();
