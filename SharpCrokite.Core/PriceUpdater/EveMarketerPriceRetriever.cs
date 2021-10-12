@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Windows;
 
-namespace MyEveToolset.PriceUpdater
+namespace SharpCrokite.Core.PriceUpdater
 {
     public class EveMarketerPriceRetriever
     {

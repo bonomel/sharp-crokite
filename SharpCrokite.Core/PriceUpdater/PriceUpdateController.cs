@@ -1,9 +1,9 @@
-﻿using MyEveToolset.Data;
-using MyEveToolset.Data.Queries;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using SharpCrokite.DataAccess;
+using SharpCrokite.DataAccess.Queries;
 
-namespace MyEveToolset.PriceUpdater
+namespace SharpCrokite.Core.PriceUpdater
 {
     public class PriceUpdateController
     {
@@ -16,7 +16,7 @@ namespace MyEveToolset.PriceUpdater
             this.priceRetriever = priceRetriever;
         }
 
-        internal void UpdatePrices()
+        public void UpdatePrices()
         {
             IList<int> listOfHarvestableIds = new AllHarvestableIdsQuery(dbContext).Execute();
             IList<int> listOfMaterialIds = new AllMaterialIdsQuery(dbContext).Execute();
@@ -30,7 +30,7 @@ namespace MyEveToolset.PriceUpdater
             priceUpdater.Update(prices);
         }
 
-        internal void DeleteAllPrices()
+        public void DeleteAllPrices()
         {
             dbContext.Prices.RemoveRange(dbContext.Prices);
             dbContext.SaveChanges();

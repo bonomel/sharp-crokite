@@ -8,9 +8,9 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Windows;
 
-using MyEveToolset.StaticDataUpdater.JSONModels;
+using SharpCrokite.Core.StaticDataUpdater.JSONModels;
 
-namespace MyEveToolset.StaticDataUpdater
+namespace SharpCrokite.Core.StaticDataUpdater
 {
     public class StaticDataRetriever
     {

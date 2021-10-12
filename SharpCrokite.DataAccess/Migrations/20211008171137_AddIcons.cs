@@ -1,7 +1,6 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace MyEveToolset.Data.Migrations
+namespace SharpCrokite.DataAccess.Migrations
 {
     public partial class AddIcons : Migration
     {

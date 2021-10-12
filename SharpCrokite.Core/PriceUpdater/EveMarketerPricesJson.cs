@@ -1,4 +1,4 @@
-﻿namespace MyEveToolset.PriceUpdater
+﻿namespace SharpCrokite.Core.PriceUpdater
 {
     public class EveMarketerPricesJSON
     { 

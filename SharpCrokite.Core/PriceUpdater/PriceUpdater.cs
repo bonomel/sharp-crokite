@@ -1,9 +1,9 @@
-﻿using MyEveToolset.Data;
-using MyEveToolset.Data.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using SharpCrokite.DataAccess;
+using SharpCrokite.DataAccess.Models;
 
-namespace MyEveToolset.PriceUpdater
+namespace SharpCrokite.Core.PriceUpdater
 {
     public class PriceUpdater
     {

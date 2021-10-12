@@ -1,10 +1,10 @@
-﻿using MyEveToolset.Data.Models;
-using MyEveToolset.StaticDataUpdater.JSONModels;
+﻿using SharpCrokite.Core.StaticDataUpdater.JSONModels;
+using SharpCrokite.DataAccess.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace MyEveToolset.StaticDataUpdater
+namespace SharpCrokite.Core.StaticDataUpdater
 {
     public class EsiJSONToDataModelConverter
     {

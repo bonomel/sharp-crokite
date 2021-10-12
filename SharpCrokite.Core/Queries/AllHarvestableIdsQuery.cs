@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace MyEveToolset.Data.Queries
+namespace SharpCrokite.DataAccess.Queries
 {
     public class AllHarvestableIdsQuery
     {

@@ -1,4 +1,4 @@
-﻿namespace MyEveToolset.StaticDataUpdater.JSONModels
+﻿namespace SharpCrokite.Core.StaticDataUpdater.JSONModels
 {
     internal interface IGroupJSON
     {

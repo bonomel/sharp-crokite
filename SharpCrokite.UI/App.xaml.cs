@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using SharpCrokite.DataAccess;
 using System.Windows;
 
 namespace SharpCrokite.UI
@@ -13,5 +8,12 @@ namespace SharpCrokite.UI
     /// </summary>
     public partial class App : Application
     {
+        private void Startup_App(object sender, StartupEventArgs e)
+        {
+            SharpCrokiteDbContext dbContext = new SharpCrokiteDbContext();
+            SharpCrokiteMainWindow sharpCrokiteMainWindow = new SharpCrokiteMainWindow(dbContext);
+
+            sharpCrokiteMainWindow.Show();
+        }
     }
 }
