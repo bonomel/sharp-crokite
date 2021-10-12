@@ -1,31 +1,24 @@
-﻿using SharpCrokite.Core.StaticDataUpdater;
-using SharpCrokite.Core.StaticDataUpdater.JSONModels;
-using SharpCrokite.DataAccess;
+﻿using SharpCrokite.Core.StaticDataUpdater.JSONModels;
 using SharpCrokite.DataAccess.Models;
-using System;
+using SharpCrokite.Infrastructure.Repositories;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SharpCrokite.Core.StaticDataUpdater
 {
     public class StaticDataUpdateController
     {
-        private readonly SharpCrokiteDbContext dbContext;
+        private readonly IRepository<Harvestable> harvestableRepository;
+        private readonly IRepository<Material> materialRepository;
         private readonly StaticDataRetriever dataRetriever;
         private readonly EsiJSONToDataModelConverter converter;
 
-        public StaticDataUpdateController(SharpCrokiteDbContext dbContext, StaticDataRetriever dataRetriever, EsiJSONToDataModelConverter converter)
+        public StaticDataUpdateController(StaticDataRetriever dataRetriever, EsiJSONToDataModelConverter converter,
+            IRepository<Harvestable> harvestableRepository, IRepository<Material> materialRepository)
         {
-            this.dbContext = dbContext;
             this.dataRetriever = dataRetriever;
             this.converter = converter;
-        }
-
-        public void DeleteData()
-        {
-            dbContext.Materials.RemoveRange(dbContext.Materials);
-            dbContext.Harvestables.RemoveRange(dbContext.Harvestables);
-            dbContext.SaveChanges();
+            this.harvestableRepository = harvestableRepository;
+            this.materialRepository = materialRepository;
         }
 
         public void UpdateData()
@@ -48,43 +41,49 @@ namespace SharpCrokite.Core.StaticDataUpdater
 
             foreach(Material material in materials)
             {
-                Material existingMaterial = dbContext.Materials.Find(material.MaterialId);
+                Material existingMaterial = materialRepository.Get(material.MaterialId);
                 byte[] icon = dataRetriever.GetIconForTypeId(material.MaterialId);
 
                 if (existingMaterial != null)
                 {
-                    existingMaterial.Name = material.Name;
-                    existingMaterial.Description = material.Description;
                     existingMaterial.Icon = icon;
+                    materialRepository.Update(material);
                 }
                 else
                 {
                     material.Icon = icon;
-                    dbContext.Add(material);
+                    materialRepository.Add(material);
                 }
             }
 
             foreach (Harvestable harvestable in harvestables)
             {
-                Harvestable existingHarvestable = dbContext.Harvestables.Find(harvestable.HarvestableId);
+                Harvestable existingHarvestable = harvestableRepository.Get(harvestable.HarvestableId);
                 byte[] icon = dataRetriever.GetIconForTypeId(harvestable.HarvestableId);
 
                 if (existingHarvestable != null)
                 {
-                    existingHarvestable.Name = harvestable.Name;
-                    existingHarvestable.Description = harvestable.Description;
-                    existingHarvestable.IsCompressedVariantOfType = harvestable.IsCompressedVariantOfType;
-                    existingHarvestable.MaterialContents = harvestable.MaterialContents;
-                    existingHarvestable.Icon = icon;
+                    harvestable.Icon = icon;
+                    harvestableRepository.Update(harvestable);
                 }
                 else
                 {
                     harvestable.Icon = icon;
-                    dbContext.Add(harvestable);
+                    harvestableRepository.Add(harvestable);
                 }
             }
 
-            dbContext.SaveChanges();
+            harvestableRepository.SaveChanges();
+            materialRepository.SaveChanges();
+        }
+
+        public void DeleteAllStaticData()
+        {
+            harvestableRepository.DeleteAll();
+            materialRepository.DeleteAll();
+
+            harvestableRepository.SaveChanges();
+            materialRepository.SaveChanges();
         }
     }
 }

@@ -8,6 +8,8 @@ using SharpCrokite.Core.PriceUpdater;
 using SharpCrokite.DataAccess.Queries;
 using SharpCrokite.DataAccess;
 using SharpCrokite.Core.StaticDataUpdater;
+using SharpCrokite.Infrastructure.Repositories;
+using System;
 
 namespace SharpCrokite.UI
 { 
@@ -47,7 +49,8 @@ namespace SharpCrokite.UI
 
         private void UpdateStaticDataButton_Click(object sender, RoutedEventArgs e)
         {
-            var staticDataUpdateController = new StaticDataUpdateController(dbContext, new StaticDataRetriever(), new EsiJSONToDataModelConverter());
+            var staticDataUpdateController = new StaticDataUpdateController(new StaticDataRetriever(), new EsiJSONToDataModelConverter(),
+                new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
 
             try
             {
@@ -59,12 +62,18 @@ namespace SharpCrokite.UI
                 _ = MessageBox.Show($"Something went wrong while updating the static data!\nMessage:\n{ex.Message}", 
                     "Http Request Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            catch (ArgumentNullException ex)
+            {
+                _ = MessageBox.Show($"Something went wrong while updating the static data!\nMessage:\n{ex.Message}",
+                    "Http Request Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void DeleteStaticDataButton_Click(object sender, RoutedEventArgs e)
         {
-            var staticDataUpdateController = new StaticDataUpdateController(dbContext, new StaticDataRetriever(), new EsiJSONToDataModelConverter());
-            staticDataUpdateController.DeleteData();
+            var staticDataUpdateController = new StaticDataUpdateController(new StaticDataRetriever(), new EsiJSONToDataModelConverter(), 
+                new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
+            staticDataUpdateController.DeleteAllStaticData();
 
             ReloadGrid();
         }

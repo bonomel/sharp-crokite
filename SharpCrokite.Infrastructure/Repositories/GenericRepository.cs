@@ -44,5 +44,15 @@ namespace SharpCrokite.Infrastructure.Repositories
         {
             return dbContext.Update(entity).Entity;
         }
+
+        public virtual T Delete(T entity)
+        {
+            return dbContext.Remove(entity).Entity;
+        }
+
+        public virtual void DeleteAll()
+        {
+            dbContext.Set<T>().RemoveRange(All());
+        }
     }
 }
