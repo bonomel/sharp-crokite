@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SharpCrokite.Core\SharpCrokite.Core.csproj" />
+    <ProjectReference Include="..\SharpCrokite.DataAccess\SharpCrokite.DataAccess.csproj" />
+    <ProjectReference Include="..\SharpCrokite.Infrastructure\SharpCrokite.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
