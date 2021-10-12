@@ -30,7 +30,7 @@ namespace SharpCrokite.Core.StaticDataUpdater
             return materials;
         }
 
-        internal static IEnumerable<Harvestable> CreateHarvestablesFromJSON(IEnumerable<IEnumerable<ITypeJSON>> asteroidTypesPerGroup, 
+        internal static IEnumerable<Harvestable> CreateHarvestablesFromJSON(IEnumerable<IEnumerable<ITypeJSON>> asteroidTypesPerGroup,
             IEnumerable<IMaterialContentJSON> materialContent)
         {
             List<Harvestable> harvestables = new();

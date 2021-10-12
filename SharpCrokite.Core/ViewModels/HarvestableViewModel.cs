@@ -9,6 +9,6 @@
         public string MaterialContents { get; set; }
         public string Description { get; set; }
         //public IList<MaterialContentViewModel> MaterialContents { get; set; } = new List<MaterialContentViewModel>();
-        public int? IsCompressedVariantOfType { get; set; }
+        public HarvestableViewModel IsCompressedVariantOfType { get; set; }
     }
 }

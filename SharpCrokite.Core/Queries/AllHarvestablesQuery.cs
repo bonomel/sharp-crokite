@@ -39,24 +39,30 @@ namespace SharpCrokite.DataAccess.Queries
 
             foreach (Harvestable harvestable in harvestableRepository.All())
             {
-                harvestableViewModels.Add(new HarvestableViewModel
-                {
-                    HarvestableId = harvestable.HarvestableId,
-                    Icon = harvestable.Icon,
-                    Name = harvestable.Name,
-                    Price = harvestable.Prices.FirstOrDefault() != null ? DisplayAsISK(harvestable.Prices.First().SellMin) : "N/A",
-                    MaterialContents = MaterialContentsAsString(harvestable.MaterialContents),
-                    Description = harvestable.Description,
-                    IsCompressedVariantOfType = harvestable.IsCompressedVariantOfType
-                });
+                harvestableViewModels.Add(CreateHarvestableViewModelFrom(harvestable));
             }
-
             return harvestableViewModels;
+        }
+
+        private HarvestableViewModel CreateHarvestableViewModelFrom(Harvestable harvestable)
+        {
+            return new HarvestableViewModel()
+            {
+                HarvestableId = harvestable.HarvestableId,
+                Icon = harvestable.Icon,
+                Name = harvestable.Name,
+                Price = harvestable.Prices.FirstOrDefault() != null ? DisplayAsISK(harvestable.Prices.First().SellMin) : "N/A",
+                MaterialContents = MaterialContentsAsString(harvestable.MaterialContents),
+                Description = harvestable.Description,
+                IsCompressedVariantOfType = harvestable.IsCompressedVariantOfType.HasValue
+                    ? CreateHarvestableViewModelFrom(harvestableRepository.Get(harvestable.IsCompressedVariantOfType.Value))
+                    : null
+            };
         }
 
         private string DisplayAsISK(decimal decimalISK)
         {
-            return $"{decimalISK.ToString("C", ISKNumberFormatInfo)}";
+            return decimalISK != 0 ? $"{decimalISK.ToString("C", ISKNumberFormatInfo)}" : "N/A";
         }
 
         private string MaterialContentsAsString(IEnumerable<MaterialContent> materialContents)
@@ -69,7 +75,7 @@ namespace SharpCrokite.DataAccess.Queries
             }
 
             string materialContentString = materialContentStringBuilder.ToString();
-            string materialContentStringTrimmed = materialContentString.Substring(0, materialContentString.Length - 2);
+            string materialContentStringTrimmed = materialContentString.Substring(0, materialContentString.Length - 1);
 
             return materialContentStringTrimmed;
         }

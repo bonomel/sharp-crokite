@@ -97,7 +97,7 @@ namespace SharpCrokite.Core.StaticDataUpdater
             string responseString = client.DownloadString(uri.AbsoluteUri);
 
             IEnumerable<IMaterialContentJSON> listOfMaterialContent = JsonSerializer.Deserialize<List<MaterialContentJSON>>(responseString);
-
+            var veldsparmaterial = listOfMaterialContent.Single(m => m.typeID == 1230);
             return listOfMaterialContent;
         }
 
