@@ -1,4 +1,4 @@
-﻿using SharpCrokite.DataAccess;
+﻿using SharpCrokite.DataAccess.DatabaseContexts;
 using System.Windows;
 
 namespace SharpCrokite.UI

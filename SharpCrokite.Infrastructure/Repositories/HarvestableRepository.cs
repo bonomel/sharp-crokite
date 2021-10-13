@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SharpCrokite.DataAccess;
+using SharpCrokite.DataAccess.DatabaseContexts;
 using SharpCrokite.DataAccess.Models;
 using System;
 using System.Collections.Generic;

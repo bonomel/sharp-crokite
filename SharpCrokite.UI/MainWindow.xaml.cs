@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Windows;
 using SharpCrokite.Core.ViewModels;
 using SharpCrokite.Core.PriceUpdater;
-using SharpCrokite.DataAccess.Queries;
-using SharpCrokite.DataAccess;
 using SharpCrokite.Core.StaticDataUpdater;
+using SharpCrokite.DataAccess.Queries;
+using SharpCrokite.DataAccess.DatabaseContexts;
 using SharpCrokite.Infrastructure.Repositories;
-using System;
 
 namespace SharpCrokite.UI
 {
