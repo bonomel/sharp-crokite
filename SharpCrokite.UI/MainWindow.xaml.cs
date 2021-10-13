@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using SharpCrokite.Core.ViewModels;
 using SharpCrokite.Core.PriceUpdater;
-using SharpCrokite.DataAccess.Queries;
-using SharpCrokite.DataAccess;
 using SharpCrokite.Core.StaticDataUpdater;
+using SharpCrokite.DataAccess.Queries;
+using SharpCrokite.DataAccess.DatabaseContexts;
+using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.UI
-{ 
+{
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -19,14 +19,13 @@ namespace SharpCrokite.UI
         private readonly SharpCrokiteDbContext dbContext;
 
         private IEnumerable<HarvestableViewModel> harvestables;
-
         private IEnumerable<HarvestableViewModel> Harvestables
         {
             get
             {
                 if(harvestables == null)
                 {
-                    var harvestablesQuery = new AllHarvestablesQuery(dbContext);
+                    var harvestablesQuery = new AllHarvestablesQuery(new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
                     harvestables = harvestablesQuery.Execute();
                 }
                 return harvestables;
@@ -47,7 +46,8 @@ namespace SharpCrokite.UI
 
         private void UpdateStaticDataButton_Click(object sender, RoutedEventArgs e)
         {
-            var staticDataUpdateController = new StaticDataUpdateController(dbContext, new StaticDataRetriever(), new EsiJSONToDataModelConverter());
+            var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(),
+                new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
 
             try
             {
@@ -59,19 +59,26 @@ namespace SharpCrokite.UI
                 _ = MessageBox.Show($"Something went wrong while updating the static data!\nMessage:\n{ex.Message}", 
                     "Http Request Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            catch (ArgumentNullException ex)
+            {
+                _ = MessageBox.Show($"Something went wrong while updating the static data!\nMessage:\n{ex.Message}",
+                    "Http Request Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void DeleteStaticDataButton_Click(object sender, RoutedEventArgs e)
         {
-            var staticDataUpdateController = new StaticDataUpdateController(dbContext, new StaticDataRetriever(), new EsiJSONToDataModelConverter());
-            staticDataUpdateController.DeleteData();
+            var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(), 
+                new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
+            staticDataUpdateController.DeleteAllStaticData();
 
             ReloadGrid();
         }
 
         private void UpdatePriceDataButton_Click(object sender, RoutedEventArgs e)
         {
-            var priceUpdateController = new PriceUpdateController(dbContext, new EveMarketerPriceRetriever());
+            var priceUpdateController = new PriceUpdateController(new EveMarketerPriceRetriever(), 
+                new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
             priceUpdateController.UpdatePrices();
 
             ReloadGrid();
@@ -79,19 +86,11 @@ namespace SharpCrokite.UI
 
         private void DeletePriceDataButton_Click(object sender, RoutedEventArgs e)
         {
-            var priceUpdateController = new PriceUpdateController(dbContext, new EveMarketerPriceRetriever());
+            var priceUpdateController = new PriceUpdateController(new EveMarketerPriceRetriever(), 
+                new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
             priceUpdateController.DeleteAllPrices();
 
             ReloadGrid();
-        }
-
-        private void OnMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            DataGridRow row = sender as DataGridRow;
-            if (row != null)
-            {
-                row.DetailsVisibility = row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-            }
         }
 
         private void ReloadGrid()

@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SharpCrokite.Core.ViewModels;
+﻿using SharpCrokite.Core.ViewModels;
 using SharpCrokite.DataAccess.Models;
+using SharpCrokite.Infrastructure.Repositories;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -9,32 +11,58 @@ namespace SharpCrokite.DataAccess.Queries
 {
     public class AllHarvestablesQuery
     {
-        private readonly SharpCrokiteDbContext dbContext;
+        private readonly IRepository<Harvestable> harvestableRepository;
+        private readonly IRepository<Material> materialRepository;
 
-        public AllHarvestablesQuery(SharpCrokiteDbContext dbContext)
+        private readonly NumberFormatInfo ISKNumberFormatInfo;
+
+        public AllHarvestablesQuery(IRepository<Harvestable> harvestableRepository, IRepository<Material> materialRepository)
         {
-            this.dbContext = dbContext;
+            this.harvestableRepository = harvestableRepository;
+            this.materialRepository = materialRepository;
+
+            ISKNumberFormatInfo = new NumberFormatInfo()
+            {
+                CurrencyDecimalSeparator = ",",
+                CurrencyDecimalDigits = 2,
+                CurrencyGroupSeparator = ".",
+                CurrencyGroupSizes = new int[] { 3 },
+                CurrencySymbol = "ISK",
+                CurrencyPositivePattern = 3,
+                CurrencyNegativePattern = 8
+            };
         }
 
         public IList<HarvestableViewModel> Execute()
         {
             List<HarvestableViewModel> harvestableViewModels = new();
 
-            foreach (Harvestable harvestable in dbContext.Harvestables.Include(h => h.Prices).Include(h => h.MaterialContents))
+            foreach (Harvestable harvestable in harvestableRepository.All())
             {
-                harvestableViewModels.Add(new HarvestableViewModel
-                {
-                    HarvestableId = harvestable.HarvestableId,
-                    Icon = harvestable.Icon,
-                    Name = harvestable.Name,
-                    Price = harvestable.Prices.FirstOrDefault() != null ? harvestable.Prices.First().SellMax : 0,
-                    MaterialContents = MaterialContentsAsString(harvestable.MaterialContents),
-                    Description = harvestable.Description,
-                    IsCompressedVariantOfType = harvestable.IsCompressedVariantOfType
-                });
+                harvestableViewModels.Add(CreateHarvestableViewModelFrom(harvestable));
             }
-
             return harvestableViewModels;
+        }
+
+        private HarvestableViewModel CreateHarvestableViewModelFrom(Harvestable harvestable)
+        {
+            return new HarvestableViewModel()
+            {
+                HarvestableId = harvestable.HarvestableId,
+                Icon = harvestable.Icon,
+                Name = harvestable.Name,
+                Price = harvestable.Prices.FirstOrDefault() != null ? DisplayAsISK(harvestable.Prices.First().SellMin) : "N/A",
+                MaterialContents = MaterialContentsAsString(harvestable.MaterialContents),
+                Description = harvestable.Description,
+                IsCompressedVariantOfType = harvestable.IsCompressedVariantOfType.HasValue
+                    ? CreateHarvestableViewModelFrom(harvestableRepository.Get(harvestable.IsCompressedVariantOfType.Value))
+                    : null
+            };
+        }
+
+        private string DisplayAsISK(decimal decimalISK)
+        {
+            return decimalISK != 0 ? $"{decimalISK.ToString("C", ISKNumberFormatInfo)}" : "N/A";
         }
 
         private string MaterialContentsAsString(IEnumerable<MaterialContent> materialContents)
@@ -43,31 +71,13 @@ namespace SharpCrokite.DataAccess.Queries
 
             foreach(MaterialContent material in materialContents)
             {
-                materialContentStringBuilder.Append($"{dbContext.Materials.Find(material.MaterialId).Name}: {material.Quantity}\n");
+                materialContentStringBuilder.Append($"{materialRepository.Get(material.MaterialId).Name}: {material.Quantity}\n");
             }
 
             string materialContentString = materialContentStringBuilder.ToString();
-            string materialContentStringTrimmed = materialContentString.Substring(0, materialContentString.Length - 2);
+            string materialContentStringTrimmed = materialContentString.Substring(0, materialContentString.Length - 1);
 
             return materialContentStringTrimmed;
         }
-
-        //private IList<MaterialContentViewModel> FindMaterialContentsForHarvestable(int harvestableId)
-        //{
-        //    List<MaterialContentViewModel> materialContentViewModels = new();
-
-        //    foreach (MaterialContent materialContent in dbContext.MaterialContents
-        //        .Where(mc => mc.HarvestableId == harvestableId).ToList())
-        //    {
-        //        materialContentViewModels.Add(new MaterialContentViewModel
-        //        {
-        //            HarvestableId = materialContent.HarvestableId,
-        //            MaterialId = materialContent.MaterialId,
-        //            Quantity = materialContent.Quantity
-        //        });
-        //    }
-
-        //    return materialContentViewModels;
-        //}
     }
 }

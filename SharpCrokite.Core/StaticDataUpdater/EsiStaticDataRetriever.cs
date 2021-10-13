@@ -12,7 +12,7 @@ using SharpCrokite.Core.StaticDataUpdater.JSONModels;
 
 namespace SharpCrokite.Core.StaticDataUpdater
 {
-    public class StaticDataRetriever
+    public class EsiStaticDataRetriever
     {
         private const string EsiBaseUrl = "https://esi.evetech.net/latest/";
         private const string MaterialContentUrl = "http://sde.zzeve.com/invTypeMaterials.json";
@@ -97,7 +97,7 @@ namespace SharpCrokite.Core.StaticDataUpdater
             string responseString = client.DownloadString(uri.AbsoluteUri);
 
             IEnumerable<IMaterialContentJSON> listOfMaterialContent = JsonSerializer.Deserialize<List<MaterialContentJSON>>(responseString);
-
+            var veldsparmaterial = listOfMaterialContent.Single(m => m.typeID == 1230);
             return listOfMaterialContent;
         }
 

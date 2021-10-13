@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SharpCrokite.DataAccess.Models;
 
-namespace SharpCrokite.DataAccess
+namespace SharpCrokite.DataAccess.DatabaseContexts
 {
     public class SharpCrokiteDbContext : DbContext
     {
