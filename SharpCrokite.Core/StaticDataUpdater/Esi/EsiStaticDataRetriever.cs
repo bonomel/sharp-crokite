@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using SharpCrokite.Core.StaticDataUpdater.Esi.EsiJsonModels;
 using SharpCrokite.Core.StaticDataUpdater.JsonModels;
@@ -43,13 +45,13 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
             client.BaseAddress = new Uri(EsiBaseUrl);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            List<HarvestableDto> harvestableDtos = new();
+            ConcurrentBag<HarvestableDto> harvestableDtos = new();
 
             EsiCategoryJson asteroidCategory = GetCategories().Single(c => c.name == "Asteroid");
             IEnumerable<EsiGroupJson> asteroidGroups = GetGroupsFromCategory(client, asteroidCategory);
             IEnumerable<EsiMaterialContentJson> materials = RetrieveMaterialContent();
 
-            foreach (EsiGroupJson asteroidGroup in asteroidGroups)
+            _ = Parallel.ForEach(asteroidGroups, asteroidGroup =>
             {
                 foreach (EsiTypeJson asteroidType in GetTypesPerGroup(client, asteroidGroup))
                 {
@@ -67,11 +69,10 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
                                 HarvestableId = asteroidType.type_id,
                                 MaterialId = m.materialTypeID,
                                 Quantity = m.quantity
-                            }
-                            ).ToList()
+                            }).ToList()
                     });
                 }
-            }
+            });
 
             SetCompressedVariantIds(harvestableDtos);
 
@@ -83,7 +84,7 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
             return Regex.Replace(stringToRemoveFrom, "<.*?>", string.Empty);
         }
 
-        private static void SetCompressedVariantIds(List<HarvestableDto> harvestables)
+        private static void SetCompressedVariantIds(IEnumerable<HarvestableDto> harvestables)
         {
             foreach (var harvestable in harvestables)
             {
@@ -102,16 +103,14 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
             client.BaseAddress = new Uri(EsiBaseUrl);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            List<MaterialDto> materialDtos = new();
+            ConcurrentBag<MaterialDto> materialDtos = new();
 
             EsiCategoryJson materialCategory = GetCategories().Single(c => c.name == "Material");
 
             IEnumerable<EsiGroupJson> materialGroups = GetGroupsFromCategory(client, materialCategory)
                 .Where(g => g.name is "Mineral" or "Moon Materials" or "Ice Product");
 
-            List<IEnumerable<EsiTypeJson>> materialTypesPerGroup = new();
-
-            foreach (EsiGroupJson materialGroup in materialGroups)
+            _ = Parallel.ForEach(materialGroups, materialGroup =>
             {
                 foreach (EsiTypeJson materialType in GetTypesPerGroup(client, materialGroup))
                 {
@@ -124,9 +123,7 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
                         Icon = GetIconForTypeId(materialType.type_id)
                     });
                 }
-                
-                materialTypesPerGroup.Add(GetTypesPerGroup(client, materialGroup));
-            }
+            });
 
             return materialDtos;
         }
