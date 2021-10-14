@@ -8,7 +8,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Windows;
 
-using SharpCrokite.Core.StaticDataUpdater.JSONModels;
+using SharpCrokite.Core.StaticDataUpdater.JsonModels;
 
 namespace SharpCrokite.Core.StaticDataUpdater
 {
@@ -23,10 +23,10 @@ namespace SharpCrokite.Core.StaticDataUpdater
         private const string TypesRoutePart = "types/";
         private const string IconRoutePart = "icon/";
 
-        private List<CategoryJSON> categories;
+        private List<CategoryJson> categories;
         private int maxTries = 3;
 
-        private List<CategoryJSON> Categories
+        private List<CategoryJson> Categories
         {
             get
             {
@@ -38,19 +38,19 @@ namespace SharpCrokite.Core.StaticDataUpdater
             }
         }
 
-        public IEnumerable<IEnumerable<TypeJSON>> RetrieveAsteroidTypesPerGroup()
+        public IEnumerable<IEnumerable<TypeJson>> RetrieveAsteroidTypesPerGroup()
         {
             using HttpClient client = new();
             client.BaseAddress = new Uri(EsiBaseUrl);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            CategoryJSON asteroidCategory = Categories.Single(c => c.name == "Asteroid");
+            CategoryJson asteroidCategory = Categories.Single(c => c.name == "Asteroid");
 
-            IEnumerable<GroupJSON> asteroidGroups = GetGroupsFromCategory(client, asteroidCategory);
+            IEnumerable<GroupJson> asteroidGroups = GetGroupsFromCategory(client, asteroidCategory);
 
-            List<IEnumerable<TypeJSON>> asteroidListPerType = new();
+            List<IEnumerable<TypeJson>> asteroidListPerType = new();
 
-            foreach (GroupJSON asteroidGroup in asteroidGroups)
+            foreach (GroupJson asteroidGroup in asteroidGroups)
             {
                 asteroidListPerType.Add(GetTypesPerGroup(client, asteroidGroup));
             }
@@ -58,20 +58,20 @@ namespace SharpCrokite.Core.StaticDataUpdater
             return asteroidListPerType;
         }
 
-        public IEnumerable<IEnumerable<TypeJSON>> RetrieveMaterialTypesPerGroup()
+        public IEnumerable<IEnumerable<TypeJson>> RetrieveMaterialTypesPerGroup()
         {
             using HttpClient client = new();
             client.BaseAddress = new Uri(EsiBaseUrl);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            CategoryJSON materialCategory = Categories.Single(c => c.name == "Material");
+            CategoryJson materialCategory = Categories.Single(c => c.name == "Material");
 
-            IEnumerable<GroupJSON> materialGroups = GetGroupsFromCategory(client, materialCategory)
+            IEnumerable<GroupJson> materialGroups = GetGroupsFromCategory(client, materialCategory)
                 .Where(g => g.name == "Mineral" || g.name == "Moon Materials" || g.name == "Ice Product");
 
-            List<IEnumerable<TypeJSON>> materialTypesPerGroup = new();
+            List<IEnumerable<TypeJson>> materialTypesPerGroup = new();
 
-            foreach (GroupJSON materialGroup in materialGroups)
+            foreach (GroupJson materialGroup in materialGroups)
             {
                 materialTypesPerGroup.Add(GetTypesPerGroup(client, materialGroup));
             }
@@ -89,14 +89,14 @@ namespace SharpCrokite.Core.StaticDataUpdater
             return responseStream;
         }
 
-        public IEnumerable<MaterialContentJSON> RetrieveMaterialContent()
+        public IEnumerable<MaterialContentJson> RetrieveMaterialContent()
         {
             using WebClient client = new();
             Uri uri = new(MaterialContentUrl);
 
             string responseString = client.DownloadString(uri.AbsoluteUri);
 
-            IEnumerable<MaterialContentJSON> listOfMaterialContent = JsonSerializer.Deserialize<List<MaterialContentJSON>>(responseString);
+            IEnumerable<MaterialContentJson> listOfMaterialContent = JsonSerializer.Deserialize<List<MaterialContentJson>>(responseString);
             var veldsparmaterial = listOfMaterialContent.Single(m => m.typeID == 1230);
             return listOfMaterialContent;
         }
@@ -115,7 +115,7 @@ namespace SharpCrokite.Core.StaticDataUpdater
 
                 IList<string> categoryIdList = responseString.Split(',').ToList();
 
-                List<CategoryJSON> listOfCategories = new();
+                List<CategoryJson> listOfCategories = new();
 
                 foreach (string categoryId in categoryIdList)
                 {
@@ -133,16 +133,16 @@ namespace SharpCrokite.Core.StaticDataUpdater
             }
         }
 
-        private CategoryJSON GetCategoryInfo(HttpClient client, string categoryId)
+        private CategoryJson GetCategoryInfo(HttpClient client, string categoryId)
         {
             HttpResponseMessage response = client.GetAsync($"{UniverseRoute}{CategoriesRoutePart}{categoryId}").Result;
             if (response.IsSuccessStatusCode)
             {
                 string responseString = response.Content.ReadAsStringAsync().Result;
 
-                CategoryJSON categoryJSON = JsonSerializer.Deserialize<CategoryJSON>(responseString);
+                CategoryJson categoryJson = JsonSerializer.Deserialize<CategoryJson>(responseString);
 
-                return categoryJSON;
+                return categoryJson;
             }
             else
             {
@@ -155,9 +155,9 @@ namespace SharpCrokite.Core.StaticDataUpdater
             }
         }
 
-        private IEnumerable<GroupJSON> GetGroupsFromCategory(HttpClient client, CategoryJSON category)
+        private IEnumerable<GroupJson> GetGroupsFromCategory(HttpClient client, CategoryJson category)
         {
-            List<GroupJSON> listOfGroups = new();
+            List<GroupJson> listOfGroups = new();
             foreach (int groupId in category.groups)
             {
                 HttpResponseMessage response = client.GetAsync($"{UniverseRoute}{GroupsRoutePart}{groupId}").Result;
@@ -166,9 +166,9 @@ namespace SharpCrokite.Core.StaticDataUpdater
                 {
                     string responseString = response.Content.ReadAsStringAsync().Result;
 
-                    GroupJSON groupJSON = JsonSerializer.Deserialize<GroupJSON>(responseString);
+                    GroupJson groupJson = JsonSerializer.Deserialize<GroupJson>(responseString);
 
-                    listOfGroups.Add(groupJSON);
+                    listOfGroups.Add(groupJson);
                 }
                 else
                 {
@@ -181,9 +181,9 @@ namespace SharpCrokite.Core.StaticDataUpdater
             return listOfGroups.Where(g => g.published);
         }
 
-        private IEnumerable<TypeJSON> GetTypesPerGroup(HttpClient client, GroupJSON group)
+        private IEnumerable<TypeJson> GetTypesPerGroup(HttpClient client, GroupJson group)
         {
-            List<TypeJSON> typeList = new();
+            List<TypeJson> typeList = new();
             foreach (int typeid in group.types)
             {
                 for (int currentTry = 1; currentTry <= maxTries; currentTry++)
@@ -194,9 +194,9 @@ namespace SharpCrokite.Core.StaticDataUpdater
                     {
                         string responseString = response.Content.ReadAsStringAsync().Result;
 
-                        TypeJSON typeJSON = JsonSerializer.Deserialize<TypeJSON>(responseString);
+                        TypeJson typeJson = JsonSerializer.Deserialize<TypeJson>(responseString);
 
-                        typeList.Add(typeJSON);
+                        typeList.Add(typeJson);
 
                         currentTry = maxTries;
                     }

@@ -1,4 +1,4 @@
-﻿using SharpCrokite.Core.StaticDataUpdater.JSONModels;
+﻿using SharpCrokite.Core.StaticDataUpdater.JsonModels;
 using SharpCrokite.DataAccess.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,15 +6,15 @@ using System.Text.RegularExpressions;
 
 namespace SharpCrokite.Core.StaticDataUpdater
 {
-    public static class EsiJSONToDataModelConverter
+    public static class EsiJsonToDataModelConverter
     {
-        internal static IEnumerable<Material> CreateMaterialsFromJSON(IEnumerable<IEnumerable<TypeJSON>> materialTypesPerGroup)
+        internal static IEnumerable<Material> CreateMaterialsFromJSON(IEnumerable<IEnumerable<TypeJson>> materialTypesPerGroup)
         {
             List<Material> materials = new();
 
-            foreach (IEnumerable<TypeJSON> group in materialTypesPerGroup)
+            foreach (IEnumerable<TypeJson> group in materialTypesPerGroup)
             {
-                foreach (TypeJSON type in group)
+                foreach (TypeJson type in group)
                 {
                     materials.Add(
                         new Material
@@ -30,15 +30,15 @@ namespace SharpCrokite.Core.StaticDataUpdater
             return materials;
         }
 
-        internal static IEnumerable<Harvestable> CreateHarvestablesFromJSON(IEnumerable<IEnumerable<TypeJSON>> asteroidTypesPerGroup,
-            IEnumerable<MaterialContentJSON> materialContent)
+        internal static IEnumerable<Harvestable> CreateHarvestablesFromJSON(IEnumerable<IEnumerable<TypeJson>> asteroidTypesPerGroup,
+            IEnumerable<MaterialContentJson> materialContent)
         {
             List<Harvestable> harvestables = new();
-            List<MaterialContentJSON> materials = materialContent.ToList();
+            List<MaterialContentJson> materials = materialContent.ToList();
 
-            foreach(IEnumerable<TypeJSON> group in asteroidTypesPerGroup)
+            foreach(IEnumerable<TypeJson> group in asteroidTypesPerGroup)
             {
-                foreach(TypeJSON type in group)
+                foreach(TypeJson type in group)
                 {
                     List<MaterialContent> materialContents = new();
 
