@@ -8,6 +8,7 @@ using SharpCrokite.Core.StaticDataUpdater;
 using SharpCrokite.DataAccess.Queries;
 using SharpCrokite.DataAccess.DatabaseContexts;
 using SharpCrokite.Infrastructure.Repositories;
+using SharpCrokite.Core.StaticDataUpdater.Esi;
 
 namespace SharpCrokite.UI
 {
@@ -39,9 +40,16 @@ namespace SharpCrokite.UI
 
         public SharpCrokiteMainWindow(SharpCrokiteDbContext dbContext) : this()
         {
-            this.dbContext = dbContext;
+            try 
+            {
+                this.dbContext = dbContext;
 
-            HarvestablesDataGrid.ItemsSource = Harvestables;
+                HarvestablesDataGrid.ItemsSource = Harvestables;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void UpdateStaticDataButton_Click(object sender, RoutedEventArgs e)

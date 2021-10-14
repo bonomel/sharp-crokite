@@ -1,6 +1,6 @@
-﻿namespace SharpCrokite.Core.StaticDataUpdater.JSONModels
+﻿namespace SharpCrokite.Core.StaticDataUpdater.JsonModels
 {
-    public class GroupJSON : IGroupJSON
+    public class EsiGroupJson
     {
         public int category_id { get; set; }
         public int group_id { get; set; }
