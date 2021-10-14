@@ -209,22 +209,31 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
             List<EsiGroupJson> listOfGroups = new();
             foreach (int groupId in category.groups)
             {
-                HttpResponseMessage response = client.GetAsync($"{UniverseRoute}{GroupsRoutePart}{groupId}").Result;
-
-                if (response.IsSuccessStatusCode)
+                for (int currentTry = 1; currentTry <= maxTries; currentTry++)
                 {
-                    string responseString = response.Content.ReadAsStringAsync().Result;
+                    HttpResponseMessage response = client.GetAsync($"{UniverseRoute}{GroupsRoutePart}{groupId}").Result;
 
-                    EsiGroupJson groupJson = JsonSerializer.Deserialize<EsiGroupJson>(responseString);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responseString = response.Content.ReadAsStringAsync().Result;
 
-                    listOfGroups.Add(groupJson);
-                }
-                else
-                {
-                    MessageBox.Show($"Call to {EsiBaseUrl}{UniverseRoute}{GroupsRoutePart}{groupId} failed!\nReason:\n{response.ReasonPhrase}\nStatuscode:{response.StatusCode}",
-                        "Failed during API call!",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+                        EsiGroupJson groupJson = JsonSerializer.Deserialize<EsiGroupJson>(responseString);
+
+                        listOfGroups.Add(groupJson);
+
+                        currentTry = maxTries;
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"The API call to {EsiBaseUrl}{UniverseRoute}{GroupsRoutePart}{groupId} failed. Try: {currentTry}");
+
+                        if (currentTry == 3)
+                        {
+                            throw new HttpRequestException($"The API call to {EsiBaseUrl}{UniverseRoute}{TypesRoutePart}{groupId} failed three times!\n" +
+                                $"Reason:\n{response.ReasonPhrase}\n" +
+                                $"Statuscode:{response.StatusCode}");
+                        }
+                    }
                 }
             }
             return listOfGroups.Where(g => g.published);
