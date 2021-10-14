@@ -51,6 +51,7 @@ namespace SharpCrokite.DataAccess.Queries
                 HarvestableId = harvestable.HarvestableId,
                 Icon = harvestable.Icon,
                 Name = harvestable.Name,
+                Type = harvestable.Type,
                 Price = harvestable.Prices.FirstOrDefault() != null ? DisplayAsISK(harvestable.Prices.First().SellMin) : "N/A",
                 MaterialContents = MaterialContentsAsString(harvestable.MaterialContents),
                 Description = harvestable.Description,

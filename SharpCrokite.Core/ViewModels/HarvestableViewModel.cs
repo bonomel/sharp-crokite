@@ -5,6 +5,7 @@
         public int HarvestableId { get; set; }
         public byte[] Icon { get; internal set; }
         public string Name { get; set; }
+        public string Type { get; set; }
         public string Price { get; set; }
         public string MaterialContents { get; set; }
         public string Description { get; set; }

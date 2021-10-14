@@ -8,6 +8,7 @@ using SharpCrokite.Core.StaticDataUpdater;
 using SharpCrokite.DataAccess.Queries;
 using SharpCrokite.DataAccess.DatabaseContexts;
 using SharpCrokite.Infrastructure.Repositories;
+using SharpCrokite.Core.StaticDataUpdater.Esi;
 
 namespace SharpCrokite.UI
 {

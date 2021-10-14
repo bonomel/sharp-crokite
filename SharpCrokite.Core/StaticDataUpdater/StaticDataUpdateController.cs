@@ -1,4 +1,5 @@
-﻿using SharpCrokite.DataAccess.Models;
+﻿using SharpCrokite.Core.StaticDataUpdater.Esi;
+using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Repositories;
 using System.Collections.Generic;
 

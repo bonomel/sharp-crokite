@@ -1,6 +1,5 @@
 ﻿using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Repositories;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,6 +28,7 @@ namespace SharpCrokite.Core.StaticDataUpdater
                     existingHarvestable.Type = harvestableDto.Type;
                     existingHarvestable.Description = harvestableDto.Description;
                     existingHarvestable.Icon = harvestableDto.Icon;
+                    existingHarvestable.IsCompressedVariantOfType = harvestableDto.IsCompressedVariantOfType;
                     existingHarvestable.MaterialContents = harvestableDto.MaterialContents.Select(dto => new MaterialContent()
                         {
                             HarvestableId = dto.HarvestableId,
@@ -47,6 +47,7 @@ namespace SharpCrokite.Core.StaticDataUpdater
                         Type = harvestableDto.Type,
                         Description = harvestableDto.Description,
                         Icon = harvestableDto.Icon,
+                        IsCompressedVariantOfType = harvestableDto.IsCompressedVariantOfType,
                         MaterialContents = harvestableDto.MaterialContents.Select(dto => new MaterialContent()
                         {
                             HarvestableId = dto.HarvestableId,

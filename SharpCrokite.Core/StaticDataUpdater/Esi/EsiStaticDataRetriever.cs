@@ -6,11 +6,12 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Windows;
+using SharpCrokite.Core.StaticDataUpdater.Esi.EsiJsonModels;
+using SharpCrokite.Core.StaticDataUpdater.JsonModels;
 
-using SharpCrokite.Core.StaticDataUpdater.EsiJsonModels;
-
-namespace SharpCrokite.Core.StaticDataUpdater
+namespace SharpCrokite.Core.StaticDataUpdater.Esi
 {
     public class EsiStaticDataRetriever
     {
@@ -63,7 +64,7 @@ namespace SharpCrokite.Core.StaticDataUpdater
                         HarvestableId = asteroidType.type_id,
                         Name = asteroidType.name,
                         Type = asteroidGroup.name,
-                        Description = asteroidType.description,
+                        Description = RemoveHtmlFromString(asteroidType.description),
                         Icon = GetIconForTypeId(asteroidType.type_id),
                         MaterialContents = materials
                             .Where(m => m.typeID == asteroidType.type_id)
@@ -81,6 +82,11 @@ namespace SharpCrokite.Core.StaticDataUpdater
             SetCompressedVariantIds(harvestableDtos);
 
             return harvestableDtos;
+        }
+
+        private static string RemoveHtmlFromString(string stringToRemoveFrom)
+        {
+            return Regex.Replace(stringToRemoveFrom, "<.*?>", string.Empty);
         }
 
         private static void SetCompressedVariantIds(List<HarvestableDto> harvestables)
@@ -120,7 +126,7 @@ namespace SharpCrokite.Core.StaticDataUpdater
                         MaterialId = materialType.type_id,
                         Name = materialType.name,
                         Type = materialGroup.name,
-                        Description = materialType.description,
+                        Description = RemoveHtmlFromString(materialType.description),
                         Icon = GetIconForTypeId(materialType.type_id)
                     });
                 }

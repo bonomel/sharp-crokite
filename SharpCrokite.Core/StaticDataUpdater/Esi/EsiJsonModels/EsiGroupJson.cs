@@ -1,4 +1,4 @@
-﻿namespace SharpCrokite.Core.StaticDataUpdater.EsiJsonModels
+﻿namespace SharpCrokite.Core.StaticDataUpdater.JsonModels
 {
     public class EsiGroupJson
     {
