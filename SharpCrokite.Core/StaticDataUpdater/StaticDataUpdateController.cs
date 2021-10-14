@@ -1,5 +1,4 @@
-﻿using SharpCrokite.Core.StaticDataUpdater.EsiJsonModels;
-using SharpCrokite.DataAccess.Models;
+﻿using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Repositories;
 using System.Collections.Generic;
 
@@ -20,58 +19,13 @@ namespace SharpCrokite.Core.StaticDataUpdater
 
         public void UpdateData()
         {
-            IEnumerable<IEnumerable<EsiTypeJson>> asteroidTypesPerGroup = dataRetriever.RetrieveAsteroidTypesPerGroup();
-            IEnumerable<IEnumerable<EsiTypeJson>> materialTypes = dataRetriever.RetrieveMaterialTypesPerGroup();
-            IEnumerable<EsiMaterialContentJson> materialContent = dataRetriever.RetrieveMaterialContent();
+            IEnumerable<HarvestableDto> harvestableDtos = dataRetriever.RetrieveHarvestables();
+            IEnumerable<MaterialDto> materialDtos = dataRetriever.RetrieveMaterials();
 
-            IEnumerable<Material> materials = EsiJsonToDataModelConverter.CreateMaterialsFromJSON(materialTypes);
-            IEnumerable<Harvestable> harvestables = EsiJsonToDataModelConverter.CreateHarvestablesFromJSON(asteroidTypesPerGroup, materialContent);
+            StaticDataUpdater updater = new(harvestableRepository, materialRepository);
 
-            UpdateHarvestables(harvestables);
-            UpdateMaterial(materials);
-        }
-
-        private void UpdateHarvestables(IEnumerable<Harvestable> harvestables)
-        {
-            foreach (Harvestable harvestable in harvestables)
-            {
-                Harvestable existingHarvestable = harvestableRepository.Get(harvestable.HarvestableId);
-                byte[] icon = dataRetriever.GetIconForTypeId(harvestable.HarvestableId);
-
-                if (existingHarvestable != null)
-                {
-                    harvestable.Icon = icon;
-                    harvestableRepository.Update(harvestable);
-                }
-                else
-                {
-                    harvestable.Icon = icon;
-                    harvestableRepository.Add(harvestable);
-                }
-            }
-
-            harvestableRepository.SaveChanges();
-        }
-        private void UpdateMaterial(IEnumerable<Material> materials)
-        {
-            foreach (Material material in materials)
-            {
-                Material existingMaterial = materialRepository.Get(material.MaterialId);
-                byte[] icon = dataRetriever.GetIconForTypeId(material.MaterialId);
-
-                if (existingMaterial != null)
-                {
-                    existingMaterial.Icon = icon;
-                    materialRepository.Update(material);
-                }
-                else
-                {
-                    material.Icon = icon;
-                    materialRepository.Add(material);
-                }
-            }
-
-            materialRepository.SaveChanges();
+            updater.UpdateHarvestables(harvestableDtos);
+            updater.UpdateMaterials(materialDtos);
         }
 
         public void DeleteAllStaticData()

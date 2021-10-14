@@ -39,9 +39,16 @@ namespace SharpCrokite.UI
 
         public SharpCrokiteMainWindow(SharpCrokiteDbContext dbContext) : this()
         {
-            this.dbContext = dbContext;
+            try 
+            {
+                this.dbContext = dbContext;
 
-            HarvestablesDataGrid.ItemsSource = Harvestables;
+                HarvestablesDataGrid.ItemsSource = Harvestables;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void UpdateStaticDataButton_Click(object sender, RoutedEventArgs e)

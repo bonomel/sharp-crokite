@@ -38,31 +38,71 @@ namespace SharpCrokite.Core.StaticDataUpdater
             }
         }
 
-        public IEnumerable<IEnumerable<EsiTypeJson>> RetrieveAsteroidTypesPerGroup()
+        public IEnumerable<HarvestableDto> RetrieveHarvestables()
         {
             using HttpClient client = new();
             client.BaseAddress = new Uri(EsiBaseUrl);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            List<HarvestableDto> harvestableDtos = new();
 
             EsiCategoryJson asteroidCategory = Categories.Single(c => c.name == "Asteroid");
 
             IEnumerable<EsiGroupJson> asteroidGroups = GetGroupsFromCategory(client, asteroidCategory);
 
-            List<IEnumerable<EsiTypeJson>> asteroidListPerType = new();
+            List<IEnumerable<EsiTypeJson>> asteroidTypesPerGroup = new();
+
+            IEnumerable<EsiMaterialContentJson> materials = RetrieveMaterialContent();
 
             foreach (EsiGroupJson asteroidGroup in asteroidGroups)
             {
-                asteroidListPerType.Add(GetTypesPerGroup(client, asteroidGroup));
+                foreach (EsiTypeJson asteroidType in GetTypesPerGroup(client, asteroidGroup))
+                {
+                    harvestableDtos.Add(new HarvestableDto()
+                    {
+                        HarvestableId = asteroidType.type_id,
+                        Name = asteroidType.name,
+                        Type = asteroidGroup.name,
+                        Description = asteroidType.description,
+                        Icon = GetIconForTypeId(asteroidType.type_id),
+                        MaterialContents = materials
+                            .Where(m => m.typeID == asteroidType.type_id)
+                            .Select(m => new MaterialContentDto
+                            {
+                                HarvestableId = asteroidType.type_id,
+                                MaterialId = m.materialTypeID,
+                                Quantity = m.quantity
+                            }
+                            ).ToList()
+                    });
+                }
             }
 
-            return asteroidListPerType;
+            SetCompressedVariantIds(harvestableDtos);
+
+            return harvestableDtos;
         }
 
-        public IEnumerable<IEnumerable<EsiTypeJson>> RetrieveMaterialTypesPerGroup()
+        private static void SetCompressedVariantIds(List<HarvestableDto> harvestables)
+        {
+            foreach (var harvestable in harvestables)
+            {
+                if (harvestable.Name.Contains("Compressed"))
+                {
+                    string lookupString = harvestable.Name.Replace("Compressed ", "");
+
+                    harvestable.IsCompressedVariantOfType = harvestables.Single(h => h.Name == lookupString).HarvestableId;
+                }
+            }
+        }
+
+        public IEnumerable<MaterialDto> RetrieveMaterials()
         {
             using HttpClient client = new();
             client.BaseAddress = new Uri(EsiBaseUrl);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            List<MaterialDto> materialDtos = new();
 
             EsiCategoryJson materialCategory = Categories.Single(c => c.name == "Material");
 
@@ -73,13 +113,25 @@ namespace SharpCrokite.Core.StaticDataUpdater
 
             foreach (EsiGroupJson materialGroup in materialGroups)
             {
+                foreach (EsiTypeJson materialType in GetTypesPerGroup(client, materialGroup))
+                {
+                    materialDtos.Add(new MaterialDto()
+                    {
+                        MaterialId = materialType.type_id,
+                        Name = materialType.name,
+                        Type = materialGroup.name,
+                        Description = materialType.description,
+                        Icon = GetIconForTypeId(materialType.type_id)
+                    });
+                }
+                
                 materialTypesPerGroup.Add(GetTypesPerGroup(client, materialGroup));
             }
 
-            return materialTypesPerGroup;
+            return materialDtos;
         }
 
-        internal byte[] GetIconForTypeId(int typeId)
+        private static byte[] GetIconForTypeId(int typeId)
         {
             using WebClient client = new();
             Uri uri = new($"{EveTechBaseUrl}{typeId}/{IconRoutePart}");
