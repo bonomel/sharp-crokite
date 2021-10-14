@@ -1,4 +1,4 @@
-﻿using SharpCrokite.Core.StaticDataUpdater.JsonModels;
+﻿using SharpCrokite.Core.StaticDataUpdater.EsiJsonModels;
 using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Repositories;
 using System.Collections.Generic;
@@ -20,9 +20,9 @@ namespace SharpCrokite.Core.StaticDataUpdater
 
         public void UpdateData()
         {
-            IEnumerable<IEnumerable<TypeJson>> asteroidTypesPerGroup = dataRetriever.RetrieveAsteroidTypesPerGroup();
-            IEnumerable<IEnumerable<TypeJson>> materialTypes = dataRetriever.RetrieveMaterialTypesPerGroup();
-            IEnumerable<MaterialContentJson> materialContent = dataRetriever.RetrieveMaterialContent();
+            IEnumerable<IEnumerable<EsiTypeJson>> asteroidTypesPerGroup = dataRetriever.RetrieveAsteroidTypesPerGroup();
+            IEnumerable<IEnumerable<EsiTypeJson>> materialTypes = dataRetriever.RetrieveMaterialTypesPerGroup();
+            IEnumerable<EsiMaterialContentJson> materialContent = dataRetriever.RetrieveMaterialContent();
 
             IEnumerable<Material> materials = EsiJsonToDataModelConverter.CreateMaterialsFromJSON(materialTypes);
             IEnumerable<Harvestable> harvestables = EsiJsonToDataModelConverter.CreateHarvestablesFromJSON(asteroidTypesPerGroup, materialContent);

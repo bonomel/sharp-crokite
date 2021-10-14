@@ -1,6 +1,6 @@
-﻿namespace SharpCrokite.Core.StaticDataUpdater.JsonModels
+﻿namespace SharpCrokite.Core.StaticDataUpdater.EsiJsonModels
 {
-    public class TypeJson
+    public class EsiTypeJson
     {
         public int type_id { get; set; }
         public float capacity { get; set; }

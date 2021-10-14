@@ -24,18 +24,18 @@ namespace SharpCrokite.Core.PriceUpdater
 
             IList<string> batchedUrls = CreateBatchedUrls(batches);
 
-            IEnumerable<EveMarketerPricesJSON> priceJson = RetrievePricesAsJson(batchedUrls);
+            IEnumerable<EveMarketerPricesJson> priceJson = RetrievePricesAsJson(batchedUrls);
 
             IList<PriceDto> priceDtos = TransformToPriceDtos(priceJson);
 
             return priceDtos;
         }
 
-        private IList<PriceDto> TransformToPriceDtos(IEnumerable<EveMarketerPricesJSON> priceJson)
+        private IList<PriceDto> TransformToPriceDtos(IEnumerable<EveMarketerPricesJson> priceJson)
         {
             List<PriceDto> priceDtos = new();
 
-            foreach(EveMarketerPricesJSON json in priceJson)
+            foreach(EveMarketerPricesJson json in priceJson)
             {
                 priceDtos.Add(new PriceDto()
                 {
@@ -52,11 +52,11 @@ namespace SharpCrokite.Core.PriceUpdater
             return priceDtos;
         }
 
-        private IEnumerable<EveMarketerPricesJSON> RetrievePricesAsJson(IList<string> batchedUrls)
+        private IEnumerable<EveMarketerPricesJson> RetrievePricesAsJson(IList<string> batchedUrls)
         {
             using HttpClient client = new();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            List<EveMarketerPricesJSON> priceJson = new();
+            List<EveMarketerPricesJson> priceJson = new();
             foreach(string url in batchedUrls)
             {
                 HttpResponseMessage response = client.GetAsync(url).Result;
@@ -65,7 +65,7 @@ namespace SharpCrokite.Core.PriceUpdater
                 {
                     string responseString = response.Content.ReadAsStringAsync().Result;
 
-                    List<EveMarketerPricesJSON> batchJsonResult = JsonSerializer.Deserialize<List<EveMarketerPricesJSON>>(responseString);
+                    List<EveMarketerPricesJson> batchJsonResult = JsonSerializer.Deserialize<List<EveMarketerPricesJson>>(responseString);
 
                     priceJson.AddRange(batchJsonResult);
                 }

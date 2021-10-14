@@ -1,6 +1,6 @@
-﻿namespace SharpCrokite.Core.StaticDataUpdater.JsonModels
+﻿namespace SharpCrokite.Core.StaticDataUpdater.EsiJsonModels
 {
-    public class MaterialContentJson
+    public class EsiMaterialContentJson
     {
         public int typeID { get; set; }
         public int materialTypeID { get; set; }

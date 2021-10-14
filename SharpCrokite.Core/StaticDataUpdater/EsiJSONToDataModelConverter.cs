@@ -1,4 +1,4 @@
-﻿using SharpCrokite.Core.StaticDataUpdater.JsonModels;
+﻿using SharpCrokite.Core.StaticDataUpdater.EsiJsonModels;
 using SharpCrokite.DataAccess.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +8,13 @@ namespace SharpCrokite.Core.StaticDataUpdater
 {
     public static class EsiJsonToDataModelConverter
     {
-        internal static IEnumerable<Material> CreateMaterialsFromJSON(IEnumerable<IEnumerable<TypeJson>> materialTypesPerGroup)
+        internal static IEnumerable<Material> CreateMaterialsFromJSON(IEnumerable<IEnumerable<EsiTypeJson>> materialTypesPerGroup)
         {
             List<Material> materials = new();
 
-            foreach (IEnumerable<TypeJson> group in materialTypesPerGroup)
+            foreach (IEnumerable<EsiTypeJson> group in materialTypesPerGroup)
             {
-                foreach (TypeJson type in group)
+                foreach (EsiTypeJson type in group)
                 {
                     materials.Add(
                         new Material
@@ -30,15 +30,15 @@ namespace SharpCrokite.Core.StaticDataUpdater
             return materials;
         }
 
-        internal static IEnumerable<Harvestable> CreateHarvestablesFromJSON(IEnumerable<IEnumerable<TypeJson>> asteroidTypesPerGroup,
-            IEnumerable<MaterialContentJson> materialContent)
+        internal static IEnumerable<Harvestable> CreateHarvestablesFromJSON(IEnumerable<IEnumerable<EsiTypeJson>> asteroidTypesPerGroup,
+            IEnumerable<EsiMaterialContentJson> materialContent)
         {
             List<Harvestable> harvestables = new();
-            List<MaterialContentJson> materials = materialContent.ToList();
+            List<EsiMaterialContentJson> materials = materialContent.ToList();
 
-            foreach(IEnumerable<TypeJson> group in asteroidTypesPerGroup)
+            foreach(IEnumerable<EsiTypeJson> group in asteroidTypesPerGroup)
             {
-                foreach(TypeJson type in group)
+                foreach(EsiTypeJson type in group)
                 {
                     List<MaterialContent> materialContents = new();
 

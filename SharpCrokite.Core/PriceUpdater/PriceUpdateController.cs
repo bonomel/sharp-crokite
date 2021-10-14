@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using SharpCrokite.DataAccess;
 using SharpCrokite.DataAccess.Models;
-using SharpCrokite.DataAccess.Queries;
 using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.PriceUpdater

@@ -1,6 +1,6 @@
 ﻿namespace SharpCrokite.Core.PriceUpdater
 {
-    public class EveMarketerPricesJSON
+    public class EveMarketerPricesJson
     { 
         public Buy buy { get; set; }
         public Sell sell { get; set; }
