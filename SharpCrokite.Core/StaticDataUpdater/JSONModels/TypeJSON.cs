@@ -1,6 +1,6 @@
 ﻿namespace SharpCrokite.Core.StaticDataUpdater.JSONModels
 {
-    public class TypeJSON : ITypeJSON
+    public class TypeJSON
     {
         public int type_id { get; set; }
         public float capacity { get; set; }

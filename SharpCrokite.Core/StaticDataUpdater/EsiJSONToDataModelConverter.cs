@@ -8,13 +8,13 @@ namespace SharpCrokite.Core.StaticDataUpdater
 {
     public static class EsiJSONToDataModelConverter
     {
-        internal static IEnumerable<Material> CreateMaterialsFromJSON(IEnumerable<IEnumerable<ITypeJSON>> materialTypesPerGroup)
+        internal static IEnumerable<Material> CreateMaterialsFromJSON(IEnumerable<IEnumerable<TypeJSON>> materialTypesPerGroup)
         {
             List<Material> materials = new();
 
-            foreach (IEnumerable<ITypeJSON> group in materialTypesPerGroup)
+            foreach (IEnumerable<TypeJSON> group in materialTypesPerGroup)
             {
-                foreach (ITypeJSON type in group)
+                foreach (TypeJSON type in group)
                 {
                     materials.Add(
                         new Material
@@ -30,15 +30,15 @@ namespace SharpCrokite.Core.StaticDataUpdater
             return materials;
         }
 
-        internal static IEnumerable<Harvestable> CreateHarvestablesFromJSON(IEnumerable<IEnumerable<ITypeJSON>> asteroidTypesPerGroup,
-            IEnumerable<IMaterialContentJSON> materialContent)
+        internal static IEnumerable<Harvestable> CreateHarvestablesFromJSON(IEnumerable<IEnumerable<TypeJSON>> asteroidTypesPerGroup,
+            IEnumerable<MaterialContentJSON> materialContent)
         {
             List<Harvestable> harvestables = new();
-            List<IMaterialContentJSON> materials = materialContent.ToList();
+            List<MaterialContentJSON> materials = materialContent.ToList();
 
-            foreach(IEnumerable<ITypeJSON> group in asteroidTypesPerGroup)
+            foreach(IEnumerable<TypeJSON> group in asteroidTypesPerGroup)
             {
-                foreach(ITypeJSON type in group)
+                foreach(TypeJSON type in group)
                 {
                     List<MaterialContent> materialContents = new();
 
