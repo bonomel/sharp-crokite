@@ -24,19 +24,17 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
         private const string TypesRoutePart = "types/";
         private const string IconRoutePart = "icon/";
 
-        private List<EsiCategoryJson> categories;
-        private int maxTries = 3;
+        private readonly int maxTries = 3;
 
-        private List<EsiCategoryJson> Categories
+        private IEnumerable<EsiCategoryJson> categories;
+
+        private IEnumerable<EsiCategoryJson> GetCategories()
         {
-            get
+            if (categories == null)
             {
-                if(categories == null)
-                {
-                    LoadCategoriesFromEsi();
-                }
-                return categories;
+                LoadCategoriesFromEsi();
             }
+            return categories;
         }
 
         public IEnumerable<HarvestableDto> RetrieveHarvestables()
@@ -47,12 +45,8 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
 
             List<HarvestableDto> harvestableDtos = new();
 
-            EsiCategoryJson asteroidCategory = Categories.Single(c => c.name == "Asteroid");
-
+            EsiCategoryJson asteroidCategory = GetCategories().Single(c => c.name == "Asteroid");
             IEnumerable<EsiGroupJson> asteroidGroups = GetGroupsFromCategory(client, asteroidCategory);
-
-            List<IEnumerable<EsiTypeJson>> asteroidTypesPerGroup = new();
-
             IEnumerable<EsiMaterialContentJson> materials = RetrieveMaterialContent();
 
             foreach (EsiGroupJson asteroidGroup in asteroidGroups)
@@ -110,10 +104,10 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
 
             List<MaterialDto> materialDtos = new();
 
-            EsiCategoryJson materialCategory = Categories.Single(c => c.name == "Material");
+            EsiCategoryJson materialCategory = GetCategories().Single(c => c.name == "Material");
 
             IEnumerable<EsiGroupJson> materialGroups = GetGroupsFromCategory(client, materialCategory)
-                .Where(g => g.name == "Mineral" || g.name == "Moon Materials" || g.name == "Ice Product");
+                .Where(g => g.name is "Mineral" or "Moon Materials" or "Ice Product");
 
             List<IEnumerable<EsiTypeJson>> materialTypesPerGroup = new();
 

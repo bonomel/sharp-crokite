@@ -1,11 +1,11 @@
-﻿using SharpCrokite.Core.ViewModels;
-using SharpCrokite.DataAccess.Models;
-using SharpCrokite.Infrastructure.Repositories;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+
+using SharpCrokite.Core.ViewModels;
+using SharpCrokite.DataAccess.Models;
+using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.DataAccess.Queries
 {
@@ -14,23 +14,21 @@ namespace SharpCrokite.DataAccess.Queries
         private readonly IRepository<Harvestable> harvestableRepository;
         private readonly IRepository<Material> materialRepository;
 
-        private readonly NumberFormatInfo ISKNumberFormatInfo;
+        private static readonly NumberFormatInfo ISKNumberFormatInfo = new()
+        {
+            CurrencyDecimalSeparator = ",",
+            CurrencyDecimalDigits = 2,
+            CurrencyGroupSeparator = ".",
+            CurrencyGroupSizes = new int[] { 3 },
+            CurrencySymbol = "ISK",
+            CurrencyPositivePattern = 3,
+            CurrencyNegativePattern = 8
+        };
 
         public AllHarvestablesQuery(IRepository<Harvestable> harvestableRepository, IRepository<Material> materialRepository)
         {
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
-
-            ISKNumberFormatInfo = new NumberFormatInfo()
-            {
-                CurrencyDecimalSeparator = ",",
-                CurrencyDecimalDigits = 2,
-                CurrencyGroupSeparator = ".",
-                CurrencyGroupSizes = new int[] { 3 },
-                CurrencySymbol = "ISK",
-                CurrencyPositivePattern = 3,
-                CurrencyNegativePattern = 8
-            };
         }
 
         public IList<HarvestableViewModel> Execute()

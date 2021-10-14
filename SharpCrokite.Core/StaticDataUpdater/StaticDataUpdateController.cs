@@ -11,7 +11,9 @@ namespace SharpCrokite.Core.StaticDataUpdater
         private readonly IRepository<Material> materialRepository;
         private readonly EsiStaticDataRetriever dataRetriever;
 
-        public StaticDataUpdateController(EsiStaticDataRetriever dataRetriever, IRepository<Harvestable> harvestableRepository, IRepository<Material> materialRepository)
+        public StaticDataUpdateController(EsiStaticDataRetriever dataRetriever,
+            IRepository<Harvestable> harvestableRepository,
+            IRepository<Material> materialRepository)
         {
             this.dataRetriever = dataRetriever;
             this.harvestableRepository = harvestableRepository;
