@@ -20,7 +20,7 @@
                         <Button Content="Delete Prices" Name="DeletePriceDataButton" Click="DeletePriceDataButton_Click" Width="160" Margin="5,10,0,5"/>
                     </StackPanel>
                     <DataGrid Name="HarvestablesDataGrid" Margin="10,50,10,10" IsReadOnly="true" AutoGenerateColumns="False" 
-                              HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" HeadersVisibility="Column"  
+                              HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" HeadersVisibility="Column"
                               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="False"
                               CanUserReorderColumns="False" CanUserResizeColumns="False">
                         <DataGrid.CellStyle>
@@ -50,7 +50,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="120">
+                            <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="180">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="VerticalAlignment" Value="Center" />
