@@ -11,7 +11,6 @@ namespace SharpCrokite.UI.Views
         public HarvestablesView()
         {
             InitializeComponent();
-            //DataContext = new HarvestableViewModel();
         }
     }
 }
