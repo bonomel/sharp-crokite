@@ -9,6 +9,7 @@ using SharpCrokite.DataAccess.Queries;
 using SharpCrokite.DataAccess.DatabaseContexts;
 using SharpCrokite.Infrastructure.Repositories;
 using SharpCrokite.Core.StaticDataUpdater.Esi;
+using SharpCrokite.Core.Models;
 
 namespace SharpCrokite.UI
 {
@@ -18,20 +19,6 @@ namespace SharpCrokite.UI
     public partial class SharpCrokiteMainWindow : Window
     {
         private readonly SharpCrokiteDbContext dbContext;
-
-        private IEnumerable<HarvestableViewModel> harvestables;
-        private IEnumerable<HarvestableViewModel> Harvestables
-        {
-            get
-            {
-                if(harvestables == null)
-                {
-                    var harvestablesQuery = new AllHarvestablesQuery(new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
-                    harvestables = harvestablesQuery.Execute();
-                }
-                return harvestables;
-            }
-        }
 
         public SharpCrokiteMainWindow()
         {
@@ -43,8 +30,6 @@ namespace SharpCrokite.UI
             try 
             {
                 this.dbContext = dbContext;
-
-                HarvestablesDataGrid.ItemsSource = Harvestables;
             }
             catch (Exception ex)
             {
@@ -103,8 +88,7 @@ namespace SharpCrokite.UI
 
         private void ReloadGrid()
         {
-            harvestables = null;
-            HarvestablesDataGrid.ItemsSource = Harvestables;
+            
         }
     }
 }

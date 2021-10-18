@@ -1,15 +1,36 @@
-﻿namespace SharpCrokite.Core.ViewModels
+﻿using SharpCrokite.Core.Models;
+using SharpCrokite.DataAccess.DatabaseContexts;
+using SharpCrokite.DataAccess.Models;
+using SharpCrokite.DataAccess.Queries;
+using SharpCrokite.Infrastructure.Repositories;
+using System.Collections.ObjectModel;
+
+namespace SharpCrokite.Core.ViewModels
 {
     public class HarvestableViewModel
     {
-        public int HarvestableId { get; set; }
-        public byte[] Icon { get; internal set; }
-        public string Name { get; set; }
-        public string Type { get; set; }
-        public string Price { get; set; }
-        public string MaterialContents { get; set; }
-        public string Description { get; set; }
-        //public IList<MaterialContentViewModel> MaterialContents { get; set; } = new List<MaterialContentViewModel>();
-        public HarvestableViewModel IsCompressedVariantOfType { get; set; }
+        private readonly IRepository<Harvestable> harvestableRepository;
+        private readonly IRepository<Material> materialRepository;
+
+        public ObservableCollection<HarvestableModel> Harvestables
+        {
+            get;
+            set;
+        }
+
+        public HarvestableViewModel()
+        {
+            SharpCrokiteDbContext dbContext = new();
+            harvestableRepository = new HarvestableRepository(dbContext);
+            materialRepository = new MaterialRepository(dbContext);
+
+            LoadHarvestables();
+        }
+
+        private void LoadHarvestables()
+        {
+            AllHarvestablesQuery allHarvestablesQuery = new(harvestableRepository, materialRepository);
+            Harvestables = new(allHarvestablesQuery.Execute());
+        }
     }
 }
