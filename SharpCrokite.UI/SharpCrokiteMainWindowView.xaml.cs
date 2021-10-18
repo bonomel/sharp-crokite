@@ -12,18 +12,18 @@ namespace SharpCrokite.UI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class SharpCrokiteMainWindow : Window
+    public partial class SharpCrokiteMainWindowView : Window
     {
         private readonly SharpCrokiteDbContext dbContext;
 
-        public SharpCrokiteMainWindow()
+        public SharpCrokiteMainWindowView()
         {
             InitializeComponent();
         }
 
-        public SharpCrokiteMainWindow(SharpCrokiteDbContext dbContext) : this()
+        public SharpCrokiteMainWindowView(SharpCrokiteDbContext dbContext) : this()
         {
-            try 
+            try
             {
                 this.dbContext = dbContext;
             }
@@ -61,7 +61,7 @@ namespace SharpCrokite.UI
                 new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
             staticDataUpdateController.DeleteAllStaticData();
 
-            ReloadGrid();
+            //ReloadGrid();
         }
 
         private void UpdatePriceDataButton_Click(object sender, RoutedEventArgs e)
@@ -70,7 +70,7 @@ namespace SharpCrokite.UI
                 new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
             priceUpdateController.UpdatePrices();
 
-            ReloadGrid();
+            //ReloadGrid();
         }
 
         private void DeletePriceDataButton_Click(object sender, RoutedEventArgs e)
@@ -79,7 +79,7 @@ namespace SharpCrokite.UI
                 new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
             priceUpdateController.DeleteAllPrices();
 
-            ReloadGrid();
+            //ReloadGrid();
         }
 
         private void ReloadGrid()

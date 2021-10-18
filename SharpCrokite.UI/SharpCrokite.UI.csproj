@@ -22,7 +22,7 @@
     <Page Update="App.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="MainWindow.xaml">
+    <Page Update="SharpCrokiteMainWindowView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
