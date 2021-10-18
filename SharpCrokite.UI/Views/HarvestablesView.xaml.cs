@@ -6,12 +6,12 @@ namespace SharpCrokite.UI.Views
     /// <summary>
     /// Interaction logic for AllHarvestablesView.xaml
     /// </summary>
-    public partial class AllHarvestablesView : UserControl
+    public partial class HarvestablesView : UserControl
     {
-        public AllHarvestablesView()
+        public HarvestablesView()
         {
             InitializeComponent();
-            DataContext = new HarvestableViewModel();
+            //DataContext = new HarvestableViewModel();
         }
     }
 }

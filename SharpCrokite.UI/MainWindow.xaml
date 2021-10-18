@@ -16,10 +16,10 @@
                 <Button Content="Delete Prices" Name="DeletePriceDataButton" Click="DeletePriceDataButton_Click" Width="160" Margin="5,10,0,5"/>
             </StackPanel>
         </StackPanel>
-        <TabControl Margin="0, 50, 0, 0">
+        <TabControl Margin="10, 50, 10, 10">
             <TabItem Header="Harvestables">
                 <Grid>
-                    <views:AllHarvestablesView x:Name="AllHarvestablesViewControl"/>
+                    <views:HarvestablesView x:Name="AllHarvestablesViewControl"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Mining Yields">
