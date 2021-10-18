@@ -27,8 +27,6 @@
             <TabItem Header="Mining Yields">
                 <DataGrid Margin="10,10,10,10"/>
             </TabItem>
-            <TabItem Header="Settings">
-            </TabItem>
         </TabControl>
     </Grid>
 </Window>

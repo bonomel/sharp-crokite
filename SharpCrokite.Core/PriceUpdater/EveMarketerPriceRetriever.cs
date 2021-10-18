@@ -117,4 +117,3 @@ namespace SharpCrokite.Core.PriceUpdater
         }
     }
 }
-// http://api.evemarketer.com/ec/marketstat?usesystem=30000144&typeid=18&typeid=34&typeid=35&typeid=36&typeid=37&typeid=38&typeid=39&typeid=40&typeid=1224&typeid=1228&typeid=1230&typeid=17455&typeid=17456&typeid=17459&typeid=17460&typeid=17463&typeid=17464&typeid=17470&typeid=17471&typeid=11399&typeid=28432&typeid=28429&typeid=28424&typeid=28422&typeid=28416&typeid=28410&typeid=28406&typeid=28403&typeid=28401&typeid=28397&typeid=28394&typeid=28420&typeid=28391&typeid=28388&typeid=28367&typeid=45492&typeid=45493&typeid=45491&typeid=45490&typeid=16633&typeid=16636&typeid=16635&typeid=16634

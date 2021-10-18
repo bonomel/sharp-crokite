@@ -1,5 +1,4 @@
-﻿using SharpCrokite.Core.ViewModels;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace SharpCrokite.UI.Views
 {

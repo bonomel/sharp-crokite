@@ -73,7 +73,9 @@ namespace SharpCrokite.DataAccess.Queries
             }
 
             string materialContentString = materialContentStringBuilder.ToString();
-            string materialContentStringTrimmed = materialContentString.Substring(0, materialContentString.Length - 1);
+            string materialContentStringTrimmed = materialContentString[0..^1];
+            // this means position 0 until '..' 1 before last '^' 
+            // thus it'll trim the last newline character :)
 
             return materialContentStringTrimmed;
         }
