@@ -9,12 +9,26 @@ using System.Windows;
 
 namespace SharpCrokite.Core.ViewModels
 {
-    public class HarvestablesViewModel
+    public class HarvestablesViewModel : INotifyPropertyChanged
     {
         private readonly IRepository<Harvestable> harvestableRepository;
         private readonly IRepository<Material> materialRepository;
+        private ObservableCollection<HarvestableModel> harvestables;
 
-        public ObservableCollection<HarvestableModel> Harvestables { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        public ObservableCollection<HarvestableModel> Harvestables
+        {
+            get => harvestables;
+            set
+            {
+                if (harvestables != value)
+                {
+                    harvestables = value;
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(Harvestables)));
+                }
+            }
+        }
 
         public HarvestablesViewModel()
         {

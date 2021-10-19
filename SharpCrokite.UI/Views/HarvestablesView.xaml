@@ -11,7 +11,7 @@
         <DataGrid Name="HarvestablesDataGrid" Margin="10,10,10,10" IsReadOnly="true" AutoGenerateColumns="False" 
                               HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" HeadersVisibility="Column"
                               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="False"
-                              CanUserReorderColumns="False" CanUserResizeColumns="False" ItemsSource="{Binding Path=Harvestables}">
+                              CanUserReorderColumns="False" CanUserResizeColumns="False" ItemsSource="{Binding Harvestables}">
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
                     <Style.Triggers>

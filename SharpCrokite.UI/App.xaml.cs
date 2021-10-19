@@ -11,7 +11,7 @@ namespace SharpCrokite.UI
         private void Startup_App(object sender, StartupEventArgs e)
         {
             SharpCrokiteDbContext dbContext = new SharpCrokiteDbContext();
-            SharpCrokiteMainWindowView sharpCrokiteMainWindow = new SharpCrokiteMainWindowView(dbContext);
+            MainWindowView sharpCrokiteMainWindow = new MainWindowView(dbContext);
 
             sharpCrokiteMainWindow.Show();
         }
