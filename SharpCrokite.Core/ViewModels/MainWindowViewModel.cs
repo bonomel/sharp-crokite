@@ -17,10 +17,6 @@ namespace SharpCrokite.Core.ViewModels
 
         public MainWindowViewModel()
         {
-            dbContext = new SharpCrokiteDbContext();
-            harvestableRepository = new HarvestableRepository(dbContext);
-            materialRepository = new MaterialRepository(dbContext);
-
             UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
             DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
         }
@@ -35,6 +31,7 @@ namespace SharpCrokite.Core.ViewModels
             try
             {
                 staticDataUpdateController.UpdateData();
+
             }
             catch (HttpRequestException ex)
             {
@@ -52,6 +49,7 @@ namespace SharpCrokite.Core.ViewModels
         {
             return true;
         }
+
         public RelayCommand DeleteStaticDataCommand { get; private set; }
 
         private void OnDeleteStaticData()

@@ -1,4 +1,5 @@
-﻿using SharpCrokite.Core.Models;
+﻿using SharpCrokite.Core.Commands;
+using SharpCrokite.Core.Models;
 using SharpCrokite.DataAccess.DatabaseContexts;
 using SharpCrokite.DataAccess.Models;
 using SharpCrokite.DataAccess.Queries;
@@ -30,11 +31,15 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
+        public RelayCommand UpdateHarvestablesCommand { get; private set; }
+
         public HarvestablesViewModel()
         {
             SharpCrokiteDbContext dbContext = new();
             harvestableRepository = new HarvestableRepository(dbContext);
             materialRepository = new MaterialRepository(dbContext);
+
+            UpdateHarvestablesCommand = new RelayCommand(LoadHarvestables);
 
             LoadHarvestables();
         }
@@ -43,7 +48,7 @@ namespace SharpCrokite.Core.ViewModels
         {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return;
             AllHarvestablesQuery allHarvestablesQuery = new(harvestableRepository, materialRepository);
-            Harvestables = new(allHarvestablesQuery.Execute());
+            harvestables = new(allHarvestablesQuery.Execute());
         }
     }
 }
