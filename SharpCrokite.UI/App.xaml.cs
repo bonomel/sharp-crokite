@@ -30,7 +30,7 @@ namespace SharpCrokite.UI
             services.AddSingleton<HarvestableRepository>();
             services.AddSingleton<MaterialRepository>();
 
-            services.AddSingleton<MainWindowView>();
+            services.AddSingleton<MainWindow>();
             services.AddSingleton<MainWindowViewModel>();
 
             services.AddSingleton<HarvestablesView>();
@@ -41,7 +41,7 @@ namespace SharpCrokite.UI
 
         private void Startup_App(object sender, StartupEventArgs e)
         {
-            MainWindowView window = serviceProvider.GetRequiredService<MainWindowView>();
+            MainWindow window = serviceProvider.GetRequiredService<MainWindow>();
             window.DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>();
 
             window.Show();

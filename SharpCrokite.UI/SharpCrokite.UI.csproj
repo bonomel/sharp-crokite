@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.37" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SharpCrokite.Core\SharpCrokite.Core.csproj" />
   </ItemGroup>
 
@@ -26,7 +22,7 @@
     <Page Update="App.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="MainWindowView.xaml">
+    <Page Update="MainWindow.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

@@ -1,5 +1,4 @@
 ﻿using SharpCrokite.Core.Models;
-using SharpCrokite.DataAccess.DatabaseContexts;
 using SharpCrokite.DataAccess.Queries;
 using SharpCrokite.Infrastructure.Repositories;
 using System;
@@ -9,17 +8,12 @@ using System.Windows;
 
 namespace SharpCrokite.Core.ViewModels
 {
-    public class HarvestablesViewModel : BindableBase
+    public class HarvestablesViewModel
     {
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
-        private ObservableCollection<HarvestableModel> harvestables;
 
-        public ObservableCollection<HarvestableModel> Harvestables
-        {
-            get { return harvestables; }
-            private set { harvestables = value; }
-        }
+        public ObservableCollection<HarvestableModel> Harvestables { get; private set; }
 
         public Guid Id { get; } = Guid.NewGuid();
 
@@ -35,7 +29,7 @@ namespace SharpCrokite.Core.ViewModels
         {
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return;
             AllHarvestablesQuery allHarvestablesQuery = new(harvestableRepository, materialRepository);
-            harvestables = new(allHarvestablesQuery.Execute());
+            Harvestables = new(allHarvestablesQuery.Execute());
         }
     }
 }

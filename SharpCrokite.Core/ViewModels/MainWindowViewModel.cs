@@ -8,23 +8,19 @@ using System.Windows;
 
 namespace SharpCrokite.Core.ViewModels
 {
-    public class MainWindowViewModel : BindableBase
+    public class MainWindowViewModel
     {
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
 
-        private HarvestablesViewModel harvestablesViewModel;
-        public HarvestablesViewModel HarvestablesViewModel
-        {
-            get => harvestablesViewModel;
-            private set => SetProperty(ref harvestablesViewModel, value);
-        }
+        public HarvestablesViewModel HarvestablesViewModel { get; private set; }
 
         public MainWindowViewModel(HarvestablesViewModel harvestablesViewModel, HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
-            this.harvestablesViewModel = harvestablesViewModel;
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
+
+            HarvestablesViewModel = harvestablesViewModel;
 
             UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
             DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
