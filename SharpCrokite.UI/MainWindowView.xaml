@@ -3,12 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:SharpCrokite.Core.ViewModels;assembly=SharpCrokite.Core"
         xmlns:views="clr-namespace:SharpCrokite.UI.Views"
-        xmlns:root="clr-namespace:SharpCrokite.Core.ViewModels;assembly=SharpCrokite.Core"
         mc:Ignorable="d"  ResizeMode="NoResize"
         Title="Sharp Crokite" Height="1080" Width="1920"
-        WindowStartupLocation="CenterScreen" Icon="Images/sharp-crokite-icon.png"
-        root:ViewModelLocator.AutoWireViewModel="True">
+        WindowStartupLocation="CenterScreen" Icon="Images/sharp-crokite-icon.png">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:HarvestablesViewModel}">
+            <views:HarvestablesView DataContext="{Binding HarvestablesViewModel}" />
+        </DataTemplate>
+    </Window.Resources>
     <Grid x:Name="MainGrid">
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Height="45" VerticalAlignment="Top">
@@ -21,11 +25,11 @@
         <TabControl Margin="10, 50, 10, 10">
             <TabItem Header="Harvestables">
                 <Grid>
-                    <views:HarvestablesView x:Name="AllHarvestablesViewControl"/>
+                    <ContentControl Content="{Binding HarvestablesViewModel}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Mining Yields">
-                <DataGrid Margin="10,10,10,10"/>
+                <views:HarvestablesView />
             </TabItem>
         </TabControl>
     </Grid>

@@ -1,7 +1,6 @@
 ﻿using SharpCrokite.Core.Commands;
 using SharpCrokite.Core.StaticDataUpdater;
 using SharpCrokite.Core.StaticDataUpdater.Esi;
-using SharpCrokite.DataAccess.DatabaseContexts;
 using SharpCrokite.Infrastructure.Repositories;
 using System;
 using System.Net.Http;
@@ -9,11 +8,27 @@ using System.Windows;
 
 namespace SharpCrokite.Core.ViewModels
 {
-    public class MainWindowViewModel
+    public class MainWindowViewModel : BindableBase
     {
-        private readonly SharpCrokiteDbContext dbContext;
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
+
+        private HarvestablesViewModel harvestablesViewModel;
+        public HarvestablesViewModel HarvestablesViewModel
+        {
+            get { return harvestablesViewModel; }
+            private set { SetProperty(ref harvestablesViewModel, value); }
+        }
+
+        public MainWindowViewModel(HarvestablesViewModel harvestablesViewModel, HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
+        {
+            this.harvestablesViewModel = harvestablesViewModel;
+            this.harvestableRepository = harvestableRepository;
+            this.materialRepository = materialRepository;
+
+            UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
+            DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
+        }
 
         public MainWindowViewModel()
         {
@@ -26,7 +41,7 @@ namespace SharpCrokite.Core.ViewModels
         private void OnUpdateStaticData()
         {
             var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(),
-                new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
+                harvestableRepository, materialRepository);
 
             try
             {
@@ -55,7 +70,7 @@ namespace SharpCrokite.Core.ViewModels
         private void OnDeleteStaticData()
         {
             var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(),
-                new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
+                harvestableRepository, materialRepository);
 
             staticDataUpdateController.DeleteAllStaticData();
         }

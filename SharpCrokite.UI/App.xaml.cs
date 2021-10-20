@@ -2,6 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using SharpCrokite.Infrastructure.Repositories;
+using System;
+using SharpCrokite.Core.ViewModels;
+using SharpCrokite.UI.Views;
 
 namespace SharpCrokite.UI
 {
@@ -10,32 +13,38 @@ namespace SharpCrokite.UI
     /// </summary>
     public partial class App : Application
     {
-        private ServiceProvider serviceProvider;
+        private IServiceProvider serviceProvider;
 
-        public App()
+        protected override void OnStartup(StartupEventArgs e)
         {
-            ServiceCollection services = new();
-            ConfigureServices(services);
-            serviceProvider = services.BuildServiceProvider();
+            serviceProvider = CreateServiceProvider();
+            base.OnStartup(e);
         }
 
-        private void ConfigureServices(ServiceCollection services)
+        private static IServiceProvider CreateServiceProvider()
         {
+            IServiceCollection services = new ServiceCollection();
+
             services.AddDbContext<SharpCrokiteDbContext>(ServiceLifetime.Singleton);
 
             services.AddSingleton<HarvestableRepository>();
             services.AddSingleton<MaterialRepository>();
 
             services.AddSingleton<MainWindowView>();
+            services.AddSingleton<MainWindowViewModel>();
+
+            services.AddSingleton<HarvestablesView>();
+            services.AddSingleton<HarvestablesViewModel>();
+
+            return services.BuildServiceProvider();
         }
 
         private void Startup_App(object sender, StartupEventArgs e)
         {
-            SharpCrokiteDbContext dbContext = new SharpCrokiteDbContext();
+            MainWindowView window = serviceProvider.GetRequiredService<MainWindowView>();
+            window.DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>();
 
-            var mainWindow = serviceProvider.GetService<MainWindowView>();
-
-            mainWindow.Show();
+            window.Show();
         }
     }
 }
