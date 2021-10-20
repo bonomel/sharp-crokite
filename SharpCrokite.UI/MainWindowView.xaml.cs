@@ -11,23 +11,5 @@ namespace SharpCrokite.UI
         {
             InitializeComponent();
         }
-
-        private void UpdatePriceDataButton_Click(object sender, RoutedEventArgs e)
-        {
-            //var priceUpdateController = new PriceUpdateController(new EveMarketerPriceRetriever(), 
-            //    new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
-            //priceUpdateController.UpdatePrices();
-
-            //ReloadGrid();
-        }
-
-        private void DeletePriceDataButton_Click(object sender, RoutedEventArgs e)
-        {
-            //var priceUpdateController = new PriceUpdateController(new EveMarketerPriceRetriever(), 
-            //    new HarvestableRepository(dbContext), new MaterialRepository(dbContext));
-            //priceUpdateController.DeleteAllPrices();
-
-            //ReloadGrid();
-        }
     }
 }

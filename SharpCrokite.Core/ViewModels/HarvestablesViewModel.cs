@@ -15,13 +15,13 @@ namespace SharpCrokite.Core.ViewModels
         private readonly MaterialRepository materialRepository;
         private ObservableCollection<HarvestableModel> harvestables;
 
-        public Guid Id = Guid.NewGuid();
-
         public ObservableCollection<HarvestableModel> Harvestables
         {
             get { return harvestables; }
             private set { harvestables = value; }
         }
+
+        public Guid Id { get; } = Guid.NewGuid();
 
         public HarvestablesViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
@@ -31,16 +31,9 @@ namespace SharpCrokite.Core.ViewModels
             LoadHarvestables();
         }
 
-        public HarvestablesViewModel()
-        {
-            SharpCrokiteDbContext dbContext = new();
-            this.harvestableRepository = new HarvestableRepository(dbContext);
-            this.materialRepository = new MaterialRepository(dbContext);
-        }
-
         private void LoadHarvestables()
         {
-            //if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return;
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return;
             AllHarvestablesQuery allHarvestablesQuery = new(harvestableRepository, materialRepository);
             harvestables = new(allHarvestablesQuery.Execute());
         }

@@ -16,8 +16,8 @@ namespace SharpCrokite.Core.ViewModels
         private HarvestablesViewModel harvestablesViewModel;
         public HarvestablesViewModel HarvestablesViewModel
         {
-            get { return harvestablesViewModel; }
-            private set { SetProperty(ref harvestablesViewModel, value); }
+            get => harvestablesViewModel;
+            private set => SetProperty(ref harvestablesViewModel, value);
         }
 
         public MainWindowViewModel(HarvestablesViewModel harvestablesViewModel, HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
