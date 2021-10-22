@@ -46,13 +46,7 @@ namespace SharpCrokite.Core.Queries
                     Name = harvestableModel.Name,
                     Description = harvestableModel.Description,
                     Type = harvestableModel.Type,
-                    Tritanium = GetMaterialQuantity(harvestableModel, "Tritanium"),
-                    Pyerite = GetMaterialQuantity(harvestableModel, "Pyerite"),
-                    Mexallon = GetMaterialQuantity(harvestableModel, "Mexallon"),
-                    Isogen = GetMaterialQuantity(harvestableModel, "Isogen"),
-                    Nocxium = GetMaterialQuantity(harvestableModel, "Nocxium"),
-                    Zydrine = GetMaterialQuantity(harvestableModel, "Zydrine"),
-                    Megacyte = GetMaterialQuantity(harvestableModel, "Megacyte")
+                    Minerals = harvestableModel.MaterialContents.ToDictionary(mc => mc.Material.Name, mc => mc.Quantity)
                 });
             }
 
@@ -86,6 +80,8 @@ namespace SharpCrokite.Core.Queries
             return normalOreIskPerHourCollection;
         }
 
+        // This method will return the type with the highest amount of mineral content
+        // This is necessary because CCP left obsolete types in the database, but without a proper flag
         private NormalOreIskPerHour GetObsoleteTypeFromListOfOreTypes(List<NormalOreIskPerHour> normalOreIskPerHourPerType)
         {
             return normalOreIskPerHourPerType.Aggregate((o1, o2) => 
