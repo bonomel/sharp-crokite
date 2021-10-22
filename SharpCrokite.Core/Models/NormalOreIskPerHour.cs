@@ -17,7 +17,6 @@ namespace SharpCrokite.Core.Models
         public int Nocxium => Minerals.GetValueOrDefault(nameof(Nocxium));
         public int Zydrine => Minerals.GetValueOrDefault(nameof(Zydrine));
         public int Megacyte => Minerals.GetValueOrDefault(nameof(Megacyte));
-        public decimal BatchValue { get; set; }
         public string MaterialIskPerHour { get; set; }
         public string CompressedIskPerHour { get; set; }
     }
