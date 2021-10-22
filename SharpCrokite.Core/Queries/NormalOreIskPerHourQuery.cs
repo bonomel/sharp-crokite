@@ -54,10 +54,7 @@ namespace SharpCrokite.Core.Queries
             {
                 List<NormalOreIskPerHour> normalOreIskPerHourPerType = normalOreIskPerHourCollection.Where(o => o.Type == oreType).ToList();
 
-                if(normalOreIskPerHourPerType.Any())
-                {
-                    _ = normalOreIskPerHourCollection.Remove(GetObsoleteTypeFromListOfOreTypes(normalOreIskPerHourPerType));
-                }
+                _ = normalOreIskPerHourCollection.Remove(GetObsoleteTypeFromListOfOreTypes(normalOreIskPerHourPerType));
             }
 
             foreach(NormalOreIskPerHour normalOreIskPerHour in normalOreIskPerHourCollection)
