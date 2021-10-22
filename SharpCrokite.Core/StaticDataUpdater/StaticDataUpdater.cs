@@ -31,8 +31,8 @@ namespace SharpCrokite.Core.StaticDataUpdater
                     existingHarvestable.IsCompressedVariantOfType = harvestableDto.IsCompressedVariantOfType;
                     existingHarvestable.MaterialContents = harvestableDto.MaterialContents.Select(dto => new MaterialContent()
                         {
-                            HarvestableId = dto.HarvestableId,
-                            MaterialId = dto.MaterialId,
+                            //HarvestableId = dto.HarvestableId,
+                            //MaterialId = dto.MaterialId,
                             Quantity = dto.Quantity
                         }).ToList();
 
@@ -50,8 +50,8 @@ namespace SharpCrokite.Core.StaticDataUpdater
                         IsCompressedVariantOfType = harvestableDto.IsCompressedVariantOfType,
                         MaterialContents = harvestableDto.MaterialContents.Select(dto => new MaterialContent()
                         {
-                            HarvestableId = dto.HarvestableId,
-                            MaterialId = dto.MaterialId,
+                            //HarvestableId = dto.Harvestable,
+                            //MaterialId = dto.MaterialId,
                             Quantity = dto.Quantity
                         }).ToList()
                     });

@@ -23,10 +23,11 @@ namespace SharpCrokite.Core.Queries
             List<NormalOreIskPerHour> normalOreIskPerHourCollection = new();
 
             IEnumerable<Harvestable> harvestableModels = harvestableRepository.Find(h =>
-            h.Type == "Veldspar" ||
+            (h.Type == "Veldspar" ||
             h.Type == "Scordite" ||
             h.Type == "Pyroxeres" ||
-            h.Type == "Plagioclase");
+            h.Type == "Plagioclase") &&
+            h.IsCompressedVariantOfType == null);
 
             foreach(Harvestable harvestableModel in harvestableModels)
             {
@@ -35,19 +36,26 @@ namespace SharpCrokite.Core.Queries
                     Icon = harvestableModel.Icon,
                     Name = harvestableModel.Name,
                     Description = harvestableModel.Description,
-                    Tritanium = 0,
-                    Pyerite = 0,
-                    Isogen = 0,
-                    Megacyte = 0,
-                    Mexallon = 0,
-                    Nocxium = 0,
-                    Zydrine = 0,
+                    Tritanium = GetMaterialQuantity(harvestableModel, "Tritanium"),
+                    Pyerite = GetMaterialQuantity(harvestableModel, "Pyerite"),
+                    Isogen = GetMaterialQuantity(harvestableModel, "Isogen"),
+                    Megacyte = GetMaterialQuantity(harvestableModel, "Megacyte"),
+                    Mexallon = GetMaterialQuantity(harvestableModel, "Mexallon"),
+                    Nocxium = GetMaterialQuantity(harvestableModel, "Nocxium"),
+                    Zydrine = GetMaterialQuantity(harvestableModel, "Zydrine"),
                     MaterialIskPerHour = "todo",
                     CompressedIskPerHour = "todo"
                 });
             }
 
             return normalOreIskPerHourCollection;
+        }
+
+        private static int GetMaterialQuantity(Harvestable harvestableModel, string materialName)
+        {
+            return harvestableModel.MaterialContents.SingleOrDefault(mc => mc.Material.Name == materialName) != null
+                ? harvestableModel.MaterialContents.SingleOrDefault(mc => mc.Material.Name == materialName).Quantity
+                : 0;
         }
     }
 }
