@@ -30,6 +30,9 @@ namespace SharpCrokite.UI
             services.AddSingleton<MainWindow>();
             services.AddSingleton<MainWindowViewModel>();
 
+            services.AddSingleton<NormalOreIskPerHourView>();
+            services.AddSingleton<NormalOreIskPerHourViewModel>();
+
             services.AddSingleton<HarvestablesView>();
             services.AddSingleton<HarvestablesViewModel>();
 

@@ -21,7 +21,7 @@
                 <views:HarvestablesView DataContext="{Binding HarvestablesViewModel}"/>
             </TabItem>
             <TabItem Header="Mining Yields">
-                
+                <views:NormalOreIskPerHourView DataContext="{Binding NormalOreIskPerHourViewModel}"/>
             </TabItem>
         </TabControl>
     </Grid>

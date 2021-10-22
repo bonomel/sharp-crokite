@@ -146,7 +146,7 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
             string responseString = client.DownloadString(uri.AbsoluteUri);
 
             IEnumerable<EsiMaterialContentJson> listOfMaterialContent = JsonSerializer.Deserialize<List<EsiMaterialContentJson>>(responseString);
-            var veldsparmaterial = listOfMaterialContent.Single(m => m.typeID == 1230);
+
             return listOfMaterialContent;
         }
 
