@@ -15,16 +15,18 @@ namespace SharpCrokite.Core.ViewModels
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
 
-        public HarvestablesViewModel HarvestablesViewModel { get; private set; }
-
+        public HarvestablesViewModel HarvestablesViewModel { get; }
+        public NormalOreIskPerHourViewModel NormalOreIskPerHourViewModel { get; }
         public Guid Id { get; } = Guid.NewGuid();
 
-        public MainWindowViewModel(HarvestablesViewModel harvestablesViewModel, HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
+        public MainWindowViewModel(HarvestablesViewModel harvestablesViewModel, NormalOreIskPerHourViewModel normalOreIskPerHourViewModel,
+            HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
 
             HarvestablesViewModel = harvestablesViewModel;
+            NormalOreIskPerHourViewModel = normalOreIskPerHourViewModel;
 
             UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
             DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
