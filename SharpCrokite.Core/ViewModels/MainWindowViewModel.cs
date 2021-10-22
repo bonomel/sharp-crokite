@@ -1,4 +1,5 @@
 ﻿using SharpCrokite.Core.Commands;
+using SharpCrokite.Core.PriceUpdater;
 using SharpCrokite.Core.StaticDataUpdater;
 using SharpCrokite.Core.StaticDataUpdater.Esi;
 using SharpCrokite.Infrastructure.Repositories;
@@ -24,12 +25,39 @@ namespace SharpCrokite.Core.ViewModels
 
             UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
             DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
+            UpdatePricesCommand = new RelayCommand(OnUpdatePrices, CanUpdatePrices);
+            DeletePricesCommand = new RelayCommand(OnDeletePrices, CanDeletePrices);
         }
 
-        public MainWindowViewModel()
+
+        public RelayCommand UpdatePricesCommand { get; private set; }
+
+        private bool CanUpdatePrices()
         {
-            UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
-            DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
+            return true;
+        }
+
+        private void OnUpdatePrices()
+        {
+            PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
+
+            priceUpdateController.UpdatePrices();
+            HarvestablesViewModel.UpdateHarvestables();
+        }
+
+        public RelayCommand DeletePricesCommand { get; private set; }
+
+        private bool CanDeletePrices()
+        {
+            return true;
+        }
+
+        private void OnDeletePrices()
+        {
+            PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
+
+            priceUpdateController.DeleteAllPrices();
+            HarvestablesViewModel.UpdateHarvestables();
         }
 
         public RelayCommand UpdateStaticDataCommand { get; private set; }
@@ -42,7 +70,7 @@ namespace SharpCrokite.Core.ViewModels
             try
             {
                 staticDataUpdateController.UpdateData();
-
+                HarvestablesViewModel.UpdateHarvestables();
             }
             catch (HttpRequestException ex)
             {
@@ -69,6 +97,7 @@ namespace SharpCrokite.Core.ViewModels
                 harvestableRepository, materialRepository);
 
             staticDataUpdateController.DeleteAllStaticData();
+            HarvestablesViewModel.UpdateHarvestables();
         }
 
         private bool CanDeleteStaticData()

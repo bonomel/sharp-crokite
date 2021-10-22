@@ -31,7 +31,7 @@ namespace SharpCrokite.Core.PriceUpdater
             return priceDtos;
         }
 
-        private IList<PriceDto> TransformToPriceDtos(IEnumerable<EveMarketerPricesJson> priceJson)
+        private static IList<PriceDto> TransformToPriceDtos(IEnumerable<EveMarketerPricesJson> priceJson)
         {
             List<PriceDto> priceDtos = new();
 
@@ -52,7 +52,7 @@ namespace SharpCrokite.Core.PriceUpdater
             return priceDtos;
         }
 
-        private IEnumerable<EveMarketerPricesJson> RetrievePricesAsJson(IList<string> batchedUrls)
+        private static IEnumerable<EveMarketerPricesJson> RetrievePricesAsJson(IList<string> batchedUrls)
         {
             using HttpClient client = new();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -102,7 +102,7 @@ namespace SharpCrokite.Core.PriceUpdater
             return batches;
         }
 
-        private string UrlBuilder(int systemKey, IEnumerable<int> typeIds)
+        private static string UrlBuilder(int systemKey, IEnumerable<int> typeIds)
         {
             StringBuilder stringBuilder = new();
 

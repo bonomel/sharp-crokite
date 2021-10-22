@@ -12,8 +12,8 @@
             <StackPanel Orientation="Horizontal" Height="45" VerticalAlignment="Top">
                 <Button Content="Update Static Data" Name="UpdateStaticDataButton" Command="{Binding UpdateStaticDataCommand}" Width="160" Margin="10,10,0,5"/>
                 <Button Content="Delete Static Data" Name="DeleteStaticDataButton" Command="{Binding DeleteStaticDataCommand}" Width="160" Margin="5,10,0,5"/>
-                <Button Content="Update Prices" Name="UpdatePriceDataButton" Width="160" Margin="5,10,0,5"/>
-                <Button Content="Delete Prices" Name="DeletePriceDataButton" Width="160" Margin="5,10,0,5"/>
+                <Button Content="Update Prices" Name="UpdatePriceDataButton" Command="{Binding UpdatePricesCommand}" Width="160" Margin="5,10,0,5"/>
+                <Button Content="Delete Prices" Name="DeletePriceDataButton" Command="{Binding DeletePricesCommand}" Width="160" Margin="5,10,0,5"/>
             </StackPanel>
         </StackPanel>
         <TabControl Margin="10, 50, 10, 10">
