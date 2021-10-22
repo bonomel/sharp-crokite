@@ -3,6 +3,7 @@ using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace SharpCrokite.Core.Queries
@@ -69,19 +70,46 @@ namespace SharpCrokite.Core.Queries
 
             foreach(NormalOreIskPerHour normalOreIskPerHour in normalOreIskPerHourCollection)
             {
-                // TODO add calculation:
-                //
-                // foreach mineral that is not 0, multiply by reprocessing efficiency, round down
-                // multiply by price to get value per mineral type
-                // add up all results, this is batch value
-                // divide by 100 to get value per unit
-                // divide unit by volume to get value per m3
-                // multiply by yield to get value per second
-                // multiply by 60 twice to get value per hour
+                var notEmptyMinerals = normalOreIskPerHour.Minerals.Where(m => m.Value != 0);
+
+                decimal batchValueAfterReprocessing = new();
+
+                foreach(KeyValuePair<string, int> mineral in notEmptyMinerals)
+                {
+                    int mineralsAfterReprocessing = Convert.ToInt32(Math.Floor(mineral.Value * defaultReprocessingEfficiency));
+                    decimal currentMarketPrice = minerals.Single(m => m.Name == mineral.Key).Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
+
+                    batchValueAfterReprocessing += mineralsAfterReprocessing * currentMarketPrice;
+                }
+
+                decimal valuePerUnit = batchValueAfterReprocessing / 100; // batchsize
+                decimal valuePerSquareMeters = valuePerUnit / normalOreIskPerHour.Volume;
+
+                decimal valuePerSecond = valuePerSquareMeters * defaultYieldPerSecond;
+
+                decimal valuePerHour = valuePerSecond * 60 * 60; // 3600 seconds = 1 hour
+
+                normalOreIskPerHour.MaterialIskPerHour = DisplayAsISK(valuePerHour);
             }
 
             return normalOreIskPerHourCollection;
         }
+
+        private string DisplayAsISK(decimal decimalISK)
+        {
+            return decimalISK != 0 ? $"{decimalISK.ToString("C", ISKNumberFormatInfo)}" : "N/A";
+        }
+
+        private static readonly NumberFormatInfo ISKNumberFormatInfo = new()
+        {
+            CurrencyDecimalSeparator = ",",
+            CurrencyDecimalDigits = 2,
+            CurrencyGroupSeparator = ".",
+            CurrencyGroupSizes = new int[] { 3 },
+            CurrencySymbol = "ISK",
+            CurrencyPositivePattern = 3,
+            CurrencyNegativePattern = 8
+        };
 
         // This method will return the type with the highest amount of mineral content
         // This is necessary because CCP left obsolete types in the database, but without a proper flag
