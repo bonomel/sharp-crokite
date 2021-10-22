@@ -93,7 +93,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Morphite" Binding="{Binding Morphite}" Width="80">
+                <DataGridTextColumn Header="Batch Value" Binding="{Binding BatchValue}" Width="120">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />

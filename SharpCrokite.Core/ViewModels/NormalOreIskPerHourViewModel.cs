@@ -10,7 +10,7 @@ namespace SharpCrokite.Core.ViewModels
     {
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
-        
+
         private ObservableCollection<NormalOreIskPerHour> normalOreIskPerHourCollection = new();
 
         public ObservableCollection<NormalOreIskPerHour> NormalOreIskPerHourCollection
