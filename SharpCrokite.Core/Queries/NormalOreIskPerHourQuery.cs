@@ -9,6 +9,8 @@ namespace SharpCrokite.Core.Queries
 {
     public class NormalOreIskPerHourQuery
     {
+        private const string MineralTypeString = "Mineral";
+
         private HarvestableRepository harvestableRepository;
         private MaterialRepository materialRepository;
 
@@ -32,7 +34,7 @@ namespace SharpCrokite.Core.Queries
         {
             List<NormalOreIskPerHour> normalOreIskPerHourCollection = new();
 
-            List<Material> minerals = materialRepository.Find(m => m.Type == "Mineral").ToList();
+            List<Material> minerals = materialRepository.Find(m => m.Type == MineralTypeString).ToList();
 
             IEnumerable<Harvestable> harvestableModels = harvestableRepository.Find(h =>
             NormalOreTypes.Contains(h.Type) &&
@@ -45,6 +47,7 @@ namespace SharpCrokite.Core.Queries
                     Icon = harvestableModel.Icon,
                     Name = harvestableModel.Name,
                     Description = harvestableModel.Description,
+                    Volume = harvestableModel.Volume,
                     Type = harvestableModel.Type,
                     Minerals = harvestableModel.MaterialContents.ToDictionary(mc => mc.Material.Name, mc => mc.Quantity)
                 });
@@ -84,7 +87,7 @@ namespace SharpCrokite.Core.Queries
         // This is necessary because CCP left obsolete types in the database, but without a proper flag
         private NormalOreIskPerHour GetObsoleteTypeFromListOfOreTypes(List<NormalOreIskPerHour> normalOreIskPerHourPerType)
         {
-            return normalOreIskPerHourPerType.Aggregate((o1, o2) => 
+            return normalOreIskPerHourPerType.Aggregate((o1, o2) =>
                 o1.Tritanium > o2.Tritanium ||
                 o1.Pyerite > o2.Pyerite ||
                 o1.Mexallon > o2.Mexallon ||
@@ -97,13 +100,13 @@ namespace SharpCrokite.Core.Queries
 
         private void CalculateBatchValue(NormalOreIskPerHour normalOreIskPerHour, List<Material> minerals)
         {
-            normalOreIskPerHour.BatchValue += normalOreIskPerHour.Tritanium * minerals.Single(m => m.Name == "Tritanium").Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
-            normalOreIskPerHour.BatchValue += normalOreIskPerHour.Pyerite * minerals.Single(m => m.Name == "Pyerite").Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
-            normalOreIskPerHour.BatchValue += normalOreIskPerHour.Mexallon * minerals.Single(m => m.Name == "Mexallon").Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
-            normalOreIskPerHour.BatchValue += normalOreIskPerHour.Isogen * minerals.Single(m => m.Name == "Isogen").Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
-            normalOreIskPerHour.BatchValue += normalOreIskPerHour.Nocxium * minerals.Single(m => m.Name == "Nocxium").Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
-            normalOreIskPerHour.BatchValue += normalOreIskPerHour.Zydrine * minerals.Single(m => m.Name == "Zydrine").Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
-            normalOreIskPerHour.BatchValue += normalOreIskPerHour.Megacyte * minerals.Single(m => m.Name == "Megacyte").Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
+            normalOreIskPerHour.BatchValue += normalOreIskPerHour.Tritanium * minerals.Single(m => m.Name == nameof(normalOreIskPerHour.Tritanium)).Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
+            normalOreIskPerHour.BatchValue += normalOreIskPerHour.Pyerite * minerals.Single(m => m.Name == nameof(normalOreIskPerHour.Pyerite)).Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
+            normalOreIskPerHour.BatchValue += normalOreIskPerHour.Mexallon * minerals.Single(m => m.Name == nameof(normalOreIskPerHour.Mexallon)).Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
+            normalOreIskPerHour.BatchValue += normalOreIskPerHour.Isogen * minerals.Single(m => m.Name == nameof(normalOreIskPerHour.Isogen)).Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
+            normalOreIskPerHour.BatchValue += normalOreIskPerHour.Nocxium * minerals.Single(m => m.Name == nameof(normalOreIskPerHour.Nocxium)).Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
+            normalOreIskPerHour.BatchValue += normalOreIskPerHour.Zydrine * minerals.Single(m => m.Name == nameof(normalOreIskPerHour.Zydrine)).Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
+            normalOreIskPerHour.BatchValue += normalOreIskPerHour.Megacyte * minerals.Single(m => m.Name == nameof(normalOreIskPerHour.Megacyte)).Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
         }
 
         private static int GetMaterialQuantity(Harvestable harvestableModel, string materialName)

@@ -10,5 +10,6 @@
         public string MaterialContents { get; internal set; }
         public string Description { get; internal set; }
         public HarvestableModel IsCompressedVariantOfType { get; internal set; }
+        public decimal Volume { get; internal set; }
     }
 }
