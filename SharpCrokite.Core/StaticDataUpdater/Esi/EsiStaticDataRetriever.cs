@@ -61,6 +61,7 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
                         Name = asteroidType.name,
                         Type = asteroidGroup.name,
                         Description = RemoveHtmlFromString(asteroidType.description),
+                        Volume = asteroidType.volume,
                         Icon = GetIconForTypeId(asteroidType.type_id),
                         MaterialContents = materials
                             .Where(m => m.typeID == asteroidType.type_id)

@@ -27,14 +27,14 @@ namespace SharpCrokite.Core.StaticDataUpdater
                     existingHarvestable.Name = harvestableDto.Name;
                     existingHarvestable.Type = harvestableDto.Type;
                     existingHarvestable.Description = harvestableDto.Description;
+                    existingHarvestable.Volume = harvestableDto.Volume;
                     existingHarvestable.Icon = harvestableDto.Icon;
                     existingHarvestable.IsCompressedVariantOfType = harvestableDto.IsCompressedVariantOfType;
                     existingHarvestable.MaterialContents = harvestableDto.MaterialContents.Select(dto => new MaterialContent()
-                        {
-                            //HarvestableId = dto.HarvestableId,
-                            //MaterialId = dto.MaterialId,
-                            Quantity = dto.Quantity
-                        }).ToList();
+                    {
+                        Material = materialRepository.Get(dto.MaterialId),
+                        Quantity = dto.Quantity
+                    }).ToList();
 
                     harvestableRepository.Update(existingHarvestable);
                 }
@@ -46,12 +46,12 @@ namespace SharpCrokite.Core.StaticDataUpdater
                         Name = harvestableDto.Name,
                         Type = harvestableDto.Type,
                         Description = harvestableDto.Description,
+                        Volume = harvestableDto.Volume,
                         Icon = harvestableDto.Icon,
                         IsCompressedVariantOfType = harvestableDto.IsCompressedVariantOfType,
                         MaterialContents = harvestableDto.MaterialContents.Select(dto => new MaterialContent()
                         {
-                            //HarvestableId = dto.Harvestable,
-                            //MaterialId = dto.MaterialId,
+                            Material = materialRepository.Get(dto.MaterialId),
                             Quantity = dto.Quantity
                         }).ToList()
                     });
