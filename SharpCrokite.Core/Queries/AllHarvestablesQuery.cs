@@ -2,8 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Text;
-
-using SharpCrokite.Core.ViewModels;
+using SharpCrokite.Core.Models;
 using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Repositories;
 
@@ -31,20 +30,20 @@ namespace SharpCrokite.DataAccess.Queries
             this.materialRepository = materialRepository;
         }
 
-        public IList<HarvestableViewModel> Execute()
+        public IList<HarvestableModel> Execute()
         {
-            List<HarvestableViewModel> harvestableViewModels = new();
+            List<HarvestableModel> harvestableViewModels = new();
 
             foreach (Harvestable harvestable in harvestableRepository.All())
             {
-                harvestableViewModels.Add(CreateHarvestableViewModelFrom(harvestable));
+                harvestableViewModels.Add(CreateHarvestableModelFrom(harvestable));
             }
             return harvestableViewModels;
         }
 
-        private HarvestableViewModel CreateHarvestableViewModelFrom(Harvestable harvestable)
+        private HarvestableModel CreateHarvestableModelFrom(Harvestable harvestable)
         {
-            return new HarvestableViewModel()
+            return new HarvestableModel()
             {
                 HarvestableId = harvestable.HarvestableId,
                 Icon = harvestable.Icon,
@@ -54,7 +53,7 @@ namespace SharpCrokite.DataAccess.Queries
                 MaterialContents = MaterialContentsAsString(harvestable.MaterialContents),
                 Description = harvestable.Description,
                 IsCompressedVariantOfType = harvestable.IsCompressedVariantOfType.HasValue
-                    ? CreateHarvestableViewModelFrom(harvestableRepository.Get(harvestable.IsCompressedVariantOfType.Value))
+                    ? CreateHarvestableModelFrom(harvestableRepository.Get(harvestable.IsCompressedVariantOfType.Value))
                     : null
             };
         }
@@ -74,7 +73,9 @@ namespace SharpCrokite.DataAccess.Queries
             }
 
             string materialContentString = materialContentStringBuilder.ToString();
-            string materialContentStringTrimmed = materialContentString.Substring(0, materialContentString.Length - 1);
+            string materialContentStringTrimmed = materialContentString[0..^1];
+            // this means position 0 until '..' 1 before last '^' 
+            // thus it'll trim the last newline character :)
 
             return materialContentStringTrimmed;
         }
