@@ -1,19 +1,19 @@
-﻿using SharpCrokite.Core.StaticDataUpdater.Esi;
-using SharpCrokite.DataAccess.Models;
+﻿using System.Collections.Generic;
+
+using SharpCrokite.Core.StaticDataUpdater.Esi;
 using SharpCrokite.Infrastructure.Repositories;
-using System.Collections.Generic;
 
 namespace SharpCrokite.Core.StaticDataUpdater
 {
     public class StaticDataUpdateController
     {
-        private readonly IRepository<Harvestable> harvestableRepository;
-        private readonly IRepository<Material> materialRepository;
+        private readonly HarvestableRepository harvestableRepository;
+        private readonly MaterialRepository materialRepository;
         private readonly EsiStaticDataRetriever dataRetriever;
 
         public StaticDataUpdateController(EsiStaticDataRetriever dataRetriever,
-            IRepository<Harvestable> harvestableRepository,
-            IRepository<Material> materialRepository)
+            HarvestableRepository harvestableRepository,
+            MaterialRepository materialRepository)
         {
             this.dataRetriever = dataRetriever;
             this.harvestableRepository = harvestableRepository;

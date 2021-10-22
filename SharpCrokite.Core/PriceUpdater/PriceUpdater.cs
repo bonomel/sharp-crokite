@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Repositories;
 
@@ -7,10 +8,10 @@ namespace SharpCrokite.Core.PriceUpdater
 {
     public class PriceUpdater
     {
-        private readonly IRepository<Harvestable> harvestableRepository;
-        private readonly IRepository<Material> materialRepository;
+        private readonly HarvestableRepository harvestableRepository;
+        private readonly MaterialRepository materialRepository;
 
-        public PriceUpdater(IRepository<Harvestable> harvestableRepository, IRepository<Material> materialRepository)
+        public PriceUpdater(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;

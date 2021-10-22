@@ -1,11 +1,12 @@
-﻿using SharpCrokite.Core.Commands;
+﻿using System;
+using System.Net.Http;
+using System.Windows;
+
+using SharpCrokite.Core.Commands;
 using SharpCrokite.Core.PriceUpdater;
 using SharpCrokite.Core.StaticDataUpdater;
 using SharpCrokite.Core.StaticDataUpdater.Esi;
 using SharpCrokite.Infrastructure.Repositories;
-using System;
-using System.Net.Http;
-using System.Windows;
 
 namespace SharpCrokite.Core.ViewModels
 {
@@ -15,6 +16,8 @@ namespace SharpCrokite.Core.ViewModels
         private readonly MaterialRepository materialRepository;
 
         public HarvestablesViewModel HarvestablesViewModel { get; private set; }
+
+        public Guid Id { get; } = Guid.NewGuid();
 
         public MainWindowViewModel(HarvestablesViewModel harvestablesViewModel, HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {

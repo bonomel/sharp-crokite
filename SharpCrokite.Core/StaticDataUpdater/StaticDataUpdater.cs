@@ -7,10 +7,10 @@ namespace SharpCrokite.Core.StaticDataUpdater
 {
     public class StaticDataUpdater
     {
-        private readonly IRepository<Harvestable> harvestableRepository;
-        private readonly IRepository<Material> materialRepository;
+        private readonly HarvestableRepository harvestableRepository;
+        private readonly MaterialRepository materialRepository;
 
-        public StaticDataUpdater(IRepository<Harvestable> harvestableRepository, IRepository<Material> materialRepository)
+        public StaticDataUpdater(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;

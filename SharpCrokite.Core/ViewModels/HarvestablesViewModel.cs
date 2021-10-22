@@ -1,10 +1,10 @@
-﻿using SharpCrokite.Core.Models;
-using SharpCrokite.DataAccess.Queries;
-using SharpCrokite.Infrastructure.Repositories;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows;
+
+using SharpCrokite.Core.Models;
+using SharpCrokite.Core.Queries;
+using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.ViewModels
 {
@@ -17,7 +17,7 @@ namespace SharpCrokite.Core.ViewModels
 
         private ObservableCollection<HarvestableModel> harvestables = new();
         public ObservableCollection<HarvestableModel> Harvestables
-        { 
+        {
             get => harvestables;
             private set
             {
@@ -34,18 +34,18 @@ namespace SharpCrokite.Core.ViewModels
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
 
-            LoadHarvestables();
-        }
-        internal void UpdateHarvestables()
-        {
-            LoadHarvestables();
+            harvestables = GetHarvestableModels();
         }
 
-        private void LoadHarvestables()
+        internal void UpdateHarvestables()
         {
-            if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return;
+            Harvestables = GetHarvestableModels();
+        }
+
+        private ObservableCollection<HarvestableModel> GetHarvestableModels()
+        {
             AllHarvestablesQuery allHarvestablesQuery = new(harvestableRepository, materialRepository);
-            Harvestables = new(allHarvestablesQuery.Execute());
+            return new(allHarvestablesQuery.Execute());
         }
 
         private void NotifyPropertyChanged(string propertyName)

@@ -6,12 +6,12 @@ using SharpCrokite.Core.Models;
 using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Repositories;
 
-namespace SharpCrokite.DataAccess.Queries
+namespace SharpCrokite.Core.Queries
 {
     public class AllHarvestablesQuery
     {
-        private readonly IRepository<Harvestable> harvestableRepository;
-        private readonly IRepository<Material> materialRepository;
+        private readonly HarvestableRepository harvestableRepository;
+        private readonly MaterialRepository materialRepository;
 
         private static readonly NumberFormatInfo ISKNumberFormatInfo = new()
         {
@@ -24,7 +24,7 @@ namespace SharpCrokite.DataAccess.Queries
             CurrencyNegativePattern = 8
         };
 
-        public AllHarvestablesQuery(IRepository<Harvestable> harvestableRepository, IRepository<Material> materialRepository)
+        public AllHarvestablesQuery(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
@@ -67,7 +67,7 @@ namespace SharpCrokite.DataAccess.Queries
         {
             StringBuilder materialContentStringBuilder = new();
 
-            foreach(MaterialContent material in materialContents)
+            foreach (MaterialContent material in materialContents)
             {
                 materialContentStringBuilder.Append($"{materialRepository.Get(material.MaterialId).Name}: {material.Quantity}\n");
             }

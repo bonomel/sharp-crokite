@@ -8,9 +8,6 @@ using SharpCrokite.UI.Views;
 
 namespace SharpCrokite.UI
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         private IServiceProvider serviceProvider;
