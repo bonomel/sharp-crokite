@@ -1,4 +1,6 @@
-﻿namespace SharpCrokite.Core.Models
+﻿using System.Collections.Generic;
+
+namespace SharpCrokite.Core.Models
 {
     public class NormalOreIskPerHour
     {
@@ -7,13 +9,14 @@
         public string Type { get; set; }
         public string Description { get; set; }
         public decimal Volume { get; set; }
-        public int Tritanium { get; set; }
-        public int Pyerite { get; set; }
-        public int Mexallon { get; set; }
-        public int Isogen { get; set; }
-        public int Nocxium { get; set; }
-        public int Zydrine { get; set; }
-        public int Megacyte { get; set; }
+        public Dictionary<string, int> Minerals { get; set; } = new() { };
+        public int Tritanium => Minerals.GetValueOrDefault(nameof(Tritanium));
+        public int Pyerite => Minerals.GetValueOrDefault(nameof(Pyerite));
+        public int Mexallon => Minerals.GetValueOrDefault(nameof(Mexallon));
+        public int Isogen => Minerals.GetValueOrDefault(nameof(Isogen));
+        public int Nocxium => Minerals.GetValueOrDefault(nameof(Nocxium));
+        public int Zydrine => Minerals.GetValueOrDefault(nameof(Zydrine));
+        public int Megacyte => Minerals.GetValueOrDefault(nameof(Megacyte));
         public decimal BatchValue { get; set; }
         public string MaterialIskPerHour { get; set; }
         public string CompressedIskPerHour { get; set; }
