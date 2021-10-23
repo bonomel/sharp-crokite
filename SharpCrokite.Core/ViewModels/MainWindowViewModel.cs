@@ -48,6 +48,7 @@ namespace SharpCrokite.Core.ViewModels
 
             priceUpdateController.UpdatePrices();
             HarvestablesViewModel.UpdateHarvestables();
+            NormalOreIskPerHourViewModel.UpdateNormalOreIskPerHour();
         }
 
         public RelayCommand DeletePricesCommand { get; private set; }
@@ -63,6 +64,7 @@ namespace SharpCrokite.Core.ViewModels
 
             priceUpdateController.DeleteAllPrices();
             HarvestablesViewModel.UpdateHarvestables();
+            NormalOreIskPerHourViewModel.UpdateNormalOreIskPerHour();
         }
 
         public RelayCommand UpdateStaticDataCommand { get; private set; }
@@ -76,6 +78,7 @@ namespace SharpCrokite.Core.ViewModels
             {
                 staticDataUpdateController.UpdateData();
                 HarvestablesViewModel.UpdateHarvestables();
+                NormalOreIskPerHourViewModel.UpdateNormalOreIskPerHour();
             }
             catch (HttpRequestException ex)
             {
@@ -103,6 +106,7 @@ namespace SharpCrokite.Core.ViewModels
 
             staticDataUpdateController.DeleteAllStaticData();
             HarvestablesViewModel.UpdateHarvestables();
+            NormalOreIskPerHourViewModel.UpdateNormalOreIskPerHour();
         }
 
         private bool CanDeleteStaticData()

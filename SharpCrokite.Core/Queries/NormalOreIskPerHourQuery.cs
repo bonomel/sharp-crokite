@@ -72,7 +72,15 @@ namespace SharpCrokite.Core.Queries
                 foreach(KeyValuePair<string, int> mineral in notEmptyMinerals)
                 {
                     int mineralsAfterReprocessing = Convert.ToInt32(Math.Floor(mineral.Value * defaultReprocessingEfficiency));
-                    decimal currentMarketPrice = minerals.Single(m => m.Name == mineral.Key).Prices.Single(p => p.SystemId == systemToUseForPrices).SellPercentile;
+
+                    decimal currentMarketPrice = 0;
+
+                    if (minerals.Single(m => m.Name == mineral.Key).Prices.Any())
+                    {
+                        currentMarketPrice = minerals.Single(m => m.Name == mineral.Key).Prices.SingleOrDefault(p => p.SystemId == systemToUseForPrices) != null
+                        ? minerals.Single(m => m.Name == mineral.Key).Prices.SingleOrDefault(p => p.SystemId == systemToUseForPrices).SellPercentile
+                        : 0;
+                    }
 
                     batchValueAfterReprocessing += mineralsAfterReprocessing * currentMarketPrice;
                 }

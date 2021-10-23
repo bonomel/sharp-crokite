@@ -26,6 +26,9 @@ namespace SharpCrokite.DataAccess.DatabaseContexts
         {
             modelBuilder.Entity<Harvestable>().HasMany(h => h.Prices).WithOne(p => p.Harvestable).OnDelete(DeleteBehavior.Cascade).IsRequired(false);
             modelBuilder.Entity<Material>().HasMany(m => m.Prices).WithOne(p => p.Material).OnDelete(DeleteBehavior.Cascade).IsRequired(false);
+
+            modelBuilder.Entity<Harvestable>().HasMany(h => h.MaterialContents).WithOne(mc => mc.Harvestable).OnDelete(DeleteBehavior.Cascade).IsRequired(false);
+            modelBuilder.Entity<MaterialContent>().HasOne(mc => mc.Material).WithMany().OnDelete(DeleteBehavior.Cascade).IsRequired(false);
         }
     }
 }
