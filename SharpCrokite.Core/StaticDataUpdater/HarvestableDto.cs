@@ -11,5 +11,6 @@ namespace SharpCrokite.Core.StaticDataUpdater
         public string Description { get; set; }
         public List<MaterialContentDto> MaterialContents { get; set; } = new List<MaterialContentDto>();
         public int? IsCompressedVariantOfType { get; set; }
+        public decimal Volume { get; set; }
     }
 }

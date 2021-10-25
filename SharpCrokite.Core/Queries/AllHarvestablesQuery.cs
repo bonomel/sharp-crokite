@@ -52,6 +52,7 @@ namespace SharpCrokite.Core.Queries
                 Price = harvestable.Prices.FirstOrDefault() != null ? DisplayAsISK(harvestable.Prices.First().SellMin) : "N/A",
                 MaterialContents = MaterialContentsAsString(harvestable.MaterialContents),
                 Description = harvestable.Description,
+                Volume = harvestable.Volume,
                 IsCompressedVariantOfType = harvestable.IsCompressedVariantOfType.HasValue
                     ? CreateHarvestableModelFrom(harvestableRepository.Get(harvestable.IsCompressedVariantOfType.Value))
                     : null
@@ -73,9 +74,10 @@ namespace SharpCrokite.Core.Queries
             }
 
             string materialContentString = materialContentStringBuilder.ToString();
-            string materialContentStringTrimmed = materialContentString[0..^1];
+
             // this means position 0 until '..' 1 before last '^' 
             // thus it'll trim the last newline character :)
+            string materialContentStringTrimmed = !string.IsNullOrWhiteSpace(materialContentString) ? materialContentString[0..^1] : string.Empty;
 
             return materialContentStringTrimmed;
         }

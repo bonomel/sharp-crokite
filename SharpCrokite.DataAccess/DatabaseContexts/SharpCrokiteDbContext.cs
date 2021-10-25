@@ -24,9 +24,8 @@ namespace SharpCrokite.DataAccess.DatabaseContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Harvestable>().HasMany(m => m.Prices).WithOne(p => p.Harvestable).OnDelete(DeleteBehavior.Cascade).IsRequired(false);
+            modelBuilder.Entity<Harvestable>().HasMany(h => h.Prices).WithOne(p => p.Harvestable).OnDelete(DeleteBehavior.Cascade).IsRequired(false);
             modelBuilder.Entity<Material>().HasMany(m => m.Prices).WithOne(p => p.Material).OnDelete(DeleteBehavior.Cascade).IsRequired(false);
-
             modelBuilder.Entity<MaterialContent>().HasOne(m => m.Material).WithMany().OnDelete(DeleteBehavior.SetNull).IsRequired(false);
         }
     }

@@ -33,11 +33,11 @@ namespace SharpCrokite.Core.StaticDataUpdater
 
         public void DeleteAllStaticData()
         {
-            harvestableRepository.DeleteAll();
             materialRepository.DeleteAll();
+            harvestableRepository.DeleteAll();
 
-            harvestableRepository.SaveChanges();
             materialRepository.SaveChanges();
+            harvestableRepository.SaveChanges();
         }
     }
 }

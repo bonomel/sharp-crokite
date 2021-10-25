@@ -61,6 +61,7 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
                         Name = asteroidType.name,
                         Type = asteroidGroup.name,
                         Description = RemoveHtmlFromString(asteroidType.description),
+                        Volume = asteroidType.volume,
                         Icon = GetIconForTypeId(asteroidType.type_id),
                         MaterialContents = materials
                             .Where(m => m.typeID == asteroidType.type_id)
@@ -146,7 +147,7 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
             string responseString = client.DownloadString(uri.AbsoluteUri);
 
             IEnumerable<EsiMaterialContentJson> listOfMaterialContent = JsonSerializer.Deserialize<List<EsiMaterialContentJson>>(responseString);
-            var veldsparmaterial = listOfMaterialContent.Single(m => m.typeID == 1230);
+
             return listOfMaterialContent;
         }
 

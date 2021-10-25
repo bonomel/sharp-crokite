@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SharpCrokite.DataAccess.DatabaseContexts;
 
 namespace SharpCrokite.DataAccess.Migrations
 {
     [DbContext(typeof(SharpCrokiteDbContext))]
-    partial class SharpCrokiteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211022183859_AddCascadeDeleteFoMaterialContent")]
+    partial class AddCascadeDeleteFoMaterialContent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,16 +138,18 @@ namespace SharpCrokite.DataAccess.Migrations
 
             modelBuilder.Entity("SharpCrokite.DataAccess.Models.MaterialContent", b =>
                 {
-                    b.HasOne("SharpCrokite.DataAccess.Models.Harvestable", null)
+                    b.HasOne("SharpCrokite.DataAccess.Models.Harvestable", "Harvestable")
                         .WithMany("MaterialContents")
                         .HasForeignKey("HarvestableId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                        
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("SharpCrokite.DataAccess.Models.Material", "Material")
                         .WithMany()
                         .HasForeignKey("MaterialId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Harvestable");
+
                     b.Navigation("Material");
                 });
 

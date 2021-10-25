@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SharpCrokite.DataAccess.DatabaseContexts;
 
 namespace SharpCrokite.DataAccess.Migrations
 {
     [DbContext(typeof(SharpCrokiteDbContext))]
-    partial class SharpCrokiteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211022103558_AddNavigationPropertyToMaterialContent")]
+    partial class AddNavigationPropertyToMaterialContent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,9 +37,6 @@ namespace SharpCrokite.DataAccess.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Type")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Volume")
                         .HasColumnType("TEXT");
 
                     b.HasKey("HarvestableId");
@@ -136,16 +135,16 @@ namespace SharpCrokite.DataAccess.Migrations
 
             modelBuilder.Entity("SharpCrokite.DataAccess.Models.MaterialContent", b =>
                 {
-                    b.HasOne("SharpCrokite.DataAccess.Models.Harvestable", null)
+                    b.HasOne("SharpCrokite.DataAccess.Models.Harvestable", "Harvestable")
                         .WithMany("MaterialContents")
-                        .HasForeignKey("HarvestableId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                        
+                        .HasForeignKey("HarvestableId");
+
                     b.HasOne("SharpCrokite.DataAccess.Models.Material", "Material")
                         .WithMany()
-                        .HasForeignKey("MaterialId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("MaterialId");
+
+                    b.Navigation("Harvestable");
+
                     b.Navigation("Material");
                 });
 

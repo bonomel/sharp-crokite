@@ -23,6 +23,7 @@ namespace SharpCrokite.Infrastructure.Repositories
 
             harvestable.Name = entity.Name;
             harvestable.Description = entity.Description;
+            harvestable.Volume = entity.Volume;
             harvestable.Type = entity.Type;
             harvestable.Icon = entity.Icon;
             harvestable.IsCompressedVariantOfType = entity.IsCompressedVariantOfType;

@@ -15,16 +15,18 @@ namespace SharpCrokite.Core.ViewModels
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
 
-        public HarvestablesViewModel HarvestablesViewModel { get; private set; }
-
+        public HarvestablesViewModel HarvestablesViewModel { get; }
+        public NormalOreIskPerHourViewModel NormalOreIskPerHourViewModel { get; }
         public Guid Id { get; } = Guid.NewGuid();
 
-        public MainWindowViewModel(HarvestablesViewModel harvestablesViewModel, HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
+        public MainWindowViewModel(HarvestablesViewModel harvestablesViewModel, NormalOreIskPerHourViewModel normalOreIskPerHourViewModel,
+            HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
 
             HarvestablesViewModel = harvestablesViewModel;
+            NormalOreIskPerHourViewModel = normalOreIskPerHourViewModel;
 
             UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
             DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
@@ -46,6 +48,7 @@ namespace SharpCrokite.Core.ViewModels
 
             priceUpdateController.UpdatePrices();
             HarvestablesViewModel.UpdateHarvestables();
+            NormalOreIskPerHourViewModel.UpdateNormalOreIskPerHour();
         }
 
         public RelayCommand DeletePricesCommand { get; private set; }
@@ -61,6 +64,7 @@ namespace SharpCrokite.Core.ViewModels
 
             priceUpdateController.DeleteAllPrices();
             HarvestablesViewModel.UpdateHarvestables();
+            NormalOreIskPerHourViewModel.UpdateNormalOreIskPerHour();
         }
 
         public RelayCommand UpdateStaticDataCommand { get; private set; }
@@ -74,6 +78,7 @@ namespace SharpCrokite.Core.ViewModels
             {
                 staticDataUpdateController.UpdateData();
                 HarvestablesViewModel.UpdateHarvestables();
+                NormalOreIskPerHourViewModel.UpdateNormalOreIskPerHour();
             }
             catch (HttpRequestException ex)
             {
@@ -101,6 +106,7 @@ namespace SharpCrokite.Core.ViewModels
 
             staticDataUpdateController.DeleteAllStaticData();
             HarvestablesViewModel.UpdateHarvestables();
+            NormalOreIskPerHourViewModel.UpdateNormalOreIskPerHour();
         }
 
         private bool CanDeleteStaticData()
