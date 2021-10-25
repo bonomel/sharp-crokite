@@ -4,21 +4,29 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="1280">
+             d:DesignHeight="450" d:DesignWidth="1400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <CheckBox IsChecked="{Binding Path=ShowImprovedVariantsIsChecked, Mode=TwoWay}"  Margin="10,10,10,10">
+            <CheckBox IsChecked="{Binding Path=ShowImprovedVariantsIsChecked, Mode=TwoWay}" Margin="10,10,0,0">
                 <TextBlock>Show improved variants</TextBlock>
             </CheckBox>
         </StackPanel>
         <DataGrid Name="HarvestablesDataGrid" Margin="10,0,10,10" IsReadOnly="true" AutoGenerateColumns="False" Grid.Row="1"
-                              HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" HeadersVisibility="Column"
-                              CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="False"
-                              CanUserReorderColumns="False" CanUserResizeColumns="False" ItemsSource="{Binding NormalOreIskPerHourCollection}">
+                    HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" HeadersVisibility="Column"
+                    CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="True"
+                    CanUserReorderColumns="True" CanUserResizeColumns="False" ItemsSource="{Binding NormalOreIskPerHourCollection}"
+                    FontSize="12" FontFamily="Montserrat, Times New Roman">
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Height" Value="32" />
+                    <Setter Property="FontWeight" Value="DemiBold" />
+                    <Setter Property="HorizontalContentAlignment" Value="Right" />
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
                     <Style.Triggers>
@@ -40,7 +48,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn  Header="Icon">
+                <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Image Source="{Binding Icon}" Width="24" Height="24" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="100" />
@@ -48,9 +56,14 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="240">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                            <Setter Property="FontWeight" Value="DemiBold" />
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
-                            <Setter Property="VerticalAlignment" Value="Center" />
                             <Setter Property="Margin" Value="5,5,5,5" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
@@ -64,7 +77,13 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Tritanium" Binding="{Binding Tritanium}" Width="80">
+                <DataGridTextColumn Binding="{Binding Tritanium}" Width="100">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/tritanium-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Tritanium" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -73,7 +92,13 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Pyerite" Binding="{Binding Pyerite}" Width="80">
+                <DataGridTextColumn Binding="{Binding Pyerite}" Width="100">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/pyerite-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Pyerite" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -82,7 +107,13 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Mexallon" Binding="{Binding Mexallon}" Width="80">
+                <DataGridTextColumn Binding="{Binding Mexallon}" Width="100">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/mexallon-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Mexallon" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -91,7 +122,13 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Isogen" Binding="{Binding Isogen}" Width="80">
+                <DataGridTextColumn Binding="{Binding Isogen}" Width="100">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/isogen-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Isogen" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -100,7 +137,13 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Nocxium" Binding="{Binding Nocxium}" Width="80">
+                <DataGridTextColumn Binding="{Binding Nocxium}" Width="100">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/nocxium-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Nocxium" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -109,7 +152,13 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Zydrine" Binding="{Binding Zydrine}" Width="80">
+                <DataGridTextColumn Binding="{Binding Zydrine}" Width="100">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/zydrine-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Zydrine" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -118,7 +167,13 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Megacyte" Binding="{Binding Megacyte}" Width="80">
+                <DataGridTextColumn Binding="{Binding Megacyte}" Width="100">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/megacyte-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Megacyte" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -127,7 +182,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Materials ISK/hour" Binding="{Binding MaterialIskPerHour}" Width="140">
+                <DataGridTextColumn Header="Materials ISK/hour" Binding="{Binding MaterialIskPerHour}" Width="160">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -136,7 +191,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Compressed ISK/hour" Binding="{Binding CompressedIskPerHour}" Width="140">
+                <DataGridTextColumn Header="Compressed ISK/hour" Binding="{Binding CompressedIskPerHour}" Width="160">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />

@@ -1,8 +1,9 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 namespace SharpCrokite.Infrastructure.Common
 {
-    public class Isk
+    public class Isk : IComparable
     {
         public decimal Amount { get; }
 
@@ -25,6 +26,17 @@ namespace SharpCrokite.Infrastructure.Common
         public override string ToString()
         {
             return Amount != 0 ? $"{Amount.ToString("C", IskNumberFormatInfo)}" : "N/A";
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj == null) return 1;
+
+            Isk comparableIsk = obj as Isk;
+
+            if (Amount > comparableIsk.Amount) return 1;
+            else if (Amount < comparableIsk.Amount) return -1;
+            else return 0;
         }
     }
 }

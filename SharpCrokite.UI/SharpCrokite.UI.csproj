@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\isogen-icon.png" />
+    <None Remove="Images\megacyte-icon.png" />
+    <None Remove="Images\mexallon-icon.png" />
+    <None Remove="Images\nocxium-icon.png" />
+    <None Remove="Images\pyerite-icon.png" />
     <None Remove="Images\sharp-crokite-icon.png" />
+    <None Remove="Images\tritanium-icon.png" />
+    <None Remove="Images\zydrine-icon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,7 +22,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\isogen-icon.png" />
+    <Resource Include="Images\megacyte-icon.png" />
+    <Resource Include="Images\mexallon-icon.png" />
+    <Resource Include="Images\nocxium-icon.png" />
+    <Resource Include="Images\pyerite-icon.png" />
     <Resource Include="Images\sharp-crokite-icon.png" />
+    <Resource Include="Images\tritanium-icon.png" />
+    <Resource Include="Images\zydrine-icon.png" />
   </ItemGroup>
 
   <ItemGroup>
