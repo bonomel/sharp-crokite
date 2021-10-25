@@ -48,6 +48,7 @@ namespace SharpCrokite.Core.ViewModels
             NormalOreIskPerHourQuery normalOreIskPerHourQuery = new(harvestableRepository, materialRepository);
             return new(normalOreIskPerHourQuery.Execute());
         }
+
         private void NotifyPropertyChanged(string propertyName)
         {
             if (!string.IsNullOrWhiteSpace(propertyName))
