@@ -2,8 +2,8 @@
 using SharpCrokite.Core.Queries;
 using SharpCrokite.Infrastructure.Repositories;
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 
 namespace SharpCrokite.Core.ViewModels
 {
@@ -14,16 +14,32 @@ namespace SharpCrokite.Core.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        private ObservableCollection<NormalOreIskPerHour> normalOreIskPerHourCollection = new();
-        public ObservableCollection<NormalOreIskPerHour> NormalOreIskPerHourCollection
-        { 
+        private bool showImprovedVariantsIsChecked;
+        public bool ShowImprovedVariantsIsChecked
+        {
+            get => showImprovedVariantsIsChecked;
+            set
+            {
+                showImprovedVariantsIsChecked = value;
+                SetVisibilityForImprovedVariants();
+            }
+        }
+
+        private void SetVisibilityForImprovedVariants()
+        {
+            normalOreIskPerHourCollection.Where(o => o.IsImprovedVariant).ToList().ForEach(o => o.Visible = showImprovedVariantsIsChecked);
+        }
+
+        private BindingList<NormalOreIskPerHour> normalOreIskPerHourCollection = new();
+
+        public BindingList<NormalOreIskPerHour> NormalOreIskPerHourCollection
+        {
             get => normalOreIskPerHourCollection;
             private set
             {
-                if (Equals(value, normalOreIskPerHourCollection)) return;
-
+                if (Equals(value, normalOreIskPerHourCollection)) { return; }
                 normalOreIskPerHourCollection = value;
-
+                SetVisibilityForImprovedVariants();
                 NotifyPropertyChanged(nameof(NormalOreIskPerHourCollection));
             }
         }
@@ -36,6 +52,8 @@ namespace SharpCrokite.Core.ViewModels
             this.materialRepository = materialRepository;
 
             normalOreIskPerHourCollection = LoadNormalIskPerHour();
+
+            showImprovedVariantsIsChecked = true;
         }
 
         internal void UpdateNormalOreIskPerHour()
@@ -43,10 +61,10 @@ namespace SharpCrokite.Core.ViewModels
             NormalOreIskPerHourCollection = LoadNormalIskPerHour();
         }
 
-        private ObservableCollection<NormalOreIskPerHour> LoadNormalIskPerHour()
+        private BindingList<NormalOreIskPerHour> LoadNormalIskPerHour()
         {
             NormalOreIskPerHourQuery normalOreIskPerHourQuery = new(harvestableRepository, materialRepository);
-            return new(normalOreIskPerHourQuery.Execute());
+            return new(normalOreIskPerHourQuery.Execute().ToList());
         }
 
         private void NotifyPropertyChanged(string propertyName)
@@ -56,6 +74,5 @@ namespace SharpCrokite.Core.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
     }
 }

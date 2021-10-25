@@ -6,7 +6,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1280">
     <Grid>
-        <DataGrid Name="HarvestablesDataGrid" Margin="10,10,10,10" IsReadOnly="true" AutoGenerateColumns="False"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <CheckBox IsChecked="{Binding Path=ShowImprovedVariantsIsChecked, Mode=TwoWay}"  Margin="10,10,10,10">
+                <TextBlock>Show improved variants</TextBlock>
+            </CheckBox>
+        </StackPanel>
+        <DataGrid Name="HarvestablesDataGrid" Margin="10,0,10,10" IsReadOnly="true" AutoGenerateColumns="False" Grid.Row="1"
                               HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" HeadersVisibility="Column"
                               CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="False"
                               CanUserReorderColumns="False" CanUserResizeColumns="False" ItemsSource="{Binding NormalOreIskPerHourCollection}">
@@ -21,6 +30,15 @@
                     </Style.Triggers>
                 </Style>
             </DataGrid.CellStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Visible}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn  Header="Icon">
                     <DataGridTemplateColumn.CellTemplate>
@@ -37,10 +55,11 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Vol." Binding="{Binding Volume}" Width="40">
+                <DataGridTextColumn Header="Volume" Binding="{Binding Volume}" Width="60">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
                             <Setter Property="Margin" Value="5,5,5,5" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
@@ -49,6 +68,7 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
                             <Setter Property="Margin" Value="5,5,5,5" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
@@ -57,6 +77,7 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
                             <Setter Property="Margin" Value="5,5,5,5" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
@@ -65,6 +86,7 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
                             <Setter Property="Margin" Value="5,5,5,5" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
@@ -73,6 +95,7 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
                             <Setter Property="Margin" Value="5,5,5,5" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
@@ -81,6 +104,7 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
                             <Setter Property="Margin" Value="5,5,5,5" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
@@ -89,6 +113,7 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
                             <Setter Property="Margin" Value="5,5,5,5" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
@@ -97,6 +122,7 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
                             <Setter Property="Margin" Value="5,5,5,5" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>

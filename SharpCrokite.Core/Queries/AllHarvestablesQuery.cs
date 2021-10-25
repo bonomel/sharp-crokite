@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using SharpCrokite.Core.Models;
 using SharpCrokite.DataAccess.Models;
+using SharpCrokite.Infrastructure.Common;
 using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.Queries
@@ -49,7 +50,7 @@ namespace SharpCrokite.Core.Queries
                 Icon = harvestable.Icon,
                 Name = harvestable.Name,
                 Type = harvestable.Type,
-                Price = harvestable.Prices.FirstOrDefault() != null ? DisplayAsISK(harvestable.Prices.First().SellMin) : "N/A",
+                Price = harvestable.Prices.FirstOrDefault() != null ? new Isk(harvestable.Prices.First().SellMin) : new Isk(0m),
                 MaterialContents = MaterialContentsAsString(harvestable.MaterialContents),
                 Description = harvestable.Description,
                 Volume = harvestable.Volume,
