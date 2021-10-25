@@ -70,10 +70,7 @@ namespace SharpCrokite.Core.Queries
 
             foreach (MaterialContent materialContent in materialContents)
             {
-                if(materialContent.Material != null)
-                {
-                    materialContentStringBuilder.Append($"{materialRepository.Get(materialContent.Material.MaterialId).Name}: {materialContent.Quantity}\n");
-                }
+                materialContentStringBuilder.Append($"{materialContent.Material.Name}: {materialContent.Quantity}\n");
             }
 
             string materialContentString = materialContentStringBuilder.ToString();

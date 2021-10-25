@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SharpCrokite.DataAccess.DatabaseContexts;
 
 namespace SharpCrokite.DataAccess.Migrations
 {
     [DbContext(typeof(SharpCrokiteDbContext))]
-    partial class SharpCrokiteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211025022507_AddMaterialNavigationProperty")]
+    partial class AddMaterialNavigationProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,9 +37,6 @@ namespace SharpCrokite.DataAccess.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Type")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Volume")
                         .HasColumnType("TEXT");
 
                     b.HasKey("HarvestableId");
@@ -74,7 +73,7 @@ namespace SharpCrokite.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("HarvestableId")
+                    b.Property<int>("HarvestableId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("MaterialId")
@@ -141,11 +140,12 @@ namespace SharpCrokite.DataAccess.Migrations
                         .HasForeignKey("HarvestableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                        
+
                     b.HasOne("SharpCrokite.DataAccess.Models.Material", "Material")
                         .WithMany()
                         .HasForeignKey("MaterialId")
                         .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Material");
                 });
 
