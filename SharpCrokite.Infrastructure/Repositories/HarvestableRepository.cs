@@ -37,6 +37,7 @@ namespace SharpCrokite.Infrastructure.Repositories
             return dbContext.Harvestables
                 .Include(h => h.Prices)
                 .Include(h => h.MaterialContents)
+                .ThenInclude(mc => mc.Material)
                 .Where(predicate)
                 .ToList();
         }
@@ -46,6 +47,7 @@ namespace SharpCrokite.Infrastructure.Repositories
             return dbContext.Harvestables
                 .Include(h => h.Prices)
                 .Include(h => h.MaterialContents)
+                .ThenInclude(mc => mc.Material)
                 .ToList();
         }
     }

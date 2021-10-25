@@ -27,8 +27,8 @@ namespace SharpCrokite.Core.StaticDataUpdater
 
             StaticDataUpdater updater = new(harvestableRepository, materialRepository);
 
-            updater.UpdateHarvestables(harvestableDtos);
             updater.UpdateMaterials(materialDtos);
+            updater.UpdateHarvestables(harvestableDtos);
         }
 
         public void DeleteAllStaticData()
