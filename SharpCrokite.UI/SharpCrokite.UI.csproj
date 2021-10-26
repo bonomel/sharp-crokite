@@ -10,6 +10,7 @@
     <None Remove="Images\isogen-icon.png" />
     <None Remove="Images\megacyte-icon.png" />
     <None Remove="Images\mexallon-icon.png" />
+    <None Remove="Images\mining-laser-icon.png" />
     <None Remove="Images\nocxium-icon.png" />
     <None Remove="Images\pyerite-icon.png" />
     <None Remove="Images\sharp-crokite-icon.png" />
@@ -25,6 +26,7 @@
     <Resource Include="Images\isogen-icon.png" />
     <Resource Include="Images\megacyte-icon.png" />
     <Resource Include="Images\mexallon-icon.png" />
+    <Resource Include="Images\mining-laser-icon.png" />
     <Resource Include="Images\nocxium-icon.png" />
     <Resource Include="Images\pyerite-icon.png" />
     <Resource Include="Images\sharp-crokite-icon.png" />

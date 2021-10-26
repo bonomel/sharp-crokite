@@ -31,6 +31,7 @@ namespace SharpCrokite.Core.Models
         }
 
         internal int CompressedVariantTypeId { get; set; }
+        internal Dictionary<int, Isk> CompressedPrices { get; set; }
         
         public Isk MaterialIskPerHour
         {

@@ -15,13 +15,12 @@ namespace SharpCrokite.Core.ViewModels
     public class NormalOreIskPerHourViewModel : INotifyPropertyChanged
     {
         private readonly CultureInfo ci = new("en-us");
+        private const string MineralTypeString = "Mineral";
 
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
 
-        private const string MineralTypeString = "Mineral";
         private int systemToUseForPrices = 30000142; // Hard-coded Jita systemid - this will become a setting
-        private decimal defaultYieldPerSecond = 50.00m;
         private decimal defaultReprocessingEfficiency = 0.782m;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -64,7 +63,7 @@ namespace SharpCrokite.Core.ViewModels
                     {
                         yieldPerSecond = 0;
                         NotifyPropertyChanged(nameof(YieldPerSecondText));
-                        UpdateIskPerHourForYield();
+                        UpdateIskPerHour();
                     }
                     else if (decimal.TryParse(value, NumberStyles.Float, ci, out decimal result))
                     {
@@ -72,7 +71,7 @@ namespace SharpCrokite.Core.ViewModels
                         {
                             yieldPerSecond = result;
                             NotifyPropertyChanged(nameof(YieldPerSecondText));
-                            UpdateIskPerHourForYield();
+                            UpdateIskPerHour();
                         }
                     }
                 }
@@ -86,32 +85,50 @@ namespace SharpCrokite.Core.ViewModels
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
 
-            normalOreIskPerHourCollection = LoadStaticDataWithPrices();
-        }
+            normalOreIskPerHourCollection = LoadStaticData();
 
-        internal void UpdateNormalOreIskPerHour()
-        {
-            NormalOreIskPerHourCollection = LoadStaticDataWithPrices();
-        }
-
-        internal void UpdateIskPerHour() => UpdateIskPerHourWithUpdatedPrices(NormalOreIskPerHourCollection);
-
-        private void UpdateIskPerHourWithUpdatedPrices(IEnumerable<NormalOreIskPerHour> normalOreIskPerHourCollection)
-        {
-            UpdatePrices();
-            foreach (NormalOreIskPerHour normalOreIskPerHour in normalOreIskPerHourCollection)
+            if(normalOreIskPerHourCollection.Any())
             {
-                CalculateMaterialIskPerHour(normalOreIskPerHour);
-                CalculateCompressedIskPerHour(normalOreIskPerHour);
+                UpdateMineralPrices();
+                UpdateCompressedVariantPrices();
             }
+
+            UpdateIskPerHour();
         }
 
-        private void UpdatePrices()
+        internal void ReloadStaticData()
+        {
+            NormalOreIskPerHourCollection = LoadStaticData();
+        }
+
+        private ObservableCollection<NormalOreIskPerHour> LoadStaticData()
+        {
+            NormalOreIskPerHourQuery normalOreIskPerHourQuery = new(harvestableRepository);
+            return new(normalOreIskPerHourQuery.Execute());
+        }
+
+        internal void UpdatePrices()
+        {
+            UpdateMineralPrices();
+            UpdateCompressedVariantPrices();
+            UpdateIskPerHour();
+        }
+
+        private void UpdateMineralPrices()
         {
             mineralModels = materialRepository.Find(m => m.Type == MineralTypeString);
         }
 
-        private void UpdateIskPerHourForYield()
+        private void UpdateCompressedVariantPrices()
+        {
+            foreach (NormalOreIskPerHour normalOreIskPerHour in NormalOreIskPerHourCollection)
+            {
+                Harvestable compressedVariant = harvestableRepository.Find(h => h.HarvestableId == normalOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
+                normalOreIskPerHour.CompressedPrices = compressedVariant.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
+            }
+        }
+
+        private void UpdateIskPerHour()
         {
             foreach (NormalOreIskPerHour normalOreIskPerHour in NormalOreIskPerHourCollection)
             {
@@ -155,16 +172,7 @@ namespace SharpCrokite.Core.ViewModels
             decimal yieldPerSecondDividedByVolume = yieldPerSecond / normalOreIskPerHour.Volume.Amount;
             decimal batchSizeCompensatedVolume = yieldPerSecondDividedByVolume / 100; //batch size
 
-            Harvestable compressedVariant = harvestableRepository.Find(h => h.HarvestableId == normalOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
-
-            decimal unitMarketPrice = 0;
-
-            if (compressedVariant != null)
-            {
-                unitMarketPrice = compressedVariant.Prices.SingleOrDefault(p => p.SystemId == systemToUseForPrices) != null
-                    ? compressedVariant.Prices.SingleOrDefault(p => p.SystemId == systemToUseForPrices).SellPercentile
-                    : 0;
-            }
+            decimal unitMarketPrice = normalOreIskPerHour.CompressedPrices.Any() ? normalOreIskPerHour.CompressedPrices[systemToUseForPrices].Amount : 0;
 
             decimal normalizedCompressedBatchValue = unitMarketPrice * batchSizeCompensatedVolume;
             decimal compressedValuePerHour = normalizedCompressedBatchValue * 60 * 60;
@@ -175,15 +183,6 @@ namespace SharpCrokite.Core.ViewModels
         private void SetVisibilityForImprovedVariants()
         {
             normalOreIskPerHourCollection.Where(o => o.IsImprovedVariant).ToList().ForEach(o => o.Visible = showImprovedVariantsIsChecked);
-        }
-
-        private ObservableCollection<NormalOreIskPerHour> LoadStaticDataWithPrices()
-        {
-            NormalOreIskPerHourQuery normalOreIskPerHourQuery = new(harvestableRepository);
-            IEnumerable<NormalOreIskPerHour> normalIskPerHourCollection = normalOreIskPerHourQuery.Execute();
-            UpdateIskPerHourWithUpdatedPrices(normalIskPerHourCollection);
-
-            return new(normalIskPerHourCollection);
         }
 
         private void NotifyPropertyChanged(string propertyName)

@@ -11,9 +11,10 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <CheckBox Content="Show improved variants" VerticalContentAlignment="Center" IsChecked="{Binding Path=ShowImprovedVariantsIsChecked, Mode=TwoWay}" Margin="10,0,0,0" />
-            <Label Content="Yield per second" VerticalContentAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox x:Name="YieldPerSecondTextBox" Height="20" Width="100" Text="{Binding Path=YieldPerSecondText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Image Source="/Images/mining-laser-icon.png" Height="24" Width="24" Margin="10,0,-3,0"/>
+            <Label Content="m³/s" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
+            <TextBox x:Name="YieldPerSecondTextBox" Height="20" Width="80" Text="{Binding Path=YieldPerSecondText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <CheckBox Content="Show improved variants" VerticalContentAlignment="Center" IsChecked="{Binding Path=ShowImprovedVariantsIsChecked, Mode=TwoWay}" Margin="15,0,0,0" />
         </StackPanel>
         <DataGrid Name="HarvestablesDataGrid" Margin="10,0,10,10" IsReadOnly="true" AutoGenerateColumns="False" Grid.Row="1"
                     HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" HeadersVisibility="Column"
