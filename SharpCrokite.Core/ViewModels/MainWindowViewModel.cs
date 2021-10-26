@@ -48,7 +48,7 @@ namespace SharpCrokite.Core.ViewModels
 
             priceUpdateController.UpdatePrices();
             HarvestablesViewModel.UpdateHarvestables();
-            NormalOreIskPerHourViewModel.UpdateNormalOreIskPerHour();
+            NormalOreIskPerHourViewModel.UpdateIskPerHour();
         }
 
         public RelayCommand DeletePricesCommand { get; private set; }
@@ -64,7 +64,7 @@ namespace SharpCrokite.Core.ViewModels
 
             priceUpdateController.DeleteAllPrices();
             HarvestablesViewModel.UpdateHarvestables();
-            NormalOreIskPerHourViewModel.UpdateNormalOreIskPerHour();
+            NormalOreIskPerHourViewModel.UpdateIskPerHour();
         }
 
         public RelayCommand UpdateStaticDataCommand { get; private set; }

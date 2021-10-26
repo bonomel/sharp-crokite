@@ -10,15 +10,7 @@ namespace SharpCrokite.Core.Queries
 {
     public class NormalOreIskPerHourQuery
     {
-        private const string MineralTypeString = "Mineral";
-
         private readonly HarvestableRepository harvestableRepository;
-        private readonly MaterialRepository materialRepository;
-
-        private int systemToUseForPrices = 30000142; // Hard-coded Jita systemid - this will become a setting
-
-        private decimal defaultYieldPerSecond = 50.00m;
-        private decimal defaultReprocessingEfficiency = 0.782m;
 
         private static readonly string[] NormalOreTypes = new[]
         {
@@ -26,10 +18,9 @@ namespace SharpCrokite.Core.Queries
             "Dark Ochre", "Hemorphite", "Hedbergite", "Spodumain" ,"Crokite", "Bistot", "Arkonor"
         };
 
-        public NormalOreIskPerHourQuery(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
+        public NormalOreIskPerHourQuery(HarvestableRepository harvestableRepository)
         {
             this.harvestableRepository = harvestableRepository;
-            this.materialRepository = materialRepository;
         }
 
         internal IEnumerable<NormalOreIskPerHour> Execute()
@@ -69,71 +60,10 @@ namespace SharpCrokite.Core.Queries
                 }
             }
 
-            // get all types of minerals
-            IEnumerable<Material> mineralModels = materialRepository.Find(m => m.Type == MineralTypeString);
-
             // order the ores by type
             normalOreIskPerHourCollection = normalOreIskPerHourCollection.OrderBy(o => o.Type).ToList();
 
-            foreach(NormalOreIskPerHour normalOreIskPerHour in normalOreIskPerHourCollection)
-            {
-                CalculateMaterialIskPerHour(normalOreIskPerHour, mineralModels);
-                CalculateCompressedIskPerHour(normalOreIskPerHour);
-            }
-
             return normalOreIskPerHourCollection;
-        }
-
-        private void CalculateMaterialIskPerHour(NormalOreIskPerHour normalOreIskPerHour, IEnumerable<Material> minerals)
-        {
-            IEnumerable<KeyValuePair<string, int>> notEmptyMinerals = normalOreIskPerHour.Minerals.Where(m => m.Value != 0);
-
-            decimal batchValueAfterReprocessing = new();
-
-            foreach (KeyValuePair<string, int> mineral in notEmptyMinerals)
-            {
-                int mineralsAfterReprocessing = Convert.ToInt32(Math.Floor(mineral.Value * defaultReprocessingEfficiency));
-
-                decimal currentMarketPrice = 0;
-
-                if (minerals.Single(m => m.Name == mineral.Key).Prices.Any())
-                {
-                    currentMarketPrice = minerals.Single(m => m.Name == mineral.Key).Prices.SingleOrDefault(p => p.SystemId == systemToUseForPrices) != null
-                    ? minerals.Single(m => m.Name == mineral.Key).Prices.SingleOrDefault(p => p.SystemId == systemToUseForPrices).SellPercentile
-                    : 0;
-                }
-
-                batchValueAfterReprocessing += mineralsAfterReprocessing * currentMarketPrice;
-            }
-
-            decimal valuePerUnit = batchValueAfterReprocessing / 100; // batch size
-            decimal valuePerSquareMeters = valuePerUnit / normalOreIskPerHour.Volume.Amount;
-            decimal valuePerSecond = valuePerSquareMeters * defaultYieldPerSecond;
-            decimal valuePerHour = valuePerSecond * 60 * 60; // 3600 seconds = 1 hour
-
-            normalOreIskPerHour.MaterialIskPerHour = new Isk(valuePerHour);
-        }
-
-        private void CalculateCompressedIskPerHour(NormalOreIskPerHour normalOreIskPerHour)
-        {
-            decimal yieldPerSecondDividedByVolume = defaultYieldPerSecond / normalOreIskPerHour.Volume.Amount;
-            decimal batchSizeCompensatedVolume = yieldPerSecondDividedByVolume / 100; //batch size
-
-            Harvestable compressedVariant = harvestableRepository.Find(h => h.HarvestableId == normalOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
-
-            decimal unitMarketPrice = 0;
-
-            if (compressedVariant != null)
-            {
-                unitMarketPrice = compressedVariant.Prices.SingleOrDefault(p => p.SystemId == systemToUseForPrices) != null
-                    ? compressedVariant.Prices.SingleOrDefault(p => p.SystemId == systemToUseForPrices).SellPercentile
-                    : 0;
-            }
-
-            decimal normalizedCompressedBatchValue = unitMarketPrice * batchSizeCompensatedVolume;
-            decimal compressedValuePerHour = normalizedCompressedBatchValue * 60 * 60;
-
-            normalOreIskPerHour.CompressedIskPerHour = new Isk(compressedValuePerHour);
         }
 
         private static NormalOreIskPerHour GetOreTypeWithHighestAmountOfMinerals(IEnumerable<NormalOreIskPerHour> normalOreIskPerHourPerType)
