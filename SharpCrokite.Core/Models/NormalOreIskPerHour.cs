@@ -8,6 +8,7 @@ namespace SharpCrokite.Core.Models
     {
         private bool visible = true;
 
+        internal int Id { get; set; }
         public byte[] Icon { get; internal set; }
         public string Name { get; internal set; }
         public string Type { get; internal set; }
@@ -23,6 +24,7 @@ namespace SharpCrokite.Core.Models
                 NotifyPropertyChanged(nameof(Visible));
             }
         }
+        internal int CompressedVariantTypeId { get; set; }
         public Dictionary<string, int> Minerals { get; internal set; } = new() { };
         public int Tritanium => Minerals.GetValueOrDefault(nameof(Tritanium));
         public int Pyerite => Minerals.GetValueOrDefault(nameof(Pyerite));

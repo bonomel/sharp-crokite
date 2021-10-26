@@ -8,18 +8,18 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <CheckBox IsChecked="{Binding Path=ShowImprovedVariantsIsChecked, Mode=TwoWay}" Margin="10,10,0,0">
-                <TextBlock>Show improved variants</TextBlock>
-            </CheckBox>
+            <CheckBox Content="Show improved variants" VerticalContentAlignment="Center" IsChecked="{Binding Path=ShowImprovedVariantsIsChecked, Mode=TwoWay}" Margin="10,0,0,0" />
+            <Label Content="Yield per second" VerticalContentAlignment="Center" Margin="10,0,0,0"/>
+            <TextBox x:Name="YieldPerSecondTextBox" Height="20" Width="100" Text="{Binding Path=YieldPerSecondText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <DataGrid Name="HarvestablesDataGrid" Margin="10,0,10,10" IsReadOnly="true" AutoGenerateColumns="False" Grid.Row="1"
                     HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" HeadersVisibility="Column"
                     CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="True"
                     CanUserReorderColumns="True" CanUserResizeColumns="False" ItemsSource="{Binding NormalOreIskPerHourCollection}"
-                    FontSize="12" FontFamily="Montserrat, Times New Roman">
+                    FontSize="13" FontFamily="Terminus" AlternatingRowBackground="#e6e6e6" RowBackground="#f6f6f6">
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Height" Value="32" />
@@ -195,6 +195,7 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
                             <Setter Property="Margin" Value="5,5,5,5" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>

@@ -4,16 +4,32 @@ using SharpCrokite.Infrastructure.Repositories;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 
 namespace SharpCrokite.Core.ViewModels
 {
     public class NormalOreIskPerHourViewModel : INotifyPropertyChanged
     {
+        private readonly CultureInfo ci = new("en-us");
+
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        private ObservableCollection<NormalOreIskPerHour> normalOreIskPerHourCollection = new();
+        public ObservableCollection<NormalOreIskPerHour> NormalOreIskPerHourCollection
+        {
+            get => normalOreIskPerHourCollection;
+            private set
+            {
+                if (Equals(value, normalOreIskPerHourCollection)) { return; }
+                normalOreIskPerHourCollection = value;
+                SetVisibilityForImprovedVariants();
+                NotifyPropertyChanged(nameof(NormalOreIskPerHourCollection));
+            }
+        }
 
         private bool showImprovedVariantsIsChecked;
         public bool ShowImprovedVariantsIsChecked
@@ -26,22 +42,28 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
-        private void SetVisibilityForImprovedVariants()
+        private decimal yieldPerSecond = 50m;
+        public string YieldPerSecondText
         {
-            normalOreIskPerHourCollection.Where(o => o.IsImprovedVariant).ToList().ForEach(o => o.Visible = showImprovedVariantsIsChecked);
-        }
-
-        private ObservableCollection<NormalOreIskPerHour> normalOreIskPerHourCollection = new();
-
-        public ObservableCollection<NormalOreIskPerHour> NormalOreIskPerHourCollection
-        {
-            get => normalOreIskPerHourCollection;
-            private set
+            get => yieldPerSecond.ToString("F02", ci);
+            set
             {
-                if (Equals(value, normalOreIskPerHourCollection)) { return; }
-                normalOreIskPerHourCollection = value;
-                SetVisibilityForImprovedVariants();
-                NotifyPropertyChanged(nameof(NormalOreIskPerHourCollection));
+                if (yieldPerSecond.ToString("F02", ci) != value)
+                {
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        yieldPerSecond = 0;
+                        NotifyPropertyChanged(nameof(YieldPerSecondText));
+                    }
+                    else if (decimal.TryParse(value, NumberStyles.Float, ci, out decimal result))
+                    {
+                        if(yieldPerSecond != Math.Round(result, 2))
+                        {
+                            yieldPerSecond = result;
+                            NotifyPropertyChanged(nameof(YieldPerSecondText));
+                        }
+                    }
+                }
             }
         }
 
@@ -60,6 +82,11 @@ namespace SharpCrokite.Core.ViewModels
         internal void UpdateNormalOreIskPerHour()
         {
             NormalOreIskPerHourCollection = LoadNormalIskPerHour();
+        }
+
+        private void SetVisibilityForImprovedVariants()
+        {
+            normalOreIskPerHourCollection.Where(o => o.IsImprovedVariant).ToList().ForEach(o => o.Visible = showImprovedVariantsIsChecked);
         }
 
         private ObservableCollection<NormalOreIskPerHour> LoadNormalIskPerHour()
