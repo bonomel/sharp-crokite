@@ -13,6 +13,7 @@
     <None Remove="Images\mining-laser-icon.png" />
     <None Remove="Images\nocxium-icon.png" />
     <None Remove="Images\pyerite-icon.png" />
+    <None Remove="Images\reprocessing-icon.png" />
     <None Remove="Images\sharp-crokite-icon.png" />
     <None Remove="Images\tritanium-icon.png" />
     <None Remove="Images\zydrine-icon.png" />
@@ -29,6 +30,7 @@
     <Resource Include="Images\mining-laser-icon.png" />
     <Resource Include="Images\nocxium-icon.png" />
     <Resource Include="Images\pyerite-icon.png" />
+    <Resource Include="Images\reprocessing-icon.png" />
     <Resource Include="Images\sharp-crokite-icon.png" />
     <Resource Include="Images\tritanium-icon.png" />
     <Resource Include="Images\zydrine-icon.png" />

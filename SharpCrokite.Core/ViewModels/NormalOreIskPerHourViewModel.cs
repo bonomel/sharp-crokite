@@ -14,14 +14,14 @@ namespace SharpCrokite.Core.ViewModels
 {
     public class NormalOreIskPerHourViewModel : INotifyPropertyChanged
     {
-        private readonly CultureInfo ci = new("en-us");
         private const string MineralTypeString = "Mineral";
+        private const int BatchSize = 100;
+
+        private readonly CultureInfo ci = new("en-us");
+        private readonly int systemToUseForPrices = 30000142; // Hard-coded Jita systemid - this will become a setting eventually
 
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
-
-        private int systemToUseForPrices = 30000142; // Hard-coded Jita systemid - this will become a setting
-        private decimal defaultReprocessingEfficiency = 0.782m;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -50,8 +50,6 @@ namespace SharpCrokite.Core.ViewModels
         }
 
         private decimal yieldPerSecond = 50m;
-        private IEnumerable<Material> mineralModels;
-
         public string YieldPerSecondText
         {
             get => yieldPerSecond.ToString("F02", ci);
@@ -62,21 +60,56 @@ namespace SharpCrokite.Core.ViewModels
                     if (string.IsNullOrEmpty(value))
                     {
                         yieldPerSecond = 0;
+                        UpdateMaterialIskPerHour();
+                        UpdateCompressedIskPerHour();
                         NotifyPropertyChanged(nameof(YieldPerSecondText));
-                        UpdateIskPerHour();
                     }
                     else if (decimal.TryParse(value, NumberStyles.Float, ci, out decimal result))
                     {
                         if(yieldPerSecond != Math.Round(result, 2))
                         {
                             yieldPerSecond = result;
+                            UpdateMaterialIskPerHour();
+                            UpdateCompressedIskPerHour();
                             NotifyPropertyChanged(nameof(YieldPerSecondText));
-                            UpdateIskPerHour();
                         }
                     }
                 }
             }
         }
+
+        private decimal reprocessingEfficiency = 0.782m;
+        public string ReprocessingEfficiencyText
+        {
+            get => (reprocessingEfficiency * 100).ToString("F02", ci);
+            set
+            {
+                if ((reprocessingEfficiency * 100).ToString("F02", ci) != value)
+                {
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        reprocessingEfficiency = 0;
+                        UpdateMaterialIskPerHour();
+                        NotifyPropertyChanged(nameof(ReprocessingEfficiencyText));
+                    }
+                    else if (decimal.TryParse(value, NumberStyles.Float, ci, out decimal result))
+                    {
+                        if (result <= 100)
+                        {
+                            result /= 100;
+                            if (reprocessingEfficiency != Math.Round(result, 4))
+                            {
+                                reprocessingEfficiency = result;
+                                UpdateMaterialIskPerHour();
+                                NotifyPropertyChanged(nameof(ReprocessingEfficiencyText));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Material> mineralModels;
 
         public Guid Id { get; } = Guid.NewGuid();
 
@@ -93,7 +126,8 @@ namespace SharpCrokite.Core.ViewModels
                 UpdateCompressedVariantPrices();
             }
 
-            UpdateIskPerHour();
+            UpdateMaterialIskPerHour();
+            UpdateCompressedIskPerHour();
         }
 
         internal void ReloadStaticData()
@@ -101,17 +135,19 @@ namespace SharpCrokite.Core.ViewModels
             NormalOreIskPerHourCollection = LoadStaticData();
         }
 
-        private ObservableCollection<NormalOreIskPerHour> LoadStaticData()
-        {
-            NormalOreIskPerHourQuery normalOreIskPerHourQuery = new(harvestableRepository);
-            return new(normalOreIskPerHourQuery.Execute());
-        }
-
         internal void UpdatePrices()
         {
             UpdateMineralPrices();
             UpdateCompressedVariantPrices();
-            UpdateIskPerHour();
+
+            UpdateMaterialIskPerHour();
+            UpdateCompressedIskPerHour();
+        }
+
+        private ObservableCollection<NormalOreIskPerHour> LoadStaticData()
+        {
+            NormalOreIskPerHourQuery normalOreIskPerHourQuery = new(harvestableRepository);
+            return new(normalOreIskPerHourQuery.Execute());
         }
 
         private void UpdateMineralPrices()
@@ -128,11 +164,18 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
-        private void UpdateIskPerHour()
+        private void UpdateMaterialIskPerHour()
         {
             foreach (NormalOreIskPerHour normalOreIskPerHour in NormalOreIskPerHourCollection)
             {
                 CalculateMaterialIskPerHour(normalOreIskPerHour);
+            }
+        }
+
+        private void UpdateCompressedIskPerHour()
+        {
+            foreach (NormalOreIskPerHour normalOreIskPerHour in NormalOreIskPerHourCollection)
+            {
                 CalculateCompressedIskPerHour(normalOreIskPerHour);
             }
         }
@@ -145,7 +188,7 @@ namespace SharpCrokite.Core.ViewModels
 
             foreach (KeyValuePair<string, int> mineral in notEmptyMinerals)
             {
-                int mineralsAfterReprocessing = Convert.ToInt32(Math.Floor(mineral.Value * defaultReprocessingEfficiency));
+                int mineralsAfterReprocessing = Convert.ToInt32(Math.Floor(mineral.Value * reprocessingEfficiency));
 
                 decimal currentMarketPrice = 0;
 
@@ -159,7 +202,7 @@ namespace SharpCrokite.Core.ViewModels
                 batchValueAfterReprocessing += mineralsAfterReprocessing * currentMarketPrice;
             }
 
-            decimal valuePerUnit = batchValueAfterReprocessing / 100; // batch size
+            decimal valuePerUnit = batchValueAfterReprocessing / BatchSize; // batch size
             decimal valuePerSquareMeters = valuePerUnit / normalOreIskPerHour.Volume.Amount;
             decimal valuePerSecond = valuePerSquareMeters * yieldPerSecond;
             decimal valuePerHour = valuePerSecond * 60 * 60; // 3600 seconds = 1 hour

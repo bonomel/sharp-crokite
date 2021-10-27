@@ -11,9 +11,12 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Image Source="/Images/mining-laser-icon.png" Height="24" Width="24" Margin="10,0,-3,0"/>
-            <Label Content="m³/s" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
-            <TextBox x:Name="YieldPerSecondTextBox" Height="20" Width="80" Text="{Binding Path=YieldPerSecondText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Image Source="/Images/mining-laser-icon.png" Height="24" Width="24" Margin="10,0,-3,0" />
+            <Label Content="m³/s" VerticalContentAlignment="Center" Margin="0,0,0,0" />
+            <TextBox Height="20" Width="80" Text="{Binding Path=YieldPerSecondText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Image Source="/Images/reprocessing-icon.png" Height="24" Width="24" Margin="10,0,-3,0" />
+            <Label Content="%" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
+            <TextBox Height="20" Width="80" Text="{Binding Path=ReprocessingEfficiencyText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <CheckBox Content="Show improved variants" VerticalContentAlignment="Center" IsChecked="{Binding Path=ShowImprovedVariantsIsChecked, Mode=TwoWay}" Margin="15,0,0,0" />
         </StackPanel>
         <DataGrid Name="HarvestablesDataGrid" Margin="10,0,10,10" IsReadOnly="true" AutoGenerateColumns="False" Grid.Row="1"
@@ -56,7 +59,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="240">
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="180">
                     <DataGridTextColumn.HeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -183,7 +186,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Materials ISK/hour" Binding="{Binding MaterialIskPerHour}" Width="160">
+                <DataGridTextColumn Header="Materials ISK/hour" Binding="{Binding MaterialIskPerHour}" Width="140">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -192,7 +195,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Compressed ISK/hour" Binding="{Binding CompressedIskPerHour}" Width="160">
+                <DataGridTextColumn Header="Compressed ISK/hour" Binding="{Binding CompressedIskPerHour}" Width="140">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
