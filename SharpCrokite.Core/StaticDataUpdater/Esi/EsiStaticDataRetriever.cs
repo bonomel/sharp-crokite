@@ -10,8 +10,8 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+
 using SharpCrokite.Core.StaticDataUpdater.Esi.EsiJsonModels;
-using SharpCrokite.Core.StaticDataUpdater.JsonModels;
 
 namespace SharpCrokite.Core.StaticDataUpdater.Esi
 {
@@ -139,7 +139,7 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
             return responseStream;
         }
 
-        public IEnumerable<EsiMaterialContentJson> RetrieveMaterialContent()
+        private static IEnumerable<EsiMaterialContentJson> RetrieveMaterialContent()
         {
             using WebClient client = new();
             Uri uri = new(MaterialContentUrl);
@@ -183,7 +183,7 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
             }
         }
 
-        private EsiCategoryJson GetCategoryInfo(HttpClient client, string categoryId)
+        private static EsiCategoryJson GetCategoryInfo(HttpClient client, string categoryId)
         {
             HttpResponseMessage response = client.GetAsync($"{UniverseRoute}{CategoriesRoutePart}{categoryId}").Result;
             if (response.IsSuccessStatusCode)

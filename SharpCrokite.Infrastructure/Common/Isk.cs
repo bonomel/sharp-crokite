@@ -12,7 +12,7 @@ namespace SharpCrokite.Infrastructure.Common
             CurrencyDecimalSeparator = ",",
             CurrencyDecimalDigits = 2,
             CurrencyGroupSeparator = ".",
-            CurrencyGroupSizes = new int[] { 3 },
+            CurrencyGroupSizes = new[] { 3 },
             CurrencySymbol = "ISK",
             CurrencyPositivePattern = 3,
             CurrencyNegativePattern = 8
@@ -35,8 +35,8 @@ namespace SharpCrokite.Infrastructure.Common
             Isk comparableIsk = obj as Isk;
 
             if (Amount > comparableIsk.Amount) return 1;
-            else if (Amount < comparableIsk.Amount) return -1;
-            else return 0;
+            if (Amount < comparableIsk.Amount) return -1;
+            return 0;
         }
     }
 }

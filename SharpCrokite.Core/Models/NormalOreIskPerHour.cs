@@ -1,6 +1,7 @@
-﻿using SharpCrokite.Infrastructure.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
+
+using SharpCrokite.Infrastructure.Common;
 
 namespace SharpCrokite.Core.Models
 {

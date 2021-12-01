@@ -1,14 +1,15 @@
-﻿using SharpCrokite.Core.Models;
-using SharpCrokite.Core.Queries;
-using SharpCrokite.DataAccess.Models;
-using SharpCrokite.Infrastructure.Common;
-using SharpCrokite.Infrastructure.Repositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+
+using SharpCrokite.Core.Models;
+using SharpCrokite.Core.Queries;
+using SharpCrokite.DataAccess.Models;
+using SharpCrokite.Infrastructure.Common;
+using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.ViewModels
 {

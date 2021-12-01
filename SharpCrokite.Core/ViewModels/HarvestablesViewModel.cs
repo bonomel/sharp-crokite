@@ -11,7 +11,6 @@ namespace SharpCrokite.Core.ViewModels
     public class HarvestablesViewModel : INotifyPropertyChanged
     {
         private readonly HarvestableRepository harvestableRepository;
-        private readonly MaterialRepository materialRepository;
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
@@ -29,10 +28,9 @@ namespace SharpCrokite.Core.ViewModels
 
         public Guid Id { get; } = Guid.NewGuid();
 
-        public HarvestablesViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
+        public HarvestablesViewModel(HarvestableRepository harvestableRepository)
         {
             this.harvestableRepository = harvestableRepository;
-            this.materialRepository = materialRepository;
 
             harvestables = GetHarvestableModels();
         }
@@ -44,7 +42,7 @@ namespace SharpCrokite.Core.ViewModels
 
         private ObservableCollection<HarvestableModel> GetHarvestableModels()
         {
-            AllHarvestablesQuery allHarvestablesQuery = new(harvestableRepository, materialRepository);
+            AllHarvestablesQuery allHarvestablesQuery = new(harvestableRepository);
             return new(allHarvestablesQuery.Execute());
         }
 

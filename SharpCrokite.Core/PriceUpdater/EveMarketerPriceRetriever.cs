@@ -13,7 +13,7 @@ namespace SharpCrokite.Core.PriceUpdater
     {
         private const string BaseUrl = "http://api.evemarketer.com/ec/marketstat/json";
         private const int BatchSize = 200;
-        private readonly Dictionary<int, string> SystemsToGetPricesFor = new()
+        private readonly Dictionary<int, string> systemsToGetPricesFor = new()
         {
             { 30000142, "Jita" }
         };
@@ -67,11 +67,14 @@ namespace SharpCrokite.Core.PriceUpdater
 
                     List<EveMarketerPricesJson> batchJsonResult = JsonSerializer.Deserialize<List<EveMarketerPricesJson>>(responseString);
 
-                    priceJson.AddRange(batchJsonResult);
+                    if (batchJsonResult != null)
+                    {
+                        priceJson.AddRange(batchJsonResult);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show($"Something went wrong calling API:\n{url}");
+                    _ = MessageBox.Show($"Something went wrong calling API:\n{url}");
                 }
             }
             return priceJson;
@@ -81,7 +84,7 @@ namespace SharpCrokite.Core.PriceUpdater
         {
             List<string> batchedUrls = new();
             
-            foreach (KeyValuePair<int, string> system in SystemsToGetPricesFor)
+            foreach (KeyValuePair<int, string> system in systemsToGetPricesFor)
             {
                 foreach (IList<int> batch in batches)
                 {

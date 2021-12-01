@@ -1,4 +1,6 @@
-﻿namespace SharpCrokite.Core.StaticDataUpdater.JsonModels
+﻿// ReSharper disable InconsistentNaming
+#pragma warning disable IDE1006 // Naming Styles
+namespace SharpCrokite.Core.StaticDataUpdater.Esi.EsiJsonModels
 {
     public class EsiMaterialContentJson
     {

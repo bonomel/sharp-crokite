@@ -12,26 +12,13 @@ namespace SharpCrokite.Core.Queries
     public class AllHarvestablesQuery
     {
         private readonly HarvestableRepository harvestableRepository;
-        private readonly MaterialRepository materialRepository;
 
-        private static readonly NumberFormatInfo ISKNumberFormatInfo = new()
-        {
-            CurrencyDecimalSeparator = ",",
-            CurrencyDecimalDigits = 2,
-            CurrencyGroupSeparator = ".",
-            CurrencyGroupSizes = new int[] { 3 },
-            CurrencySymbol = "ISK",
-            CurrencyPositivePattern = 3,
-            CurrencyNegativePattern = 8
-        };
-
-        public AllHarvestablesQuery(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
+        public AllHarvestablesQuery(HarvestableRepository harvestableRepository)
         {
             this.harvestableRepository = harvestableRepository;
-            this.materialRepository = materialRepository;
         }
 
-        public IList<HarvestableModel> Execute()
+        public IEnumerable<HarvestableModel> Execute()
         {
             List<HarvestableModel> harvestableViewModels = new();
 
@@ -60,12 +47,7 @@ namespace SharpCrokite.Core.Queries
             };
         }
 
-        private string DisplayAsISK(decimal decimalISK)
-        {
-            return decimalISK != 0 ? $"{decimalISK.ToString("C", ISKNumberFormatInfo)}" : "N/A";
-        }
-
-        private string MaterialContentsAsString(IEnumerable<MaterialContent> materialContents)
+        private static string MaterialContentsAsString(IEnumerable<MaterialContent> materialContents)
         {
             StringBuilder materialContentStringBuilder = new();
 
@@ -78,7 +60,7 @@ namespace SharpCrokite.Core.Queries
 
             // this means position 0 until '..' 1 before last '^' 
             // thus it'll trim the last newline character :)
-            string materialContentStringTrimmed = !string.IsNullOrWhiteSpace(materialContentString) ? materialContentString[0..^1] : string.Empty;
+            string materialContentStringTrimmed = !string.IsNullOrWhiteSpace(materialContentString) ? materialContentString[..^1] : string.Empty;
 
             return materialContentStringTrimmed;
         }

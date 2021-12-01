@@ -15,6 +15,7 @@ namespace SharpCrokite.Infrastructure.Common
         {
             return $"{Amount} m³";
         }
+
         public int CompareTo(object obj)
         {
             if (obj == null) return 1;

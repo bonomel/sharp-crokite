@@ -1,8 +1,11 @@
-﻿namespace SharpCrokite.Core.PriceUpdater
+﻿// ReSharper disable InconsistentNaming
+#pragma warning disable IDE1006 // Naming Styles
+namespace SharpCrokite.Core.PriceUpdater
 {
     public class EveMarketerPricesJson
-    { 
+    {
         public Buy buy { get; set; }
+
         public Sell sell { get; set; }
 
         public class Buy

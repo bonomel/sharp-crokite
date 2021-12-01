@@ -16,7 +16,7 @@ namespace SharpCrokite.Infrastructure.Repositories
 
         public override Harvestable Update(Harvestable entity)
         {
-            var harvestable = dbContext.Harvestables
+            var harvestable = DbContext.Harvestables
                 .Include(h => h.Prices)
                 .Include(h => h.MaterialContents)
                 .Single(h => h.HarvestableId == entity.HarvestableId);
@@ -35,7 +35,7 @@ namespace SharpCrokite.Infrastructure.Repositories
 
         public override IEnumerable<Harvestable> Find(Expression<Func<Harvestable, bool>> predicate)
         {
-            return dbContext.Harvestables
+            return DbContext.Harvestables
                 .Include(h => h.Prices)
                 .Include(h => h.MaterialContents)
                 .ThenInclude(mc => mc.Material)
@@ -45,7 +45,7 @@ namespace SharpCrokite.Infrastructure.Repositories
 
         public override IEnumerable<Harvestable> All()
         {
-            return dbContext.Harvestables
+            return DbContext.Harvestables
                 .Include(h => h.Prices)
                 .Include(h => h.MaterialContents)
                 .ThenInclude(mc => mc.Material)

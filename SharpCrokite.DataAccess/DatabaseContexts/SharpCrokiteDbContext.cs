@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using SharpCrokite.DataAccess.Models;
 
 namespace SharpCrokite.DataAccess.DatabaseContexts

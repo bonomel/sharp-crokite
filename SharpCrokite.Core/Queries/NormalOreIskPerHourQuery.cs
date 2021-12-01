@@ -1,10 +1,10 @@
-﻿using SharpCrokite.Core.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using SharpCrokite.Core.Models;
 using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Common;
 using SharpCrokite.Infrastructure.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SharpCrokite.Core.Queries
 {
@@ -33,7 +33,7 @@ namespace SharpCrokite.Core.Queries
             // create the wrapped objects based on model data
             foreach (Harvestable harvestableModel in harvestableModels)
             {
-                normalOreIskPerHourCollection.Add(new()
+                normalOreIskPerHourCollection.Add(new NormalOreIskPerHour
                 {
                     Id = harvestableModel.HarvestableId,
                     CompressedVariantTypeId = harvestableRepository.Find(h => h.IsCompressedVariantOfType == harvestableModel.HarvestableId).Single().HarvestableId,
@@ -50,13 +50,15 @@ namespace SharpCrokite.Core.Queries
             {
                 IEnumerable<NormalOreIskPerHour> normalOreIskPerHourPerType = normalOreIskPerHourCollection.Where(o => o.Type == oreType);
 
-                if (normalOreIskPerHourPerType.Any())
+                List<NormalOreIskPerHour> oreIskPerHourPerType = normalOreIskPerHourPerType.ToList();
+
+                if (oreIskPerHourPerType.Any())
                 {
                     // first remove the redunant improved variant
-                    _ = normalOreIskPerHourCollection.Remove(GetOreTypeWithHighestAmountOfMinerals(normalOreIskPerHourPerType));
+                    _ = normalOreIskPerHourCollection.Remove(GetOreTypeWithHighestAmountOfMinerals(oreIskPerHourPerType));
 
                     // and then set the improved flag on the improved variants
-                    normalOreIskPerHourPerType.Where(o => o != GetOreTypeWithLowestAmountOfMinerals(normalOreIskPerHourPerType)).ToList().ForEach(o => o.IsImprovedVariant = true);
+                    oreIskPerHourPerType.Where(o => o != GetOreTypeWithLowestAmountOfMinerals(oreIskPerHourPerType)).ToList().ForEach(o => o.IsImprovedVariant = true);
                 }
             }
 

@@ -1,58 +1,60 @@
-﻿using SharpCrokite.DataAccess.DatabaseContexts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+
+using SharpCrokite.DataAccess.DatabaseContexts;
+
 
 namespace SharpCrokite.Infrastructure.Repositories
 {
     public abstract class GenericRepository<T> : IRepository<T> where T : class
     {
-        protected SharpCrokiteDbContext dbContext;
+        protected readonly SharpCrokiteDbContext DbContext;
 
-        public GenericRepository(SharpCrokiteDbContext dbContext)
+        protected GenericRepository(SharpCrokiteDbContext dbContext)
         {
-            this.dbContext = dbContext;
+            DbContext = dbContext;
         }
 
         public virtual T Add(T entity)
         {
-            return dbContext.Add(entity).Entity;
+            return DbContext.Add(entity).Entity;
         }
 
         public virtual IEnumerable<T> All()
         {
-            return dbContext.Set<T>().ToList();
+            return DbContext.Set<T>().ToList();
         }
 
         public virtual IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
         {
-            return dbContext.Set<T>().AsQueryable().Where(predicate).ToList();
+            return DbContext.Set<T>().AsQueryable().Where(predicate).ToList();
         }
 
         public virtual T Get(int id)
         {
-            return dbContext.Find<T>(id);
+            return DbContext.Find<T>(id);
         }
 
         public virtual void SaveChanges()
         {
-            dbContext.SaveChanges();
+            DbContext.SaveChanges();
         }
 
         public virtual T Update(T entity)
         {
-            return dbContext.Update(entity).Entity;
+            return DbContext.Update(entity).Entity;
         }
 
         public virtual T Delete(T entity)
         {
-            return dbContext.Remove(entity).Entity;
+            return DbContext.Remove(entity).Entity;
         }
 
         public virtual void DeleteAll()
         {
-            dbContext.Set<T>().RemoveRange(All());
+            DbContext.Set<T>().RemoveRange(All());
         }
     }
 }

@@ -2,10 +2,10 @@
 {
     public class MaterialDto
     {
-        public int MaterialId { get; set; }
-        public string Type { get; set; }
-        public string Name { get; set; }
-        public byte[] Icon { get; set; }
-        public string Description { get; set; }
+        public int MaterialId { get; init; }
+        public string Type { get; init; }
+        public string Name { get; init; }
+        public byte[] Icon { get; init; }
+        public string Description { get; init; }
     }
 }
