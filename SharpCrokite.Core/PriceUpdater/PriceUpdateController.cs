@@ -12,7 +12,7 @@ namespace SharpCrokite.Core.PriceUpdater
         private readonly MaterialRepository materialRepository;
 
         private readonly EveMarketerPriceRetriever priceRetriever;
-        
+
         public PriceUpdateController(EveMarketerPriceRetriever priceRetriever,
             HarvestableRepository harvestableRepository,
             MaterialRepository materialRepository)

@@ -8,7 +8,7 @@ using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.Queries
 {
-    public class NormalOreIskPerHourQuery
+    public class NormalOreQuery
     {
         private readonly HarvestableRepository harvestableRepository;
 
@@ -18,7 +18,7 @@ namespace SharpCrokite.Core.Queries
             "Dark Ochre", "Hemorphite", "Hedbergite", "Spodumain" ,"Crokite", "Bistot", "Arkonor"
         };
 
-        public NormalOreIskPerHourQuery(HarvestableRepository harvestableRepository)
+        public NormalOreQuery(HarvestableRepository harvestableRepository)
         {
             this.harvestableRepository = harvestableRepository;
         }

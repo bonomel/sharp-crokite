@@ -1,9 +1,10 @@
-﻿using SharpCrokite.DataAccess.DatabaseContexts;
-using Microsoft.Extensions.DependencyInjection;
-using System.Windows;
-using SharpCrokite.Infrastructure.Repositories;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Windows;
+
 using SharpCrokite.Core.ViewModels;
+using SharpCrokite.DataAccess.DatabaseContexts;
+using SharpCrokite.Infrastructure.Repositories;
 using SharpCrokite.UI.Views;
 
 namespace SharpCrokite.UI

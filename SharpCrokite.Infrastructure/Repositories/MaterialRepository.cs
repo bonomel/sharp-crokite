@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SharpCrokite.DataAccess.DatabaseContexts;
-using SharpCrokite.DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+
+using SharpCrokite.DataAccess.DatabaseContexts;
+using SharpCrokite.DataAccess.Models;
 
 namespace SharpCrokite.Infrastructure.Repositories
 {

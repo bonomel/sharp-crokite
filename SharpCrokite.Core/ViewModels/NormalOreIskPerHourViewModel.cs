@@ -147,8 +147,8 @@ namespace SharpCrokite.Core.ViewModels
 
         private ObservableCollection<NormalOreIskPerHour> LoadStaticData()
         {
-            NormalOreIskPerHourQuery normalOreIskPerHourQuery = new(harvestableRepository);
-            return new(normalOreIskPerHourQuery.Execute());
+            NormalOreQuery normalOreQuery = new(harvestableRepository);
+            return new(normalOreQuery.Execute());
         }
 
         private void UpdateMineralPrices()
@@ -161,7 +161,8 @@ namespace SharpCrokite.Core.ViewModels
             foreach (NormalOreIskPerHour normalOreIskPerHour in NormalOreIskPerHourCollection)
             {
                 Harvestable compressedVariant = harvestableRepository.Find(h => h.HarvestableId == normalOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
-                normalOreIskPerHour.CompressedPrices = compressedVariant.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
+
+                normalOreIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
             }
         }
 
@@ -191,14 +192,7 @@ namespace SharpCrokite.Core.ViewModels
             {
                 int mineralsAfterReprocessing = Convert.ToInt32(Math.Floor(mineral.Value * reprocessingEfficiency));
 
-                decimal currentMarketPrice = 0;
-
-                if (mineralModels.Single(m => m.Name == mineral.Key).Prices.Any())
-                {
-                    currentMarketPrice = mineralModels.Single(m => m.Name == mineral.Key).Prices.SingleOrDefault(p => p.SystemId == systemToUseForPrices) != null
-                    ? mineralModels.Single(m => m.Name == mineral.Key).Prices.SingleOrDefault(p => p.SystemId == systemToUseForPrices).SellPercentile
-                    : 0;
-                }
+                decimal currentMarketPrice = GetSellPercentilePriceFromMineral(mineral);
 
                 batchValueAfterReprocessing += mineralsAfterReprocessing * currentMarketPrice;
             }
@@ -209,6 +203,25 @@ namespace SharpCrokite.Core.ViewModels
             decimal valuePerHour = valuePerSecond * 60 * 60; // 3600 seconds = 1 hour
 
             normalOreIskPerHour.MaterialIskPerHour = new Isk(valuePerHour);
+        }
+
+        private decimal GetSellPercentilePriceFromMineral(KeyValuePair<string, int> mineral)
+        {
+            decimal sellPercentile = 0;
+
+            if (mineralModels.Single(m => m.Name == mineral.Key).Prices.Any())
+            {
+                IList<Price> prices = mineralModels.Single(m => m.Name == mineral.Key).Prices;
+
+                Price price = prices.SingleOrDefault(p => p.SystemId == systemToUseForPrices);
+
+                if (price != null)
+                {
+                    sellPercentile = price.SellPercentile;
+                }
+            }
+
+            return sellPercentile;
         }
 
         private void CalculateCompressedIskPerHour(NormalOreIskPerHour normalOreIskPerHour)

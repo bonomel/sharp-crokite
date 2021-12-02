@@ -2,13 +2,13 @@
 {
     internal class PriceDto
     {
-        public int TypeId { get; set; }
-        public int SystemId { get; set; }
-        public decimal BuyMax { get; set; }
-        public decimal BuyMin { get; set; }
-        public decimal BuyPercentile { get; set; }
-        public decimal SellMax { get; set; }
-        public decimal SellMin { get; set; }
-        public decimal SellPercentile { get; set; }
+        public int TypeId { get; init; }
+        public int SystemId { get; init; }
+        public decimal BuyMax { get; init; }
+        public decimal BuyMin { get; init; }
+        public decimal BuyPercentile { get; init; }
+        public decimal SellMax { get; init; }
+        public decimal SellMin { get; init; }
+        public decimal SellPercentile { get; init; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
+
 using SharpCrokite.Core.Models;
 using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Common;
@@ -31,7 +31,7 @@ namespace SharpCrokite.Core.Queries
 
         private HarvestableModel CreateHarvestableModelFrom(Harvestable harvestable)
         {
-            return new HarvestableModel()
+            return new HarvestableModel
             {
                 HarvestableId = harvestable.HarvestableId,
                 Icon = harvestable.Icon,
@@ -41,10 +41,15 @@ namespace SharpCrokite.Core.Queries
                 MaterialContents = MaterialContentsAsString(harvestable.MaterialContents),
                 Description = harvestable.Description,
                 Volume = harvestable.Volume,
-                IsCompressedVariantOfType = harvestable.IsCompressedVariantOfType.HasValue
-                    ? CreateHarvestableModelFrom(harvestableRepository.Get(harvestable.IsCompressedVariantOfType.Value))
-                    : null
+                IsCompressedVariantOfType = GetCompressedVariantOrDefault(harvestable)
             };
+        }
+
+        private HarvestableModel GetCompressedVariantOrDefault(Harvestable harvestable)
+        {
+            return harvestable.IsCompressedVariantOfType.HasValue
+                ? CreateHarvestableModelFrom(harvestableRepository.Get(harvestable.IsCompressedVariantOfType.Value))
+                : null;
         }
 
         private static string MaterialContentsAsString(IEnumerable<MaterialContent> materialContents)

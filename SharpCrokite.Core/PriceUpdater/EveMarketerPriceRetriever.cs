@@ -22,22 +22,22 @@ namespace SharpCrokite.Core.PriceUpdater
         {
             IList<IList<int>> batches = CreateBatches(allTypeIds);
 
-            IList<string> batchedUrls = CreateBatchedUrls(batches);
+            IEnumerable<string> batchedUrls = CreateBatchedUrls(batches);
 
             IEnumerable<EveMarketerPricesJson> priceJson = RetrievePricesAsJson(batchedUrls);
 
-            IList<PriceDto> priceDtos = TransformToPriceDtos(priceJson);
+            IList<PriceDto> priceDtos = MapJsonToPriceDto(priceJson);
 
             return priceDtos;
         }
 
-        private static IList<PriceDto> TransformToPriceDtos(IEnumerable<EveMarketerPricesJson> priceJson)
+        private static IList<PriceDto> MapJsonToPriceDto(IEnumerable<EveMarketerPricesJson> priceJson)
         {
             List<PriceDto> priceDtos = new();
 
             foreach(EveMarketerPricesJson json in priceJson)
             {
-                priceDtos.Add(new PriceDto()
+                priceDtos.Add(new PriceDto
                 {
                     TypeId = json.buy.forQuery.types.First(),
                     SystemId = json.buy.forQuery.systems.First(),
@@ -52,7 +52,7 @@ namespace SharpCrokite.Core.PriceUpdater
             return priceDtos;
         }
 
-        private static IEnumerable<EveMarketerPricesJson> RetrievePricesAsJson(IList<string> batchedUrls)
+        private static IEnumerable<EveMarketerPricesJson> RetrievePricesAsJson(IEnumerable<string> batchedUrls)
         {
             using HttpClient client = new();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -80,7 +80,7 @@ namespace SharpCrokite.Core.PriceUpdater
             return priceJson;
         }
 
-        private IList<string> CreateBatchedUrls(IList<IList<int>> batches)
+        private IEnumerable<string> CreateBatchedUrls(IList<IList<int>> batches)
         {
             List<string> batchedUrls = new();
             
@@ -94,7 +94,7 @@ namespace SharpCrokite.Core.PriceUpdater
             return batchedUrls;
         }
 
-        private static IList<IList<int>> CreateBatches(IList<int> allTypeIds)
+        private static IList<IList<int>> CreateBatches(ICollection<int> allTypeIds)
         {
             List<IList<int>> batches = new();
 

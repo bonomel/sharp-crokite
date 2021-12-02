@@ -17,7 +17,7 @@ namespace SharpCrokite.Core.PriceUpdater
             this.materialRepository = materialRepository;
         }
 
-        internal void Update(IList<PriceDto> priceDtos)
+        internal void Update(IEnumerable<PriceDto> priceDtos)
         {
             foreach(PriceDto dto in priceDtos)
             {
