@@ -26,7 +26,7 @@ namespace SharpCrokite.Core.Models
             }
         }
 
-        internal int CompressedVariantTypeId { get; set; }
+        internal int CompressedVariantTypeId { get; init; }
 
         internal Dictionary<int, Isk> CompressedPrices { get; set; }
 
@@ -58,7 +58,7 @@ namespace SharpCrokite.Core.Models
             }
         }
 
-        public Dictionary<string, int> Minerals { get; internal set; } = new() { };
+        public Dictionary<string, int> Minerals { get; internal init; } = new();
         public int Tritanium => Minerals.GetValueOrDefault(nameof(Tritanium));
         public int Pyerite => Minerals.GetValueOrDefault(nameof(Pyerite));
         public int Mexallon => Minerals.GetValueOrDefault(nameof(Mexallon));

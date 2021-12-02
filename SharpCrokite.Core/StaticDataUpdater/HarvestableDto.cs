@@ -4,13 +4,13 @@ namespace SharpCrokite.Core.StaticDataUpdater
 {
     public class HarvestableDto
     {
-        public int HarvestableId { get; set; }
-        public string Type { get; set; }
-        public byte[] Icon { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public List<MaterialContentDto> MaterialContents { get; set; } = new List<MaterialContentDto>();
+        public int HarvestableId { get; init; }
+        public string Type { get; init; }
+        public byte[] Icon { get; init; }
+        public string Name { get; init; }
+        public string Description { get; init; }
+        public List<MaterialContentDto> MaterialContents { get; init; } = new();
         public int? IsCompressedVariantOfType { get; set; }
-        public decimal Volume { get; set; }
+        public decimal Volume { get; init; }
     }
 }

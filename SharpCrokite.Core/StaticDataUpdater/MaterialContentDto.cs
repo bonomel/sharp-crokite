@@ -2,9 +2,8 @@
 {
     public class MaterialContentDto
     {
-        public int MaterialContentId { get; set; }
-        public int HarvestableId { get; set; }
-        public int MaterialId { get; set; }
-        public int Quantity { get; set; }
+        public int HarvestableId { get; init; }
+        public int MaterialId { get; init; }
+        public int Quantity { get; init; }
     }
 }
