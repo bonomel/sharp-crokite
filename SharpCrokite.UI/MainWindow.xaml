@@ -17,8 +17,11 @@
             </StackPanel>
         </StackPanel>
         <TabControl Margin="10, 50, 10, 10">
-            <TabItem Header="Mining ISK/h">
-                <views:NormalOreIskPerHourView DataContext="{Binding NormalOreIskPerHourViewModel}"/>
+            <TabItem Header="Asteroid Mining ISK/h">
+                <views:AsteroidIskPerHourView DataContext="{Binding AsteroidIskPerHourViewModel}"/>
+            </TabItem>
+            <TabItem Header="Moon Mining ISK/h">
+                <views:MoonOreIskPerHourView DataContext="{Binding MoonOreIskPerHourViewModel}"/>
             </TabItem>
             <TabItem Header="Harvestables">
                 <views:HarvestablesView DataContext="{Binding HarvestablesViewModel}"/>

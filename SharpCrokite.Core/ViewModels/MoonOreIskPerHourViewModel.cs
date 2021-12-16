@@ -13,7 +13,7 @@ using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.ViewModels
 {
-    public class NormalOreIskPerHourViewModel : INotifyPropertyChanged
+    public class MoonOreIskPerHourViewModel : INotifyPropertyChanged
     {
         private const string MineralTypeString = "Mineral";
         private const int BatchSize = 100;
@@ -26,16 +26,16 @@ namespace SharpCrokite.Core.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        private ObservableCollection<NormalOreIskPerHour> normalOreIskPerHourCollection = new();
-        public ObservableCollection<NormalOreIskPerHour> NormalOreIskPerHourCollection
+        private ObservableCollection<MoonOreIskPerHour> moonOreIskPerHourCollection = new();
+        public ObservableCollection<MoonOreIskPerHour> MoonOreIskPerHourCollection
         {
-            get => normalOreIskPerHourCollection;
+            get => moonOreIskPerHourCollection;
             private set
             {
-                if (Equals(value, normalOreIskPerHourCollection)) { return; }
-                normalOreIskPerHourCollection = value;
+                if (Equals(value, moonOreIskPerHourCollection)) { return; }
+                moonOreIskPerHourCollection = value;
                 SetVisibilityForImprovedVariants();
-                NotifyPropertyChanged(nameof(NormalOreIskPerHourCollection));
+                NotifyPropertyChanged(nameof(MoonOreIskPerHourCollection));
             }
         }
 
@@ -114,14 +114,14 @@ namespace SharpCrokite.Core.ViewModels
 
         public Guid Id { get; } = Guid.NewGuid();
 
-        public NormalOreIskPerHourViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
+        public MoonOreIskPerHourViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
 
-            normalOreIskPerHourCollection = LoadStaticData();
+            moonOreIskPerHourCollection = LoadStaticData();
 
-            if(normalOreIskPerHourCollection.Any())
+            if(moonOreIskPerHourCollection.Any())
             {
                 UpdateMineralPrices();
                 UpdateCompressedVariantPrices();
@@ -133,7 +133,7 @@ namespace SharpCrokite.Core.ViewModels
 
         internal void ReloadStaticData()
         {
-            NormalOreIskPerHourCollection = LoadStaticData();
+            MoonOreIskPerHourCollection = LoadStaticData();
         }
 
         internal void UpdatePrices()
@@ -145,10 +145,10 @@ namespace SharpCrokite.Core.ViewModels
             UpdateCompressedIskPerHour();
         }
 
-        private ObservableCollection<NormalOreIskPerHour> LoadStaticData()
+        private ObservableCollection<MoonOreIskPerHour> LoadStaticData()
         {
-            NormalOreQuery normalOreQuery = new(harvestableRepository);
-            return new(normalOreQuery.Execute());
+            MoonOreQuery moonOreQuery = new(harvestableRepository);
+            return new(moonOreQuery.Execute());
         }
 
         private void UpdateMineralPrices()
@@ -158,33 +158,33 @@ namespace SharpCrokite.Core.ViewModels
 
         private void UpdateCompressedVariantPrices()
         {
-            foreach (NormalOreIskPerHour normalOreIskPerHour in NormalOreIskPerHourCollection)
+            foreach (MoonOreIskPerHour moonOreIskPerHour in MoonOreIskPerHourCollection)
             {
-                Harvestable compressedVariant = harvestableRepository.Find(h => h.HarvestableId == normalOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
+                Harvestable compressedVariant = harvestableRepository.Find(h => h.HarvestableId == moonOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
 
-                normalOreIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
+                moonOreIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
             }
         }
 
         private void UpdateMaterialIskPerHour()
         {
-            foreach (NormalOreIskPerHour normalOreIskPerHour in NormalOreIskPerHourCollection)
+            foreach (MoonOreIskPerHour normalOreIskPerHour in MoonOreIskPerHourCollection)
             {
-                CalculateMaterialIskPerHour(normalOreIskPerHour);
+                // CalculateMaterialIskPerHour(normalOreIskPerHour);
             }
         }
 
         private void UpdateCompressedIskPerHour()
         {
-            foreach (NormalOreIskPerHour normalOreIskPerHour in NormalOreIskPerHourCollection)
+            foreach (MoonOreIskPerHour normalOreIskPerHour in MoonOreIskPerHourCollection)
             {
-                CalculateCompressedIskPerHour(normalOreIskPerHour);
+                // CalculateCompressedIskPerHour(normalOreIskPerHour);
             }
         }
 
-        private void CalculateMaterialIskPerHour(NormalOreIskPerHour normalOreIskPerHour)
+        private void CalculateMaterialIskPerHour(MoonOreIskPerHour asteroidIskPerHour)
         {
-            IEnumerable<KeyValuePair<string, int>> notEmptyMinerals = normalOreIskPerHour.Minerals.Where(m => m.Value != 0);
+            IEnumerable<KeyValuePair<string, int>> notEmptyMinerals = asteroidIskPerHour.Materials.Where(m => m.Value != 0);
 
             decimal batchValueAfterReprocessing = new();
 
@@ -198,11 +198,11 @@ namespace SharpCrokite.Core.ViewModels
             }
 
             decimal valuePerUnit = batchValueAfterReprocessing / BatchSize; // batch size
-            decimal valuePerSquareMeters = valuePerUnit / normalOreIskPerHour.Volume.Amount;
+            decimal valuePerSquareMeters = valuePerUnit / asteroidIskPerHour.Volume.Amount;
             decimal valuePerSecond = valuePerSquareMeters * yieldPerSecond;
             decimal valuePerHour = valuePerSecond * 60 * 60; // 3600 seconds = 1 hour
 
-            normalOreIskPerHour.MaterialIskPerHour = new Isk(valuePerHour);
+            asteroidIskPerHour.MaterialIskPerHour = new Isk(valuePerHour);
         }
 
         private decimal GetSellPercentilePriceFromMineral(KeyValuePair<string, int> mineral)
@@ -224,22 +224,22 @@ namespace SharpCrokite.Core.ViewModels
             return sellPercentile;
         }
 
-        private void CalculateCompressedIskPerHour(NormalOreIskPerHour normalOreIskPerHour)
+        private void CalculateCompressedIskPerHour(MoonOreIskPerHour asteroidIskPerHour)
         {
-            decimal yieldPerSecondDividedByVolume = yieldPerSecond / normalOreIskPerHour.Volume.Amount;
+            decimal yieldPerSecondDividedByVolume = yieldPerSecond / asteroidIskPerHour.Volume.Amount;
             decimal batchSizeCompensatedVolume = yieldPerSecondDividedByVolume / 100; //batch size
 
-            decimal unitMarketPrice = normalOreIskPerHour.CompressedPrices.Any() ? normalOreIskPerHour.CompressedPrices[systemToUseForPrices].Amount : 0;
+            decimal unitMarketPrice = asteroidIskPerHour.CompressedPrices.Any() ? asteroidIskPerHour.CompressedPrices[systemToUseForPrices].Amount : 0;
 
             decimal normalizedCompressedBatchValue = unitMarketPrice * batchSizeCompensatedVolume;
             decimal compressedValuePerHour = normalizedCompressedBatchValue * 60 * 60;
 
-            normalOreIskPerHour.CompressedIskPerHour = new Isk(compressedValuePerHour);
+            asteroidIskPerHour.CompressedIskPerHour = new Isk(compressedValuePerHour);
         }
 
         private void SetVisibilityForImprovedVariants()
         {
-            normalOreIskPerHourCollection.Where(o => o.IsImprovedVariant).ToList().ForEach(o => o.Visible = showImprovedVariantsIsChecked);
+            moonOreIskPerHourCollection.Where(o => o.IsImprovedVariant).ToList().ForEach(o => o.Visible = showImprovedVariantsIsChecked);
         }
 
         private void NotifyPropertyChanged(string propertyName)

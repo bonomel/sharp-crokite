@@ -1,5 +1,8 @@
-﻿namespace SharpCrokite.Core.StaticDataUpdater
+﻿using System.Diagnostics;
+
+namespace SharpCrokite.Core.StaticDataUpdater
 {
+    [DebuggerDisplay("{Type} - {Name}")]
     public class MaterialDto
     {
         public int MaterialId { get; init; }

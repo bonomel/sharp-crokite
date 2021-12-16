@@ -16,17 +16,20 @@ namespace SharpCrokite.Core.ViewModels
         private readonly MaterialRepository materialRepository;
 
         public HarvestablesViewModel HarvestablesViewModel { get; }
-        public NormalOreIskPerHourViewModel NormalOreIskPerHourViewModel { get; }
+        public AsteroidIskPerHourViewModel AsteroidIskPerHourViewModel { get; }
+        public MoonOreIskPerHourViewModel MoonOreIskPerHourViewModel { get; }
+
         public Guid Id { get; } = Guid.NewGuid();
 
-        public MainWindowViewModel(HarvestablesViewModel harvestablesViewModel, NormalOreIskPerHourViewModel normalOreIskPerHourViewModel,
-            HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
+        public MainWindowViewModel(HarvestablesViewModel harvestablesViewModel, AsteroidIskPerHourViewModel asteroidIskPerHourViewModel,
+            MoonOreIskPerHourViewModel moonOreIskPerHourViewModel, HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
 
             HarvestablesViewModel = harvestablesViewModel;
-            NormalOreIskPerHourViewModel = normalOreIskPerHourViewModel;
+            AsteroidIskPerHourViewModel = asteroidIskPerHourViewModel;
+            MoonOreIskPerHourViewModel = moonOreIskPerHourViewModel;
 
             UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
             DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
@@ -48,7 +51,8 @@ namespace SharpCrokite.Core.ViewModels
 
             priceUpdateController.UpdatePrices();
             HarvestablesViewModel.UpdateHarvestables();
-            NormalOreIskPerHourViewModel.UpdatePrices();
+            AsteroidIskPerHourViewModel.UpdatePrices();
+            MoonOreIskPerHourViewModel.UpdatePrices();
         }
 
         public RelayCommand DeletePricesCommand { get; private set; }
@@ -64,7 +68,8 @@ namespace SharpCrokite.Core.ViewModels
 
             priceUpdateController.DeleteAllPrices();
             HarvestablesViewModel.UpdateHarvestables();
-            NormalOreIskPerHourViewModel.UpdatePrices();
+            AsteroidIskPerHourViewModel.UpdatePrices();
+            MoonOreIskPerHourViewModel.UpdatePrices();
         }
 
         public RelayCommand UpdateStaticDataCommand { get; private set; }
@@ -78,7 +83,8 @@ namespace SharpCrokite.Core.ViewModels
             {
                 staticDataUpdateController.UpdateData();
                 HarvestablesViewModel.UpdateHarvestables();
-                NormalOreIskPerHourViewModel.ReloadStaticData();
+                AsteroidIskPerHourViewModel.ReloadStaticData();
+                MoonOreIskPerHourViewModel.ReloadStaticData();
             }
             catch (HttpRequestException ex)
             {
@@ -106,7 +112,8 @@ namespace SharpCrokite.Core.ViewModels
 
             staticDataUpdateController.DeleteAllStaticData();
             HarvestablesViewModel.UpdateHarvestables();
-            NormalOreIskPerHourViewModel.ReloadStaticData();
+            AsteroidIskPerHourViewModel.ReloadStaticData();
+            MoonOreIskPerHourViewModel.ReloadStaticData();
         }
 
         private bool CanDeleteStaticData()

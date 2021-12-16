@@ -5,7 +5,7 @@ using SharpCrokite.Infrastructure.Common;
 
 namespace SharpCrokite.Core.Models
 {
-    public class NormalOreIskPerHour : INotifyPropertyChanged
+    public class MoonOreIskPerHour : INotifyPropertyChanged
     {
         internal int Id { get; set; }
         public byte[] Icon { get; internal set; }
@@ -58,14 +58,15 @@ namespace SharpCrokite.Core.Models
             }
         }
 
-        public Dictionary<string, int> Minerals { get; internal init; } = new();
-        public int Tritanium => Minerals.GetValueOrDefault(nameof(Tritanium));
-        public int Pyerite => Minerals.GetValueOrDefault(nameof(Pyerite));
-        public int Mexallon => Minerals.GetValueOrDefault(nameof(Mexallon));
-        public int Isogen => Minerals.GetValueOrDefault(nameof(Isogen));
-        public int Nocxium => Minerals.GetValueOrDefault(nameof(Nocxium));
-        public int Zydrine => Minerals.GetValueOrDefault(nameof(Zydrine));
-        public int Megacyte => Minerals.GetValueOrDefault(nameof(Megacyte));
+        public Dictionary<string, int> Materials { get; internal init; } = new();
+
+        //public int Tritanium => Materials.GetValueOrDefault(nameof(Tritanium));
+        //public int Pyerite => Materials.GetValueOrDefault(nameof(Pyerite));
+        //public int Mexallon => Materials.GetValueOrDefault(nameof(Mexallon));
+        //public int Isogen => Materials.GetValueOrDefault(nameof(Isogen));
+        //public int Nocxium => Materials.GetValueOrDefault(nameof(Nocxium));
+        //public int Zydrine => Materials.GetValueOrDefault(nameof(Zydrine));
+        //public int Megacyte => Materials.GetValueOrDefault(nameof(Megacyte));
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         private void NotifyPropertyChanged(string propertyName)

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace SharpCrokite.DataAccess.Models
 {
+    [DebuggerDisplay("{Type} - {Name}")]
     public class Material
     {
         public int MaterialId { get; init; }

@@ -8,7 +8,7 @@ using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.Queries
 {
-    public class NormalOreQuery
+    public class AsteroidQuery
     {
         private readonly HarvestableRepository harvestableRepository;
 
@@ -18,14 +18,14 @@ namespace SharpCrokite.Core.Queries
             "Dark Ochre", "Hemorphite", "Hedbergite", "Spodumain" ,"Crokite", "Bistot", "Arkonor"
         };
 
-        public NormalOreQuery(HarvestableRepository harvestableRepository)
+        public AsteroidQuery(HarvestableRepository harvestableRepository)
         {
             this.harvestableRepository = harvestableRepository;
         }
 
-        internal IEnumerable<NormalOreIskPerHour> Execute()
+        internal IEnumerable<AsteroidIskPerHour> Execute()
         {
-            List<NormalOreIskPerHour> normalOreIskPerHourCollection = new();
+            List<AsteroidIskPerHour> normalOreIskPerHourCollection = new();
 
             IEnumerable<Harvestable> harvestableModels =
                 harvestableRepository.Find(h => NormalOreTypes.Contains(h.Type) && h.IsCompressedVariantOfType == null);
@@ -33,7 +33,7 @@ namespace SharpCrokite.Core.Queries
             // create the wrapped objects based on model data
             foreach (Harvestable harvestableModel in harvestableModels)
             {
-                normalOreIskPerHourCollection.Add(new NormalOreIskPerHour
+                normalOreIskPerHourCollection.Add(new AsteroidIskPerHour
                 {
                     Id = harvestableModel.HarvestableId,
                     CompressedVariantTypeId = harvestableRepository.Find(h => h.IsCompressedVariantOfType == harvestableModel.HarvestableId).Single().HarvestableId,
@@ -48,9 +48,9 @@ namespace SharpCrokite.Core.Queries
 
             foreach (string oreType in NormalOreTypes)
             {
-                IEnumerable<NormalOreIskPerHour> normalOreIskPerHourPerType = normalOreIskPerHourCollection.Where(o => o.Type == oreType);
+                IEnumerable<AsteroidIskPerHour> normalOreIskPerHourPerType = normalOreIskPerHourCollection.Where(o => o.Type == oreType);
 
-                List<NormalOreIskPerHour> oreIskPerHourPerType = normalOreIskPerHourPerType.ToList();
+                List<AsteroidIskPerHour> oreIskPerHourPerType = normalOreIskPerHourPerType.ToList();
 
                 if (oreIskPerHourPerType.Any())
                 {
@@ -68,7 +68,7 @@ namespace SharpCrokite.Core.Queries
             return normalOreIskPerHourCollection;
         }
 
-        private static NormalOreIskPerHour GetOreTypeWithHighestAmountOfMinerals(IEnumerable<NormalOreIskPerHour> normalOreIskPerHourPerType)
+        private static AsteroidIskPerHour GetOreTypeWithHighestAmountOfMinerals(IEnumerable<AsteroidIskPerHour> normalOreIskPerHourPerType)
         {
             return normalOreIskPerHourPerType.Aggregate((o1, o2) =>
                 o1.Tritanium > o2.Tritanium ||
@@ -81,7 +81,7 @@ namespace SharpCrokite.Core.Queries
                 ? o1 : o2);
         }
 
-        private static NormalOreIskPerHour GetOreTypeWithLowestAmountOfMinerals(IEnumerable<NormalOreIskPerHour> normalOreIskPerHourPerType)
+        private static AsteroidIskPerHour GetOreTypeWithLowestAmountOfMinerals(IEnumerable<AsteroidIskPerHour> normalOreIskPerHourPerType)
         {
             return normalOreIskPerHourPerType.Aggregate((o1, o2) =>
                 o1.Tritanium < o2.Tritanium ||
