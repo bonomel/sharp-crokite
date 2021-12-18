@@ -30,63 +30,61 @@ namespace SharpCrokite.Core.Queries
             IEnumerable<Harvestable> harvestableModels =
                 harvestableRepository.Find(h => MoonOreTypes.Contains(h.Type) && h.IsCompressedVariantOfType == null);
 
-            // create the wrapped objects based on model data
             foreach (Harvestable harvestableModel in harvestableModels)
             {
                 moonOreIskPerHourCollection.Add(new MoonOreIskPerHour
                 {
                     Id = harvestableModel.HarvestableId,
-                    // CompressedVariantTypeId = harvestableRepository.Find(h => h.IsCompressedVariantOfType == harvestableModel.HarvestableId).Single().HarvestableId,
+                    //CompressedVariantTypeId = harvestableRepository.Find(h => h.IsCompressedVariantOfType == harvestableModel.HarvestableId).Single().HarvestableId,
                     Icon = harvestableModel.Icon,
                     Name = harvestableModel.Name,
                     Description = harvestableModel.Description,
                     Volume = new Volume(harvestableModel.Volume),
                     Type = harvestableModel.Type,
-                    Materials = harvestableModel.MaterialContents.ToDictionary(mc => mc.Material.Name, mc => mc.Quantity)
+                    MaterialContent = harvestableModel.MaterialContents.Select(materialContent => new MaterialModel()
+                    {
+                        Name = materialContent.Material.Name,
+                        Type = materialContent.Material.Type,
+                        MaterialId = materialContent.Material.MaterialId,
+                        Quantity = materialContent.Quantity
+                    }).ToList()
                 });
             }
 
             foreach (string oreType in MoonOreTypes)
             {
-                IEnumerable<MoonOreIskPerHour> moonOreIskPerHourPerType = moonOreIskPerHourCollection.Where(o => o.Type == oreType);
+                List<MoonOreIskPerHour> moonOreIskPerHourPerType = moonOreIskPerHourCollection.Where(o => o.Type == oreType).ToList();
 
-                IEnumerable<IGrouping<string, MoonOreIskPerHour>> groupedMoonOreIskPerHourPerType =
-                    moonOreIskPerHourPerType.GroupBy(moonOre => moonOre.Type);
+                List<List<MoonOreIskPerHour>> moonOreIskPerHourGrouped = new();
 
-                foreach(IGrouping<string, MoonOreIskPerHour> moonOreIskPerHourPerTypeGroup in groupedMoonOreIskPerHourPerType)
+                foreach (MoonOreIskPerHour moonOreIskPerHourType in moonOreIskPerHourPerType)
                 {
-                    
+                    if (moonOreIskPerHourPerType.Any(type =>
+                        type.Name.Contains(moonOreIskPerHourType.Name) && type.Name != moonOreIskPerHourType.Name))
+                    {
+                        List<MoonOreIskPerHour> groupedByType = moonOreIskPerHourPerType.Where(type => type.Name.Contains(moonOreIskPerHourType.Name)).ToList();
+                        moonOreIskPerHourGrouped.Add(groupedByType);
+                    }
                 }
 
-                //if (moonOreIskPerHourType.Any())
-                //{
-                //    // set the improved flag on the improved variants
-                //    moonOreIskPerHourType.Where(o => o != GetOreTypeWithLowestAmountOfMinerals(moonOreIskPerHourType)).ToList().ForEach(o => o.IsImprovedVariant = true);
-                //}
+                if (moonOreIskPerHourGrouped.Any())
+                {
+                    foreach (List<MoonOreIskPerHour> moonOreGroup in moonOreIskPerHourGrouped)
+                    {
+                        // set the improved flag on the improved variants
+                        moonOreGroup.Where(o => o != GetOreTypeWithLowestAmountOfMinerals(moonOreGroup)).ToList().ForEach(o => o.IsImprovedVariant = true);
+                    }
+                }
             }
-
-            // order the ores by type
-            moonOreIskPerHourCollection = moonOreIskPerHourCollection.OrderBy(o => o.Type).ToList();
 
             return moonOreIskPerHourCollection;
         }
 
-        //private static MoonOreIskPerHour GetOreTypeWithHighestAmountOfMinerals(IEnumerable<AsteroidIskPerHour> moonOreIskPerHourPerType)
-        //{
-        //    return moonOreIskPerHourPerType.Aggregate((o1, o2) =>
-        //        o1.Tritanium > o2.Tritanium ||
-        //        o1.Pyerite > o2.Pyerite ||
-        //        o1.Mexallon > o2.Mexallon ||
-        //        o1.Isogen > o2.Isogen ||
-        //        o1.Nocxium > o2.Nocxium ||
-        //        o1.Zydrine > o2.Zydrine ||
-        //        o1.Megacyte > o2.Megacyte
-        //        ? o1 : o2);
-        //}
-
         private static MoonOreIskPerHour GetOreTypeWithLowestAmountOfMinerals(IEnumerable<MoonOreIskPerHour> moonOreIskPerHourPerType)
         {
-            return moonOreIskPerHourPerType.Last(); // or whatever
+            return moonOreIskPerHourPerType.Aggregate((o1, o2) =>
+                o1.MaterialContent.First().Quantity < o2.MaterialContent.First().Quantity
+                ? o1 : o2);
         }
     }
 }

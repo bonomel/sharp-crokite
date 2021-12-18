@@ -58,7 +58,7 @@ namespace SharpCrokite.Core.Models
             }
         }
 
-        public Dictionary<string, int> Materials { get; internal init; } = new();
+        public List<MaterialModel> MaterialContent { get; internal init; } = new();
 
         //public int Tritanium => Materials.GetValueOrDefault(nameof(Tritanium));
         //public int Pyerite => Materials.GetValueOrDefault(nameof(Pyerite));
@@ -76,5 +76,13 @@ namespace SharpCrokite.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+
+    public class MaterialModel
+    {
+        public int MaterialId;
+        public string Type;
+        public string Name;
+        public int Quantity;
     }
 }
