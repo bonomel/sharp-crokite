@@ -16,6 +16,9 @@ namespace SharpCrokite.Core.ViewModels
     public class MoonOreIskPerHourViewModel : INotifyPropertyChanged
     {
         private const string MineralTypeString = "Mineral";
+        private const string MoonMaterialsTypeString = "Moon Materials";
+
+        private const string TwoDecimalsFormatString = "F02";
         private const int BatchSize = 100;
 
         private readonly CultureInfo ci = new("en-us");
@@ -39,7 +42,7 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
-        private bool showImprovedVariantsIsChecked = true;
+        private bool showImprovedVariantsIsChecked;
         public bool ShowImprovedVariantsIsChecked
         {
             get => showImprovedVariantsIsChecked;
@@ -53,10 +56,10 @@ namespace SharpCrokite.Core.ViewModels
         private decimal yieldPerSecond = 50m;
         public string YieldPerSecondText
         {
-            get => yieldPerSecond.ToString("F02", ci);
+            get => yieldPerSecond.ToString(TwoDecimalsFormatString, ci);
             set
             {
-                if (yieldPerSecond.ToString("F02", ci) != value)
+                if (yieldPerSecond.ToString(TwoDecimalsFormatString, ci) != value)
                 {
                     if (string.IsNullOrEmpty(value))
                     {
@@ -82,10 +85,10 @@ namespace SharpCrokite.Core.ViewModels
         private decimal reprocessingEfficiency = 0.782m;
         public string ReprocessingEfficiencyText
         {
-            get => (reprocessingEfficiency * 100).ToString("F02", ci);
+            get => (reprocessingEfficiency * 100).ToString(TwoDecimalsFormatString, ci);
             set
             {
-                if ((reprocessingEfficiency * 100).ToString("F02", ci) != value)
+                if ((reprocessingEfficiency * 100).ToString(TwoDecimalsFormatString, ci) != value)
                 {
                     if (string.IsNullOrEmpty(value))
                     {
@@ -123,8 +126,8 @@ namespace SharpCrokite.Core.ViewModels
 
             if(moonOreIskPerHourCollection.Any())
             {
-                UpdateMineralPrices();
-                UpdateCompressedVariantPrices();
+                UpdateMaterialPrices();
+                //UpdateCompressedVariantPrices();
             }
 
             UpdateMaterialIskPerHour();
@@ -138,8 +141,8 @@ namespace SharpCrokite.Core.ViewModels
 
         internal void UpdatePrices()
         {
-            UpdateMineralPrices();
-            UpdateCompressedVariantPrices();
+            UpdateMaterialPrices();
+            //UpdateCompressedVariantPrices();
 
             UpdateMaterialIskPerHour();
             //UpdateCompressedIskPerHour();
@@ -148,23 +151,23 @@ namespace SharpCrokite.Core.ViewModels
         private ObservableCollection<MoonOreIskPerHour> LoadStaticData()
         {
             MoonOreQuery moonOreQuery = new(harvestableRepository);
-            return new(moonOreQuery.Execute());
+            return new ObservableCollection<MoonOreIskPerHour>(moonOreQuery.Execute());
         }
 
-        private void UpdateMineralPrices()
+        private void UpdateMaterialPrices()
         {
-            materialModels = materialRepository.Find(m => m.Type == MineralTypeString || m.Type == "Moon Materials");
+            materialModels = materialRepository.Find(material => material.Type == MineralTypeString || material.Type == MoonMaterialsTypeString);
         }
 
-        private void UpdateCompressedVariantPrices()
-        {
-            foreach (MoonOreIskPerHour moonOreIskPerHour in MoonOreIskPerHourCollection)
-            {
-                Harvestable compressedVariant = harvestableRepository.Find(h => h.HarvestableId == moonOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
+        //private void UpdateCompressedVariantPrices()
+        //{
+        //    foreach (MoonOreIskPerHour moonOreIskPerHour in MoonOreIskPerHourCollection)
+        //    {
+        //        Harvestable compressedVariant = harvestableRepository.Find(h => h.HarvestableId == moonOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
 
-                moonOreIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
-            }
-        }
+        //        moonOreIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
+        //    }
+        //}
 
         private void UpdateMaterialIskPerHour()
         {

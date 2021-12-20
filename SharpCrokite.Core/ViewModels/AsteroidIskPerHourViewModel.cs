@@ -39,7 +39,7 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
-        private bool showImprovedVariantsIsChecked = true;
+        private bool showImprovedVariantsIsChecked;
         public bool ShowImprovedVariantsIsChecked
         {
             get => showImprovedVariantsIsChecked;

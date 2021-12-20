@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-
+using System.Diagnostics;
 using SharpCrokite.Infrastructure.Common;
 
 namespace SharpCrokite.Core.Models
 {
+    [DebuggerDisplay("{Type} - {Name}")]
     public class MoonOreIskPerHour : INotifyPropertyChanged
     {
         internal int Id { get; set; }
@@ -15,7 +16,7 @@ namespace SharpCrokite.Core.Models
         public Volume Volume { get; internal set; }
         internal bool IsImprovedVariant { get; set; }
 
-        private bool visible = true;
+        private bool visible;
         public bool Visible
         {
             get => !IsImprovedVariant || visible;
@@ -26,7 +27,7 @@ namespace SharpCrokite.Core.Models
             }
         }
 
-        internal int CompressedVariantTypeId { get; init; }
+        //internal int CompressedVariantTypeId { get; init; }
 
         internal Dictionary<int, Isk> CompressedPrices { get; set; }
 
@@ -60,14 +61,6 @@ namespace SharpCrokite.Core.Models
 
         public List<MaterialModel> MaterialContent { get; internal init; } = new();
 
-        //public int Tritanium => Materials.GetValueOrDefault(nameof(Tritanium));
-        //public int Pyerite => Materials.GetValueOrDefault(nameof(Pyerite));
-        //public int Mexallon => Materials.GetValueOrDefault(nameof(Mexallon));
-        //public int Isogen => Materials.GetValueOrDefault(nameof(Isogen));
-        //public int Nocxium => Materials.GetValueOrDefault(nameof(Nocxium));
-        //public int Zydrine => Materials.GetValueOrDefault(nameof(Zydrine));
-        //public int Megacyte => Materials.GetValueOrDefault(nameof(Megacyte));
-
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         private void NotifyPropertyChanged(string propertyName)
         {
@@ -84,5 +77,6 @@ namespace SharpCrokite.Core.Models
         public string Type;
         public string Name;
         public int Quantity;
+        public string Quality;
     }
 }

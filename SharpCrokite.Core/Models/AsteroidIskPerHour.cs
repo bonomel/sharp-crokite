@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-
+using System.Diagnostics;
 using SharpCrokite.Infrastructure.Common;
 
 namespace SharpCrokite.Core.Models
 {
+    [DebuggerDisplay("{Type} - {Name}")]
     public class AsteroidIskPerHour : INotifyPropertyChanged
     {
         internal int Id { get; set; }
@@ -15,7 +16,7 @@ namespace SharpCrokite.Core.Models
         public Volume Volume { get; internal set; }
         internal bool IsImprovedVariant { get; set; }
 
-        private bool visible = true;
+        private bool visible;
         public bool Visible
         {
             get => !IsImprovedVariant || visible;

@@ -12,8 +12,7 @@ namespace SharpCrokite.Core.Queries
     {
         private readonly HarvestableRepository harvestableRepository;
 
-        private static readonly string[] NormalOreTypes = new[]
-        {
+        private static readonly string[] NormalOreTypes = {
             "Veldspar", "Scordite", "Pyroxeres", "Plagioclase", "Kernite", "Omber", "Jaspet",
             "Dark Ochre", "Hemorphite", "Hedbergite", "Spodumain" ,"Crokite", "Bistot", "Arkonor"
         };

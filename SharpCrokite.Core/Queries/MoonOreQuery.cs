@@ -12,10 +12,21 @@ namespace SharpCrokite.Core.Queries
     {
         private readonly HarvestableRepository harvestableRepository;
 
-        private static readonly string[] MoonOreTypes = new[]
+        private static class MoonOreType
         {
-            "Ubiquitous Moon Asteroids", "Common Moon Asteroids", "Uncommon Moon Asteroids",
-            "Rare Moon Asteroids", "Exceptional Moon Asteroids"
+            public const string UbiquitousMoonAsteroids = "Ubiquitous Moon Asteroids";
+            public const string CommonMoonAsteroids = "Common Moon Asteroids";
+            public const string UncommonMoonAsteroids = "Uncommon Moon Asteroids";
+            public const string RareMoonAsteroids = "RareMoonAsteroids";
+            public const string ExceptionalMoonAsteroids = "Exceptional Moon Asteroids";
+        }
+
+        private static readonly string[] MoonOreTypes = {
+            MoonOreType.UbiquitousMoonAsteroids,
+            MoonOreType.CommonMoonAsteroids,
+            MoonOreType.UncommonMoonAsteroids,
+            MoonOreType.RareMoonAsteroids,
+            MoonOreType.ExceptionalMoonAsteroids
         };
 
         public MoonOreQuery(HarvestableRepository harvestableRepository)
@@ -41,7 +52,7 @@ namespace SharpCrokite.Core.Queries
                     Description = harvestableModel.Description,
                     Volume = new Volume(harvestableModel.Volume),
                     Type = harvestableModel.Type,
-                    MaterialContent = harvestableModel.MaterialContents.Select(materialContent => new MaterialModel()
+                    MaterialContent = harvestableModel.MaterialContents.Select(materialContent => new MaterialModel
                     {
                         Name = materialContent.Material.Name,
                         Type = materialContent.Material.Type,
@@ -72,7 +83,7 @@ namespace SharpCrokite.Core.Queries
                     foreach (List<MoonOreIskPerHour> moonOreGroup in moonOreIskPerHourGrouped)
                     {
                         // set the improved flag on the improved variants
-                        moonOreGroup.Where(o => o != GetOreTypeWithLowestAmountOfMinerals(moonOreGroup)).ToList().ForEach(o => o.IsImprovedVariant = true);
+                        moonOreGroup.Where(o => o != GetBasicMoonOreType(moonOreGroup)).ToList().ForEach(o => o.IsImprovedVariant = true);
                     }
                 }
             }
@@ -80,11 +91,27 @@ namespace SharpCrokite.Core.Queries
             return moonOreIskPerHourCollection;
         }
 
-        private static MoonOreIskPerHour GetOreTypeWithLowestAmountOfMinerals(IEnumerable<MoonOreIskPerHour> moonOreIskPerHourPerType)
+        /// <summary>
+        /// This methods takes in <see cref="IEnumerable{T}"/> and return the non-improved one, based on their material types.
+        /// It assumes that all <see cref="MoonOreIskPerHour"/>s are the same type.
+        /// </summary>
+        /// <param name="moonOreIskPerHourPerType"></param>
+        /// <returns>The non-improved type of <see cref="MoonOreIskPerHour"/>.</returns>
+        private static MoonOreIskPerHour GetBasicMoonOreType(IEnumerable<MoonOreIskPerHour> moonOreIskPerHourPerType)
         {
-            return moonOreIskPerHourPerType.Aggregate((o1, o2) =>
-                o1.MaterialContent.First().Quantity < o2.MaterialContent.First().Quantity
-                ? o1 : o2);
+            return moonOreIskPerHourPerType.Aggregate(FindMoonOreWithLowestMaterialContent);
+        }
+
+        private static MoonOreIskPerHour FindMoonOreWithLowestMaterialContent(MoonOreIskPerHour moonOreToCompare, MoonOreIskPerHour moonOreToCompareTo)
+        {
+            foreach (MaterialModel materialToCompare in moonOreToCompare.MaterialContent)
+            {
+                MaterialModel materialToCompareTo = moonOreToCompareTo.MaterialContent.Single(material => material.Name == materialToCompare.Name);
+
+                return materialToCompare.Quantity < materialToCompareTo.Quantity ? moonOreToCompare : moonOreToCompareTo;
+            }
+
+            return null;
         }
     }
 }
