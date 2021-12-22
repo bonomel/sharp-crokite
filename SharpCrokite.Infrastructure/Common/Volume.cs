@@ -23,8 +23,8 @@ namespace SharpCrokite.Infrastructure.Common
             Volume comparableVolume = obj as Volume;
 
             if (Amount > comparableVolume.Amount) return 1;
-            else if (Amount < comparableVolume.Amount) return -1;
-            else return 0;
+            if (Amount < comparableVolume.Amount) return -1;
+            return 0;
         }
     }
 }

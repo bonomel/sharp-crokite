@@ -34,8 +34,8 @@ namespace SharpCrokite.Infrastructure.Common
 
             Isk comparableIsk = obj as Isk;
 
-            if (Amount > comparableIsk.Amount) return 1;
-            if (Amount < comparableIsk.Amount) return -1;
+            if (comparableIsk != null && Amount > comparableIsk.Amount) return 1;
+            if (comparableIsk != null && Amount < comparableIsk.Amount) return -1;
             return 0;
         }
     }
