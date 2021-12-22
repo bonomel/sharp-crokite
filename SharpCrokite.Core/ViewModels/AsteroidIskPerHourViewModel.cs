@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 
 using SharpCrokite.Core.Models;
@@ -13,117 +10,16 @@ using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.ViewModels
 {
-    public class AsteroidIskPerHourViewModel : INotifyPropertyChanged
+    public class AsteroidIskPerHourViewModel : IskPerHourViewModel<AsteroidIskPerHour>, INotifyPropertyChanged
     {
-        private const string MineralTypeString = "Mineral";
-        private const int BatchSize = 100;
-
-        private readonly CultureInfo ci = new("en-us");
-        private readonly int systemToUseForPrices = 30000142; // Hard-coded Jita systemid - this will become a setting eventually
-
-        private readonly HarvestableRepository harvestableRepository;
-        private readonly MaterialRepository materialRepository;
-
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-
-        private ObservableCollection<AsteroidIskPerHour> normalOreIskPerHourCollection = new();
-        public ObservableCollection<AsteroidIskPerHour> NormalOreIskPerHourCollection
-        {
-            get => normalOreIskPerHourCollection;
-            private set
-            {
-                if (Equals(value, normalOreIskPerHourCollection)) { return; }
-                normalOreIskPerHourCollection = value;
-                SetVisibilityForImprovedVariants();
-                NotifyPropertyChanged(nameof(NormalOreIskPerHourCollection));
-            }
-        }
-
-        private bool showImprovedVariantsIsChecked;
-        public bool ShowImprovedVariantsIsChecked
-        {
-            get => showImprovedVariantsIsChecked;
-            set
-            {
-                showImprovedVariantsIsChecked = value;
-                SetVisibilityForImprovedVariants();
-            }
-        }
-
-        private decimal yieldPerSecond = 50m;
-        public string YieldPerSecondText
-        {
-            get => yieldPerSecond.ToString("F02", ci);
-            set
-            {
-                if (yieldPerSecond.ToString("F02", ci) != value)
-                {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        yieldPerSecond = 0;
-                        UpdateMaterialIskPerHour();
-                        UpdateCompressedIskPerHour();
-                        NotifyPropertyChanged(nameof(YieldPerSecondText));
-                    }
-                    else if (decimal.TryParse(value, NumberStyles.Float, ci, out decimal result))
-                    {
-                        if(yieldPerSecond != Math.Round(result, 2))
-                        {
-                            yieldPerSecond = result;
-                            UpdateMaterialIskPerHour();
-                            UpdateCompressedIskPerHour();
-                            NotifyPropertyChanged(nameof(YieldPerSecondText));
-                        }
-                    }
-                }
-            }
-        }
-
-        private decimal reprocessingEfficiency = 0.782m;
-        public string ReprocessingEfficiencyText
-        {
-            get => (reprocessingEfficiency * 100).ToString("F02", ci);
-            set
-            {
-                if ((reprocessingEfficiency * 100).ToString("F02", ci) != value)
-                {
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        reprocessingEfficiency = 0;
-                        UpdateMaterialIskPerHour();
-                        NotifyPropertyChanged(nameof(ReprocessingEfficiencyText));
-                    }
-                    else if (decimal.TryParse(value, NumberStyles.Float, ci, out decimal result))
-                    {
-                        if (result <= 100)
-                        {
-                            result /= 100;
-                            if (reprocessingEfficiency != Math.Round(result, 4))
-                            {
-                                reprocessingEfficiency = result;
-                                UpdateMaterialIskPerHour();
-                                NotifyPropertyChanged(nameof(ReprocessingEfficiencyText));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<Material> mineralModels;
-
-        public Guid Id { get; } = Guid.NewGuid();
-
         public AsteroidIskPerHourViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
+            : base(harvestableRepository, materialRepository)
         {
-            this.harvestableRepository = harvestableRepository;
-            this.materialRepository = materialRepository;
+            HarvestableIskPerHourCollection = LoadStaticData();
 
-            normalOreIskPerHourCollection = LoadStaticData();
-
-            if(normalOreIskPerHourCollection.Any())
+            if (harvestableIskPerHourCollection.Any())
             {
-                UpdateMineralPrices();
+                UpdateMaterialPrices();
                 UpdateCompressedVariantPrices();
             }
 
@@ -131,123 +27,56 @@ namespace SharpCrokite.Core.ViewModels
             UpdateCompressedIskPerHour();
         }
 
-        internal void ReloadStaticData()
-        {
-            NormalOreIskPerHourCollection = LoadStaticData();
-        }
-
         internal void UpdatePrices()
         {
-            UpdateMineralPrices();
+            UpdateMaterialPrices();
             UpdateCompressedVariantPrices();
 
             UpdateMaterialIskPerHour();
             UpdateCompressedIskPerHour();
         }
 
-        private ObservableCollection<AsteroidIskPerHour> LoadStaticData()
+        protected sealed override ObservableCollection<AsteroidIskPerHour> LoadStaticData()
         {
-            AsteroidQuery asteroidQuery = new(harvestableRepository);
-            return new(asteroidQuery.Execute());
+            AsteroidQuery asteroidQuery = new(HarvestableRepository);
+            return new ObservableCollection<AsteroidIskPerHour>(asteroidQuery.Execute());
         }
 
-        private void UpdateMineralPrices()
+        protected override void UpdateIskPerHour()
         {
-            mineralModels = materialRepository.Find(m => m.Type == MineralTypeString);
+            base.UpdateIskPerHour();
+            UpdateCompressedIskPerHour();
         }
 
         private void UpdateCompressedVariantPrices()
         {
-            foreach (AsteroidIskPerHour normalOreIskPerHour in NormalOreIskPerHourCollection)
+            foreach (AsteroidIskPerHour normalOreIskPerHour in HarvestableIskPerHourCollection)
             {
-                Harvestable compressedVariant = harvestableRepository.Find(h => h.HarvestableId == normalOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
+                Harvestable compressedVariant = HarvestableRepository.Find(h => h.HarvestableId == normalOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
 
                 normalOreIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
             }
         }
 
-        private void UpdateMaterialIskPerHour()
-        {
-            foreach (AsteroidIskPerHour normalOreIskPerHour in NormalOreIskPerHourCollection)
-            {
-                CalculateMaterialIskPerHour(normalOreIskPerHour);
-            }
-        }
-
         private void UpdateCompressedIskPerHour()
         {
-            foreach (AsteroidIskPerHour normalOreIskPerHour in NormalOreIskPerHourCollection)
+            foreach (AsteroidIskPerHour normalOreIskPerHour in HarvestableIskPerHourCollection)
             {
                 CalculateCompressedIskPerHour(normalOreIskPerHour);
             }
         }
 
-        private void CalculateMaterialIskPerHour(AsteroidIskPerHour asteroidIskPerHour)
-        {
-            IEnumerable<MaterialModel> notEmptyMinerals = asteroidIskPerHour.MaterialContent.Where(m => m.Quantity != 0);
-
-            decimal batchValueAfterReprocessing = new();
-
-            foreach (MaterialModel materialModel in notEmptyMinerals)
-            {
-                int mineralsAfterReprocessing = Convert.ToInt32(Math.Floor(materialModel.Quantity * reprocessingEfficiency));
-
-                decimal currentMarketPrice = GetSellPercentilePriceFromMineral(materialModel);
-
-                batchValueAfterReprocessing += mineralsAfterReprocessing * currentMarketPrice;
-            }
-
-            decimal valuePerUnit = batchValueAfterReprocessing / BatchSize; // batch size
-            decimal valuePerSquareMeters = valuePerUnit / asteroidIskPerHour.Volume.Amount;
-            decimal valuePerSecond = valuePerSquareMeters * yieldPerSecond;
-            decimal valuePerHour = valuePerSecond * 60 * 60; // 3600 seconds = 1 hour
-
-            asteroidIskPerHour.MaterialIskPerHour = new Isk(valuePerHour);
-        }
-
-        private decimal GetSellPercentilePriceFromMineral(MaterialModel materialModel)
-        {
-            decimal sellPercentile = 0;
-
-            if (mineralModels.Single(material => material.Name == materialModel.Name).Prices.Any())
-            {
-                IList<Price> prices = mineralModels.Single(m => m.Name == materialModel.Name).Prices;
-
-                Price price = prices.SingleOrDefault(p => p.SystemId == systemToUseForPrices);
-
-                if (price != null)
-                {
-                    sellPercentile = price.SellPercentile;
-                }
-            }
-
-            return sellPercentile;
-        }
-
         private void CalculateCompressedIskPerHour(AsteroidIskPerHour asteroidIskPerHour)
         {
-            decimal yieldPerSecondDividedByVolume = yieldPerSecond / asteroidIskPerHour.Volume.Amount;
+            decimal yieldPerSecondDividedByVolume = YieldPerSecond / asteroidIskPerHour.Volume.Amount;
             decimal batchSizeCompensatedVolume = yieldPerSecondDividedByVolume / 100; //batch size
 
-            decimal unitMarketPrice = asteroidIskPerHour.CompressedPrices.Any() ? asteroidIskPerHour.CompressedPrices[systemToUseForPrices].Amount : 0;
+            decimal unitMarketPrice = asteroidIskPerHour.CompressedPrices.Any() ? asteroidIskPerHour.CompressedPrices[SystemToUseForPrices].Amount : 0;
 
             decimal normalizedCompressedBatchValue = unitMarketPrice * batchSizeCompensatedVolume;
             decimal compressedValuePerHour = normalizedCompressedBatchValue * 60 * 60;
 
             asteroidIskPerHour.CompressedIskPerHour = new Isk(compressedValuePerHour);
-        }
-
-        private void SetVisibilityForImprovedVariants()
-        {
-            normalOreIskPerHourCollection.Where(o => o.IsImprovedVariant).ToList().ForEach(o => o.Visible = showImprovedVariantsIsChecked);
-        }
-
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            if (!string.IsNullOrWhiteSpace(propertyName))
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

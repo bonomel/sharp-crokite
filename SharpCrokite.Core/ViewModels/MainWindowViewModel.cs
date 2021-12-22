@@ -2,6 +2,8 @@
 using System.Net.Http;
 using System.Windows;
 
+using JetBrains.Annotations;
+
 using SharpCrokite.Core.Commands;
 using SharpCrokite.Core.PriceUpdater;
 using SharpCrokite.Core.StaticDataUpdater;
@@ -12,14 +14,20 @@ namespace SharpCrokite.Core.ViewModels
 {
     public class MainWindowViewModel
     {
+        [UsedImplicitly]
+        public Guid Id { get; } = Guid.NewGuid();
+
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
 
+        [UsedImplicitly]
         public HarvestablesViewModel HarvestablesViewModel { get; }
-        public AsteroidIskPerHourViewModel AsteroidIskPerHourViewModel { get; }
-        public MoonOreIskPerHourViewModel MoonOreIskPerHourViewModel { get; }
 
-        public Guid Id { get; } = Guid.NewGuid();
+        [UsedImplicitly]
+        public AsteroidIskPerHourViewModel AsteroidIskPerHourViewModel { get; }
+
+        [UsedImplicitly]
+        public MoonOreIskPerHourViewModel MoonOreIskPerHourViewModel { get; }
 
         public MainWindowViewModel(HarvestablesViewModel harvestablesViewModel, AsteroidIskPerHourViewModel asteroidIskPerHourViewModel,
             MoonOreIskPerHourViewModel moonOreIskPerHourViewModel, HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
@@ -37,7 +45,7 @@ namespace SharpCrokite.Core.ViewModels
             DeletePricesCommand = new RelayCommand(OnDeletePrices, CanDeletePrices);
         }
 
-
+        [UsedImplicitly]
         public RelayCommand UpdatePricesCommand { get; private set; }
 
         private bool CanUpdatePrices()
@@ -55,6 +63,7 @@ namespace SharpCrokite.Core.ViewModels
             MoonOreIskPerHourViewModel.UpdatePrices();
         }
 
+        [UsedImplicitly]
         public RelayCommand DeletePricesCommand { get; private set; }
 
         private bool CanDeletePrices()
@@ -72,6 +81,7 @@ namespace SharpCrokite.Core.ViewModels
             MoonOreIskPerHourViewModel.UpdatePrices();
         }
 
+        [UsedImplicitly]
         public RelayCommand UpdateStaticDataCommand { get; private set; }
 
         private void OnUpdateStaticData()
@@ -103,6 +113,7 @@ namespace SharpCrokite.Core.ViewModels
             return true;
         }
 
+        [UsedImplicitly]
         public RelayCommand DeleteStaticDataCommand { get; private set; }
 
         private void OnDeleteStaticData()

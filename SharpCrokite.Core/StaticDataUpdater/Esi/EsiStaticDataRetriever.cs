@@ -130,7 +130,7 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
             return materialDtos;
         }
 
-        private string GetQualityForMaterial(EsiTypeJson materialType, EsiGroupJson materialGroup)
+        private static string GetQualityForMaterial(EsiTypeJson materialType, EsiGroupJson materialGroup)
         {
             if (materialGroup.name == "Moon Materials")
             {

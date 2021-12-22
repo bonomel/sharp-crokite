@@ -22,7 +22,7 @@
         <DataGrid Name="AsteroidIskPerHourDataGrid" Margin="10,0,10,10" IsReadOnly="true" AutoGenerateColumns="False" Grid.Row="1"
                     HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" HeadersVisibility="Column"
                     CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="True"
-                    CanUserReorderColumns="True" CanUserResizeColumns="False" ItemsSource="{Binding NormalOreIskPerHourCollection}"
+                    CanUserReorderColumns="True" CanUserResizeColumns="False" ItemsSource="{Binding HarvestableIskPerHourCollection}"
                     FontSize="13" FontFamily="Terminus" AlternatingRowBackground="#e6e6e6" RowBackground="#f6f6f6">
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">

@@ -1,7 +1,9 @@
-﻿using SharpCrokite.Infrastructure.Common;
+﻿using JetBrains.Annotations;
+using SharpCrokite.Infrastructure.Common;
 
 namespace SharpCrokite.Core.Models
 {
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class HarvestableModel
     {
         public int HarvestableId { get; internal set; }
