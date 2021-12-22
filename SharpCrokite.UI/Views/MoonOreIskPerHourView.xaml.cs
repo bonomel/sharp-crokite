@@ -1,8 +1,8 @@
 ﻿namespace SharpCrokite.UI.Views
 {
-    public partial class HarvestablesView
+    public partial class MoonOreIskPerHourView
     {
-        public HarvestablesView()
+        public MoonOreIskPerHourView()
         {
             InitializeComponent();
         }

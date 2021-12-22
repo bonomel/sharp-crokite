@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SharpCrokite.DataAccess\SharpCrokite.DataAccess.csproj" />
     <ProjectReference Include="..\SharpCrokite.Infrastructure\SharpCrokite.Infrastructure.csproj" />
   </ItemGroup>

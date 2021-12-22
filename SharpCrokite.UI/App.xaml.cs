@@ -9,7 +9,7 @@ using SharpCrokite.UI.Views;
 
 namespace SharpCrokite.UI
 {
-    public partial class App : Application
+    public partial class App
     {
         private IServiceProvider serviceProvider;
 
@@ -31,8 +31,10 @@ namespace SharpCrokite.UI
             services.AddSingleton<MainWindow>();
             services.AddSingleton<MainWindowViewModel>();
 
-            services.AddSingleton<NormalOreIskPerHourView>();
-            services.AddSingleton<NormalOreIskPerHourViewModel>();
+            services.AddSingleton<AsteroidIskPerHourView>();
+            services.AddSingleton<AsteroidIskPerHourViewModel>();
+            services.AddSingleton<MoonOreIskPerHourView>();
+            services.AddSingleton<MoonOreIskPerHourViewModel>();
 
             services.AddSingleton<HarvestablesView>();
             services.AddSingleton<HarvestablesViewModel>();
