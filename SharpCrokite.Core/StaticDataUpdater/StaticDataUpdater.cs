@@ -75,6 +75,7 @@ namespace SharpCrokite.Core.StaticDataUpdater
                     existingMaterial.Type = materialDto.Type;
                     existingMaterial.Description = materialDto.Description;
                     existingMaterial.Icon = materialDto.Icon;
+                    existingMaterial.Quality = materialDto.Quality;
 
                     materialRepository.Update(existingMaterial);
                 }
@@ -86,7 +87,8 @@ namespace SharpCrokite.Core.StaticDataUpdater
                         Name = materialDto.Name,
                         Type = materialDto.Type,
                         Description = materialDto.Description,
-                        Icon = materialDto.Icon
+                        Icon = materialDto.Icon,
+                        Quality = materialDto.Quality
                     });
                 }
             }

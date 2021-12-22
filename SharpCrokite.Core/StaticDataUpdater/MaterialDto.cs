@@ -10,5 +10,6 @@ namespace SharpCrokite.Core.StaticDataUpdater
         public string Name { get; init; }
         public byte[] Icon { get; init; }
         public string Description { get; init; }
+        public string Quality { get; init; }
     }
 }

@@ -24,6 +24,7 @@ namespace SharpCrokite.Infrastructure.Repositories
             material.Name = entity.Name;
             material.Description = entity.Description;
             material.Type = material.Type;
+            material.Quality = entity.Quality;
             material.Icon = material.Icon;
             material.Prices = material.Prices;
 

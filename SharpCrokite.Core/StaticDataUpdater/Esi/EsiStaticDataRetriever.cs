@@ -115,18 +115,62 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
             {
                 foreach (EsiTypeJson materialType in GetTypesPerGroup(client, materialGroup))
                 {
-                    materialDtos.Add(new MaterialDto()
+                    materialDtos.Add(new MaterialDto
                     {
                         MaterialId = materialType.type_id,
                         Name = materialType.name,
                         Type = materialGroup.name,
                         Description = RemoveHtmlFromString(materialType.description),
-                        Icon = GetIconForTypeId(materialType.type_id)
+                        Icon = GetIconForTypeId(materialType.type_id),
+                        Quality = GetQualityForMaterial(materialType, materialGroup)
                     });
                 }
             });
 
             return materialDtos;
+        }
+
+        private string GetQualityForMaterial(EsiTypeJson materialType, EsiGroupJson materialGroup)
+        {
+            if (materialGroup.name == "Moon Materials")
+            {
+                return MoonMaterialRarityDictionary.GetValueOrDefault(materialType.name);
+            }
+
+            return string.Empty;
+        }
+
+        private static readonly Dictionary<string, string> MoonMaterialRarityDictionary = new ()
+        {
+            {"Atmospheric Gases", MoonMaterialRarities.Rarity4 },
+            {"Evaporite Deposits", MoonMaterialRarities.Rarity4 },
+            {"Hydrocarbons", MoonMaterialRarities.Rarity4 },
+            { "Silicates", MoonMaterialRarities.Rarity4 },
+            { "Cobalt", MoonMaterialRarities.Rarity8 },
+            { "Tungsten", MoonMaterialRarities.Rarity8 },
+            { "Scandium", MoonMaterialRarities.Rarity8 },
+            { "Titanium", MoonMaterialRarities.Rarity8 },
+            { "Vanadium", MoonMaterialRarities.Rarity16 },
+            { "Chromium", MoonMaterialRarities.Rarity16 },
+            { "Platinum", MoonMaterialRarities.Rarity16 },
+            { "Cadmium", MoonMaterialRarities.Rarity16 },
+            { "Hafnium", MoonMaterialRarities.Rarity32 },
+            { "Technetium", MoonMaterialRarities.Rarity32 },
+            { "Mercury", MoonMaterialRarities.Rarity32 },
+            { "Caesium", MoonMaterialRarities.Rarity32 },
+            { "Dysporium", MoonMaterialRarities.Rarity64 },
+            { "Neodymium", MoonMaterialRarities.Rarity64 },
+            { "Promethium", MoonMaterialRarities.Rarity64 },
+            { "Thulium", MoonMaterialRarities.Rarity64 }
+        };
+
+        private static class MoonMaterialRarities
+        {
+            public const string Rarity4 = "Rarity4";
+            public const string Rarity8 = "Rarity8";
+            public const string Rarity16 = "Rarity16";
+            public const string Rarity32 = "Rarity32";
+            public const string Rarity64 = "Rarity64";
         }
 
         private static byte[] GetIconForTypeId(int typeId)
