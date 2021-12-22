@@ -1,4 +1,6 @@
-﻿using SharpCrokite.Core.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using SharpCrokite.Core.Models;
 using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.Queries

@@ -31,6 +31,7 @@ namespace SharpCrokite.Core.Queries
                 T harvestableIskPerHour = Activator.CreateInstance<T>();
 
                 harvestableIskPerHour.Id = harvestableModel.HarvestableId;
+                harvestableIskPerHour.CompressedVariantTypeId = FindCompressedVariantTypeId(harvestableModel);
                 harvestableIskPerHour.Icon = harvestableModel.Icon;
                 harvestableIskPerHour.Name = harvestableModel.Name;
                 harvestableIskPerHour.Description = harvestableModel.Description;
@@ -49,34 +50,48 @@ namespace SharpCrokite.Core.Queries
 
             foreach (string oreType in HarvestableTypes)
             {
-                List<T> harvestableIskPerHourPerType = harvestableIskPerHourCollection.Where(o => o.Type == oreType).ToList();
-
-                List<List<T>> harvestableIskPerHourGrouped = new();
-
-                foreach (T harvestableIskPerHour in harvestableIskPerHourPerType)
-                {
-                    if (harvestableIskPerHourPerType.Any(type =>
-                        type.Name.Contains(harvestableIskPerHour.Name) && type.Name != harvestableIskPerHour.Name))
-                    {
-                        List<T> groupedByType = harvestableIskPerHourPerType.Where(type => type.Name.Contains(harvestableIskPerHour.Name)).ToList();
-                        harvestableIskPerHourGrouped.Add(groupedByType);
-                    }
-                }
-
-                if (harvestableIskPerHourGrouped.Any())
-                {
-                    foreach (List<T> harvestableGroup in harvestableIskPerHourGrouped)
-                    {
-                        // set the improved flag on the improved variants
-                        harvestableGroup.Where(o => o != GetBasicOreType(harvestableGroup)).ToList().ForEach(o => o.IsImprovedVariant = true);
-                    }
-                }
+                SanitizeHarvestableCollection(harvestableIskPerHourCollection, oreType);
             }
 
             return harvestableIskPerHourCollection;
         }
 
-        private static T GetBasicOreType(IEnumerable<T> moonOreIskPerHourPerType)
+        protected virtual void SanitizeHarvestableCollection(List<T> harvestableIskPerHourCollection, string oreType)
+        {
+            List<T> harvestableIskPerHourPerType = harvestableIskPerHourCollection.Where(o => o.Type == oreType).ToList();
+
+            List<List<T>> harvestableIskPerHourGrouped = new();
+
+            foreach (T harvestableIskPerHour in harvestableIskPerHourPerType)
+            {
+                if (harvestableIskPerHourPerType.Any(type =>
+                    type.Name.Contains(harvestableIskPerHour.Name) && type.Name != harvestableIskPerHour.Name))
+                {
+                    List<T> groupedByType = harvestableIskPerHourPerType
+                        .Where(type => type.Name.Contains(harvestableIskPerHour.Name)).ToList();
+                    harvestableIskPerHourGrouped.Add(groupedByType);
+                }
+            }
+
+            if (harvestableIskPerHourGrouped.Any())
+            {
+                foreach (List<T> harvestableGroup in harvestableIskPerHourGrouped)
+                {
+                    harvestableGroup.Where(o => o != GetBasicOreType(harvestableGroup)).ToList()
+                        .ForEach(o => o.IsImprovedVariant = true);
+                }
+            }
+        }
+
+        private int? FindCompressedVariantTypeId(Harvestable harvestableModel)
+        {
+            Harvestable compressedVariant =
+                harvestableRepository.Find(h => h.IsCompressedVariantOfType == harvestableModel.HarvestableId).FirstOrDefault();
+
+            return compressedVariant?.HarvestableId;
+        }
+
+        private protected static T GetBasicOreType(IEnumerable<T> moonOreIskPerHourPerType)
         {
             return moonOreIskPerHourPerType.Aggregate(FindHarvestableWithLowestMaterialContent);
         }

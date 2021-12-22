@@ -7,8 +7,6 @@ namespace SharpCrokite.Core.Models
     [DebuggerDisplay("{Type} - {Name}")]
     public class AsteroidIskPerHour : HarvestableIskPerHour
     {
-        internal int CompressedVariantTypeId { get; init; }
-
         internal Dictionary<int, Isk> CompressedPrices { get; set; }
 
         private Isk compressedIskPerHour = new(0);

@@ -8,6 +8,7 @@ namespace SharpCrokite.Core.Models
     public abstract class HarvestableIskPerHour : INotifyPropertyChanged
     {
         public int Id { get; set; }
+        public int? CompressedVariantTypeId { get; set; }
         public byte[] Icon { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
