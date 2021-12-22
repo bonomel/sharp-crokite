@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+
 using SharpCrokite.Infrastructure.Common;
 
 namespace SharpCrokite.Core.Models
@@ -61,6 +62,18 @@ namespace SharpCrokite.Core.Models
 
         public List<MaterialModel> MaterialContent { get; internal init; } = new();
 
+        public string Rarity4Material => GetMaterialDisplayNameOrEmpty(nameof(Rarity4Material));
+        public string Rarity8Material => GetMaterialDisplayNameOrEmpty(nameof(Rarity8Material));
+        public string Rarity16Material => GetMaterialDisplayNameOrEmpty(nameof(Rarity16Material));
+        public string Rarity32Material => GetMaterialDisplayNameOrEmpty(nameof(Rarity32Material));
+        public string Rarity64Material => GetMaterialDisplayNameOrEmpty(nameof(Rarity64Material));
+
+        private string GetMaterialDisplayNameOrEmpty(string qualityName)
+        {
+            MaterialModel model = MaterialContent.Find(materialModel => materialModel.Quality == qualityName);
+            return model != null ? model.ToString() : string.Empty;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         private void NotifyPropertyChanged(string propertyName)
         {
@@ -69,14 +82,5 @@ namespace SharpCrokite.Core.Models
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-    }
-
-    public class MaterialModel
-    {
-        public int MaterialId;
-        public string Type;
-        public string Name;
-        public int Quantity;
-        public string Quality;
     }
 }

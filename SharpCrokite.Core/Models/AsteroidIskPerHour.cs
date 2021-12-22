@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
+
 using SharpCrokite.Infrastructure.Common;
 
 namespace SharpCrokite.Core.Models
@@ -59,14 +61,20 @@ namespace SharpCrokite.Core.Models
             }
         }
 
-        public Dictionary<string, int> Minerals { get; internal init; } = new();
-        public int Tritanium => Minerals.GetValueOrDefault(nameof(Tritanium));
-        public int Pyerite => Minerals.GetValueOrDefault(nameof(Pyerite));
-        public int Mexallon => Minerals.GetValueOrDefault(nameof(Mexallon));
-        public int Isogen => Minerals.GetValueOrDefault(nameof(Isogen));
-        public int Nocxium => Minerals.GetValueOrDefault(nameof(Nocxium));
-        public int Zydrine => Minerals.GetValueOrDefault(nameof(Zydrine));
-        public int Megacyte => Minerals.GetValueOrDefault(nameof(Megacyte));
+        public List<MaterialModel> MaterialContent { get; internal init; } = new();
+        public int Tritanium => GetQuantityOrDefault(nameof(Tritanium));
+        public int Pyerite => GetQuantityOrDefault(nameof(Pyerite));
+        public int Mexallon => GetQuantityOrDefault(nameof(Mexallon));
+        public int Isogen => GetQuantityOrDefault(nameof(Isogen));
+        public int Nocxium => GetQuantityOrDefault(nameof(Nocxium));
+        public int Zydrine => GetQuantityOrDefault(nameof(Zydrine));
+        public int Megacyte => GetQuantityOrDefault(nameof(Megacyte));
+
+        private int GetQuantityOrDefault(string materialName)
+        {
+            return MaterialContent.Find(materialModel => materialModel.Name == materialName) != null
+                ? MaterialContent.Single(materialModel => materialModel.Name == materialName).Quantity : 0;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
         private void NotifyPropertyChanged(string propertyName)

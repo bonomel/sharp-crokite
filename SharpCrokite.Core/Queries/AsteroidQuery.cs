@@ -41,7 +41,13 @@ namespace SharpCrokite.Core.Queries
                     Description = harvestableModel.Description,
                     Volume = new Volume(harvestableModel.Volume),
                     Type = harvestableModel.Type,
-                    Minerals = harvestableModel.MaterialContents.ToDictionary(mc => mc.Material.Name, mc => mc.Quantity)
+                    MaterialContent = harvestableModel.MaterialContents.Select(materialContent => new MaterialModel
+                    {
+                        Name = materialContent.Material.Name,
+                        Type = materialContent.Material.Type,
+                        MaterialId = materialContent.Material.MaterialId,
+                        Quantity = materialContent.Quantity
+                    }).ToList()
                 });
             }
 

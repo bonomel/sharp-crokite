@@ -72,7 +72,8 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <!--<DataGridTextColumn Header="Volume" Binding="{Binding Volume}" Width="60">
+                
+                <DataGridTextColumn Header="Volume" Binding="{Binding Volume}" Width="60">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
@@ -80,12 +81,13 @@
                             <Setter Property="Margin" Value="5,5,5,5" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>-->
-                <DataGridTextColumn Binding="{Binding RarityFourMaterial}" Width="120">
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding MaterialContent}" Width="120">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <!--<Image Source="/Images/tritanium-icon.png" Width="24" Height="24" Margin="0,0,5,0" />-->
-                            <TextBlock Text="Rarity 4 Material" VerticalAlignment="Center"/>
+                            <Image Source="/Images/tritanium-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Materials" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
@@ -96,6 +98,23 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
+
+                <DataGridTextColumn Binding="{Binding MaterialContent}" Width="120">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/tritanium-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Materials" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Margin" Value="5,5,5,5" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
                 <DataGridTextColumn Header="Materials ISK/hour" Binding="{Binding MaterialIskPerHour}" Width="140">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">

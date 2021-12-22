@@ -184,15 +184,15 @@ namespace SharpCrokite.Core.ViewModels
 
         private void CalculateMaterialIskPerHour(AsteroidIskPerHour asteroidIskPerHour)
         {
-            IEnumerable<KeyValuePair<string, int>> notEmptyMinerals = asteroidIskPerHour.Minerals.Where(m => m.Value != 0);
+            IEnumerable<MaterialModel> notEmptyMinerals = asteroidIskPerHour.MaterialContent.Where(m => m.Quantity != 0);
 
             decimal batchValueAfterReprocessing = new();
 
-            foreach (KeyValuePair<string, int> mineral in notEmptyMinerals)
+            foreach (MaterialModel materialModel in notEmptyMinerals)
             {
-                int mineralsAfterReprocessing = Convert.ToInt32(Math.Floor(mineral.Value * reprocessingEfficiency));
+                int mineralsAfterReprocessing = Convert.ToInt32(Math.Floor(materialModel.Quantity * reprocessingEfficiency));
 
-                decimal currentMarketPrice = GetSellPercentilePriceFromMineral(mineral);
+                decimal currentMarketPrice = GetSellPercentilePriceFromMineral(materialModel);
 
                 batchValueAfterReprocessing += mineralsAfterReprocessing * currentMarketPrice;
             }
@@ -205,13 +205,13 @@ namespace SharpCrokite.Core.ViewModels
             asteroidIskPerHour.MaterialIskPerHour = new Isk(valuePerHour);
         }
 
-        private decimal GetSellPercentilePriceFromMineral(KeyValuePair<string, int> mineral)
+        private decimal GetSellPercentilePriceFromMineral(MaterialModel materialModel)
         {
             decimal sellPercentile = 0;
 
-            if (mineralModels.Single(m => m.Name == mineral.Key).Prices.Any())
+            if (mineralModels.Single(material => material.Name == materialModel.Name).Prices.Any())
             {
-                IList<Price> prices = mineralModels.Single(m => m.Name == mineral.Key).Prices;
+                IList<Price> prices = mineralModels.Single(m => m.Name == materialModel.Name).Prices;
 
                 Price price = prices.SingleOrDefault(p => p.SystemId == systemToUseForPrices);
 
