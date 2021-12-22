@@ -31,8 +31,8 @@ namespace SharpCrokite.Core.ViewModels
 
         protected sealed override ObservableCollection<MoonOreIskPerHour> LoadStaticData()
         {
-            MoonOreQuery moonOreQuery = new(HarvestableRepository);
-            return new ObservableCollection<MoonOreIskPerHour>(moonOreQuery.Execute());
+            MoonOreIskPerHourQuery moonOreIskPerHourQuery = new(HarvestableRepository);
+            return new ObservableCollection<MoonOreIskPerHour>(moonOreIskPerHourQuery.Execute());
         }
     }
 }
