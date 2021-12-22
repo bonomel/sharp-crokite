@@ -81,7 +81,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Rarity4Material}" Width="120">
+                <DataGridTextColumn Binding="{Binding Rarity4}" Width="140">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Rarity 4 Material" VerticalAlignment="Center"/>
@@ -95,7 +95,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Rarity8Material}" Width="120">
+                <DataGridTextColumn Binding="{Binding Rarity8}" Width="140">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Rarity 8 Material" VerticalAlignment="Center"/>
@@ -109,7 +109,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Rarity16Material}" Width="120">
+                <DataGridTextColumn Binding="{Binding Rarity16}" Width="140">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Rarity 16 Material" VerticalAlignment="Center"/>
@@ -123,7 +123,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Rarity32Material}" Width="120">
+                <DataGridTextColumn Binding="{Binding Rarity32}" Width="140">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Rarity 32 Material" VerticalAlignment="Center"/>
@@ -137,10 +137,40 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Rarity64Material}" Width="120">
+                <DataGridTextColumn Binding="{Binding Rarity64}" Width="140">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Rarity 64 Material" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Margin" Value="5,5,5,5" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Pyerite}" Width="100">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/pyerite-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Pyerite" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Margin" Value="5,5,5,5" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Mexallon}" Width="100">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/mexallon-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Mexallon" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>

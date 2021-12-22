@@ -17,7 +17,7 @@ namespace SharpCrokite.Core.Queries
             public const string UbiquitousMoonAsteroids = "Ubiquitous Moon Asteroids";
             public const string CommonMoonAsteroids = "Common Moon Asteroids";
             public const string UncommonMoonAsteroids = "Uncommon Moon Asteroids";
-            public const string RareMoonAsteroids = "RareMoonAsteroids";
+            public const string RareMoonAsteroids = "Rare Moon Asteroids";
             public const string ExceptionalMoonAsteroids = "Exceptional Moon Asteroids";
         }
 
@@ -55,9 +55,8 @@ namespace SharpCrokite.Core.Queries
                     MaterialContent = harvestableModel.MaterialContents.Select(materialContent => new MaterialModel
                     {
                         Name = materialContent.Material.Name,
-                        Type = materialContent.Material.Type,
-                        MaterialId = materialContent.Material.MaterialId,
-                        Quantity = materialContent.Quantity
+                        Quantity = materialContent.Quantity,
+                        Quality = materialContent.Material.Quality
                     }).ToList()
                 });
             }

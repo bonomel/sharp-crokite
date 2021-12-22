@@ -44,8 +44,6 @@ namespace SharpCrokite.Core.Queries
                     MaterialContent = harvestableModel.MaterialContents.Select(materialContent => new MaterialModel
                     {
                         Name = materialContent.Material.Name,
-                        Type = materialContent.Material.Type,
-                        MaterialId = materialContent.Material.MaterialId,
                         Quantity = materialContent.Quantity
                     }).ToList()
                 });

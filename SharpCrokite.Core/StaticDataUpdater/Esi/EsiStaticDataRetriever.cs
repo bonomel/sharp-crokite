@@ -134,7 +134,8 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
         {
             if (materialGroup.name == "Moon Materials")
             {
-                return MoonMaterialRarityDictionary.GetValueOrDefault(materialType.name);
+                string rarity = MoonMaterialRarityDictionary.GetValueOrDefault(materialType.name);
+                return rarity;
             }
 
             return string.Empty;
@@ -142,9 +143,9 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
 
         private static readonly Dictionary<string, string> MoonMaterialRarityDictionary = new ()
         {
-            {"Atmospheric Gases", MoonMaterialRarities.Rarity4 },
-            {"Evaporite Deposits", MoonMaterialRarities.Rarity4 },
-            {"Hydrocarbons", MoonMaterialRarities.Rarity4 },
+            { "Atmospheric Gases", MoonMaterialRarities.Rarity4 },
+            { "Evaporite Deposits", MoonMaterialRarities.Rarity4 },
+            { "Hydrocarbons", MoonMaterialRarities.Rarity4 },
             { "Silicates", MoonMaterialRarities.Rarity4 },
             { "Cobalt", MoonMaterialRarities.Rarity8 },
             { "Tungsten", MoonMaterialRarities.Rarity8 },
@@ -158,7 +159,7 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
             { "Technetium", MoonMaterialRarities.Rarity32 },
             { "Mercury", MoonMaterialRarities.Rarity32 },
             { "Caesium", MoonMaterialRarities.Rarity32 },
-            { "Dysporium", MoonMaterialRarities.Rarity64 },
+            { "Dysprosium", MoonMaterialRarities.Rarity64 },
             { "Neodymium", MoonMaterialRarities.Rarity64 },
             { "Promethium", MoonMaterialRarities.Rarity64 },
             { "Thulium", MoonMaterialRarities.Rarity64 }

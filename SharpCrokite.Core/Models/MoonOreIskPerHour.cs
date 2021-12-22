@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-
+using System.Linq;
 using SharpCrokite.Infrastructure.Common;
 
 namespace SharpCrokite.Core.Models
@@ -62,16 +62,24 @@ namespace SharpCrokite.Core.Models
 
         public List<MaterialModel> MaterialContent { get; internal init; } = new();
 
-        public string Rarity4Material => GetMaterialDisplayNameOrEmpty(nameof(Rarity4Material));
-        public string Rarity8Material => GetMaterialDisplayNameOrEmpty(nameof(Rarity8Material));
-        public string Rarity16Material => GetMaterialDisplayNameOrEmpty(nameof(Rarity16Material));
-        public string Rarity32Material => GetMaterialDisplayNameOrEmpty(nameof(Rarity32Material));
-        public string Rarity64Material => GetMaterialDisplayNameOrEmpty(nameof(Rarity64Material));
+        public string Rarity4 => GetMaterialDisplayNameOrEmpty(nameof(Rarity4));
+        public string Rarity8 => GetMaterialDisplayNameOrEmpty(nameof(Rarity8));
+        public string Rarity16 => GetMaterialDisplayNameOrEmpty(nameof(Rarity16));
+        public string Rarity32 => GetMaterialDisplayNameOrEmpty(nameof(Rarity32));
+        public string Rarity64 => GetMaterialDisplayNameOrEmpty(nameof(Rarity64));
+        public int Pyerite => GetQuantityOrDefault(nameof(Pyerite));
+        public int Mexallon => GetQuantityOrDefault(nameof(Mexallon));
 
         private string GetMaterialDisplayNameOrEmpty(string qualityName)
         {
             MaterialModel model = MaterialContent.Find(materialModel => materialModel.Quality == qualityName);
             return model != null ? model.ToString() : string.Empty;
+        }
+
+        private int GetQuantityOrDefault(string materialName)
+        {
+            return MaterialContent.Find(materialModel => materialModel.Name == materialName) != null
+                ? MaterialContent.Single(materialModel => materialModel.Name == materialName).Quantity : 0;
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
