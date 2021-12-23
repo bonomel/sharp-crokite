@@ -23,6 +23,9 @@
             <TabItem Header="Moon Mining ISK/h">
                 <views:MoonOreIskPerHourView DataContext="{Binding MoonOreIskPerHourViewModel}"/>
             </TabItem>
+            <TabItem Header="Ice Mining ISK/h">
+                <views:IceIskPerHourView DataContext="{Binding IceIskPerHourViewModel}"/>
+            </TabItem>
             <!--<TabItem Header="Harvestables">
                 <views:HarvestablesView DataContext="{Binding HarvestablesViewModel}"/>
             </TabItem>-->

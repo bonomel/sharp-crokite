@@ -7,7 +7,7 @@ namespace SharpCrokite.Core.Models
 {
     [DebuggerDisplay("{Type} - {Name}")]
     [UsedImplicitly]
-    public class AsteroidIskPerHour : HarvestableIskPerHour
+    public class IceIskPerHour : HarvestableIskPerHour
     {
         internal Dictionary<int, Isk> CompressedPrices { get; set; }
 
@@ -25,12 +25,12 @@ namespace SharpCrokite.Core.Models
             }
         }
 
-        public int Tritanium => GetQuantityOrDefault(nameof(Tritanium));
-        public int Pyerite => GetQuantityOrDefault(nameof(Pyerite));
-        public int Mexallon => GetQuantityOrDefault(nameof(Mexallon));
-        public int Isogen => GetQuantityOrDefault(nameof(Isogen));
-        public int Nocxium => GetQuantityOrDefault(nameof(Nocxium));
-        public int Zydrine => GetQuantityOrDefault(nameof(Zydrine));
-        public int Megacyte => GetQuantityOrDefault(nameof(Megacyte));
+        public int OxygenIsotopes => GetQuantityOrDefault("Oxygen Isotopes");
+        public int HeliumIsotopes => GetQuantityOrDefault("Helium Isotopes");
+        public int NitrogenIsotopes => GetQuantityOrDefault("Nitrogen Isotopes");
+        public int HydrogenIsotopes => GetQuantityOrDefault("Hydrogen Isotopes");
+        public int HeavyWater => GetQuantityOrDefault("Heavy Water");
+        public int LiquidOzone => GetQuantityOrDefault("Liquid Ozone");
+        public int StrontiumClathrates => GetQuantityOrDefault("Strontium Clathrates");
     }
 }

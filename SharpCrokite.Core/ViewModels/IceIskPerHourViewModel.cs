@@ -10,9 +10,9 @@ using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.ViewModels
 {
-    public class AsteroidIskPerHourViewModel : IskPerHourViewModel<AsteroidIskPerHour>, INotifyPropertyChanged
+    public class IceIskPerHourViewModel : IskPerHourViewModel<IceIskPerHour>, INotifyPropertyChanged
     {
-        public AsteroidIskPerHourViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
+        public IceIskPerHourViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
             : base(harvestableRepository, materialRepository)
         {
             HarvestableIskPerHourCollection = LoadStaticData();
@@ -35,13 +35,13 @@ namespace SharpCrokite.Core.ViewModels
             UpdateMaterialIskPerHour();
             UpdateCompressedIskPerHour();
         }
+        
+        protected override int BatchSize => 1;
 
-        protected override int BatchSize => 100;
-
-        protected sealed override ObservableCollection<AsteroidIskPerHour> LoadStaticData()
+        protected sealed override ObservableCollection<IceIskPerHour> LoadStaticData()
         {
-            AsteroidIskPerHourQuery asteroidIskPerHourQuery = new(HarvestableRepository);
-            return new ObservableCollection<AsteroidIskPerHour>(asteroidIskPerHourQuery.Execute());
+            IceIskPerHourQuery iceIskPerHourQuery = new(HarvestableRepository);
+            return new ObservableCollection<IceIskPerHour>(iceIskPerHourQuery.Execute());
         }
 
         protected override void UpdateIskPerHour()
@@ -52,7 +52,7 @@ namespace SharpCrokite.Core.ViewModels
 
         private void UpdateCompressedVariantPrices()
         {
-            foreach (AsteroidIskPerHour normalOreIskPerHour in HarvestableIskPerHourCollection)
+            foreach (IceIskPerHour normalOreIskPerHour in HarvestableIskPerHourCollection)
             {
                 Harvestable compressedVariant = HarvestableRepository.Find(h => h.HarvestableId == normalOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
 
@@ -62,23 +62,23 @@ namespace SharpCrokite.Core.ViewModels
 
         private void UpdateCompressedIskPerHour()
         {
-            foreach (AsteroidIskPerHour normalOreIskPerHour in HarvestableIskPerHourCollection)
+            foreach (IceIskPerHour iceIskPerHour in HarvestableIskPerHourCollection)
             {
-                CalculateCompressedIskPerHour(normalOreIskPerHour);
+                CalculateCompressedIskPerHour(iceIskPerHour);
             }
         }
 
-        private void CalculateCompressedIskPerHour(AsteroidIskPerHour asteroidIskPerHour)
+        private void CalculateCompressedIskPerHour(IceIskPerHour iceIskPerHour)
         {
-            decimal yieldPerSecondDividedByVolume = YieldPerSecond / asteroidIskPerHour.Volume.Amount;
-            decimal batchSizeCompensatedVolume = yieldPerSecondDividedByVolume / BatchSize;
+            decimal yieldPerSecondDividedByVolume = YieldPerSecond / iceIskPerHour.Volume.Amount;
+            decimal batchSizeCompensatedVolume = yieldPerSecondDividedByVolume / BatchSize; //batch size
 
-            decimal unitMarketPrice = asteroidIskPerHour.CompressedPrices.Any() ? asteroidIskPerHour.CompressedPrices[SystemToUseForPrices].Amount : 0;
+            decimal unitMarketPrice = iceIskPerHour.CompressedPrices.Any() ? iceIskPerHour.CompressedPrices[SystemToUseForPrices].Amount : 0;
 
             decimal normalizedCompressedBatchValue = unitMarketPrice * batchSizeCompensatedVolume;
             decimal compressedValuePerHour = normalizedCompressedBatchValue * 60 * 60;
 
-            asteroidIskPerHour.CompressedIskPerHour = new Isk(compressedValuePerHour);
+            iceIskPerHour.CompressedIskPerHour = new Isk(compressedValuePerHour);
         }
     }
 }

@@ -60,6 +60,7 @@ namespace SharpCrokite.Core.Queries
                 oreIskPerHourPerType.Where(o => o != GetBasicOreType(oreIskPerHourPerType)).ToList().ForEach(o => o.IsImprovedVariant = true);
             }
         }
+
         private static AsteroidIskPerHour GetOreTypeWithHighestAmountOfMinerals(IEnumerable<AsteroidIskPerHour> normalOreIskPerHourPerType)
         {
             return normalOreIskPerHourPerType.Aggregate((o1, o2) =>
