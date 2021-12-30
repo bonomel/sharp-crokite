@@ -40,8 +40,8 @@ namespace SharpCrokite.Core.ViewModels
 
         protected sealed override ObservableCollection<AsteroidIskPerHour> LoadStaticData()
         {
-            AsteroidIskPerHourQuery asteroidIskPerHourQuery = new(HarvestableRepository);
-            return new ObservableCollection<AsteroidIskPerHour>(asteroidIskPerHourQuery.Execute());
+            AsteroidHarvestableIskPerHourQuery asteroidHarvestableIskPerHourQuery = new(HarvestableRepository);
+            return new ObservableCollection<AsteroidIskPerHour>(asteroidHarvestableIskPerHourQuery.Execute());
         }
 
         protected override void UpdateIskPerHour()

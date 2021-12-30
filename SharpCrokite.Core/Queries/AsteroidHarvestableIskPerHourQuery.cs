@@ -5,7 +5,7 @@ using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.Queries
 {
-    public class AsteroidIskPerHourQuery : IskPerHourQuery<AsteroidIskPerHour>
+    public class AsteroidHarvestableIskPerHourQuery : HarvestableIskPerHourQuery<AsteroidIskPerHour>
     {
         private static class AsteroidType
         {
@@ -16,6 +16,7 @@ namespace SharpCrokite.Core.Queries
             public const string Kernite = "Kernite";
             public const string Omber = "Omber";
             public const string Jaspet = "Jaspet";
+            public const string Gneiss = "Gneiss";
             public const string DarkOchre = "Dark Ochre";
             public const string Hemorphite = "Hemorphite";
             public const string Hedbergite = "Hedbergite";
@@ -25,7 +26,7 @@ namespace SharpCrokite.Core.Queries
             public const string Arkonor = "Arkonor";
         }
 
-        public AsteroidIskPerHourQuery(HarvestableRepository harvestableRepository) : base(harvestableRepository)
+        public AsteroidHarvestableIskPerHourQuery(HarvestableRepository harvestableRepository) : base(harvestableRepository)
         {
             HarvestableTypes = new[] {
                 AsteroidType.Veldspar,
@@ -35,6 +36,7 @@ namespace SharpCrokite.Core.Queries
                 AsteroidType.Kernite,
                 AsteroidType.Omber,
                 AsteroidType.Jaspet,
+                AsteroidType.Gneiss,
                 AsteroidType.DarkOchre,
                 AsteroidType.Hemorphite,
                 AsteroidType.Hedbergite,
@@ -54,24 +56,33 @@ namespace SharpCrokite.Core.Queries
             if (oreIskPerHourPerType.Any())
             {
                 // first remove the redunant improved variant
-                _ = harvestableIskPerHourCollection.Remove(GetOreTypeWithHighestAmountOfMinerals(oreIskPerHourPerType));
+                var bestVariant = GetBestAsteroidType(oreIskPerHourPerType);
+                _ = harvestableIskPerHourCollection.Remove(bestVariant);
 
                 // and then set the improved flag on the improved variants
-                oreIskPerHourPerType.Where(o => o != GetBasicOreType(oreIskPerHourPerType)).ToList().ForEach(o => o.IsImprovedVariant = true);
+                var basicOreType = GetBasicHarvestableType(oreIskPerHourPerType);
+                oreIskPerHourPerType.Where(o => o != basicOreType).ToList().ForEach(o => o.IsImprovedVariant = true);
             }
         }
 
-        private static AsteroidIskPerHour GetOreTypeWithHighestAmountOfMinerals(IEnumerable<AsteroidIskPerHour> normalOreIskPerHourPerType)
+        private static AsteroidIskPerHour GetBestAsteroidType(IEnumerable<AsteroidIskPerHour> harvestableTypeGroup)
         {
-            return normalOreIskPerHourPerType.Aggregate((o1, o2) =>
-                o1.Tritanium > o2.Tritanium ||
-                o1.Pyerite > o2.Pyerite ||
-                o1.Mexallon > o2.Mexallon ||
-                o1.Isogen > o2.Isogen ||
-                o1.Nocxium > o2.Nocxium ||
-                o1.Zydrine > o2.Zydrine ||
-                o1.Megacyte > o2.Megacyte
-                    ? o1 : o2);
+            return harvestableTypeGroup.Aggregate(FindAsteroidWithHighestMaterialContent);
+        }
+
+        private static AsteroidIskPerHour FindAsteroidWithHighestMaterialContent(AsteroidIskPerHour harvestableToCompare, AsteroidIskPerHour harvestableToCompareTo)
+        {
+            foreach (MaterialModel materialToCompare in harvestableToCompare.MaterialContent)
+            {
+                MaterialModel materialToCompareTo = harvestableToCompareTo.MaterialContent.Single(material => material.Name == materialToCompare.Name);
+
+                if (materialToCompare.Quantity > materialToCompareTo.Quantity)
+                {
+                    return harvestableToCompare;
+                }
+            }
+
+            return harvestableToCompareTo;
         }
     }
 }

@@ -40,8 +40,8 @@ namespace SharpCrokite.Core.ViewModels
 
         protected sealed override ObservableCollection<IceIskPerHour> LoadStaticData()
         {
-            IceIskPerHourQuery iceIskPerHourQuery = new(HarvestableRepository);
-            return new ObservableCollection<IceIskPerHour>(iceIskPerHourQuery.Execute());
+            IceHarvestableIskPerHourQuery iceHarvestableIskPerHourQuery = new(HarvestableRepository);
+            return new ObservableCollection<IceIskPerHour>(iceHarvestableIskPerHourQuery.Execute());
         }
 
         protected override void UpdateIskPerHour()

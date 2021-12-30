@@ -9,12 +9,12 @@ using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.Queries
 {
-    public abstract class IskPerHourQuery<T> where T : HarvestableIskPerHour
+    public abstract class HarvestableIskPerHourQuery<T> where T : HarvestableIskPerHour
     {
         private protected string[] HarvestableTypes;
         private readonly HarvestableRepository harvestableRepository;
 
-        protected IskPerHourQuery(HarvestableRepository harvestableRepository)
+        protected HarvestableIskPerHourQuery(HarvestableRepository harvestableRepository)
         {
             this.harvestableRepository = harvestableRepository;
         }
@@ -74,9 +74,10 @@ namespace SharpCrokite.Core.Queries
 
             if (harvestableIskPerHourGrouped.Any())
             {
-                foreach (List<T> harvestableGroup in harvestableIskPerHourGrouped)
+                foreach (List<T> harvestableTypeGroup in harvestableIskPerHourGrouped)
                 {
-                    harvestableGroup.Where(o => o != GetBasicOreType(harvestableGroup)).ToList()
+                    T basicHarvestableType = GetBasicHarvestableType(harvestableTypeGroup);
+                    harvestableTypeGroup.Where(o => o != basicHarvestableType).ToList()
                         .ForEach(o => o.IsImprovedVariant = true);
                 }
             }
@@ -90,9 +91,9 @@ namespace SharpCrokite.Core.Queries
             return compressedVariant?.HarvestableId;
         }
 
-        private protected static T GetBasicOreType(IEnumerable<T> moonOreIskPerHourPerType)
+        private protected static T GetBasicHarvestableType(IEnumerable<T> harvestableTypeGroup)
         {
-            return moonOreIskPerHourPerType.Aggregate(FindHarvestableWithLowestMaterialContent);
+            return harvestableTypeGroup.Aggregate(FindHarvestableWithLowestMaterialContent);
         }
 
         private static T FindHarvestableWithLowestMaterialContent(T harvestableToCompare, T harvestableToCompareTo)
@@ -101,10 +102,13 @@ namespace SharpCrokite.Core.Queries
             {
                 MaterialModel materialToCompareTo = harvestableToCompareTo.MaterialContent.Single(material => material.Name == materialToCompare.Name);
 
-                return materialToCompare.Quantity < materialToCompareTo.Quantity ? harvestableToCompare : harvestableToCompareTo;
+                if (materialToCompare.Quantity < materialToCompareTo.Quantity)
+                {
+                    return harvestableToCompare;
+                }
             }
 
-            return null;
+            return harvestableToCompareTo;
         }
     }
 }

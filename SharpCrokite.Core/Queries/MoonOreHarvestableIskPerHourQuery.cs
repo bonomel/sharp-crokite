@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpCrokite.Core.Models;
+﻿using SharpCrokite.Core.Models;
 using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.Queries
 {
-    public class MoonOreIskPerHourQuery : IskPerHourQuery<MoonOreIskPerHour>
+    public class MoonOreHarvestableIskPerHourQuery : HarvestableIskPerHourQuery<MoonOreIskPerHour>
     {
         private static class MoonOreType
         {
@@ -16,7 +14,7 @@ namespace SharpCrokite.Core.Queries
             public const string ExceptionalMoonAsteroids = "Exceptional Moon Asteroids";
         }
 
-        public MoonOreIskPerHourQuery(HarvestableRepository harvestableRepository) : base(harvestableRepository)
+        public MoonOreHarvestableIskPerHourQuery(HarvestableRepository harvestableRepository) : base(harvestableRepository)
         {
             HarvestableTypes = new [] {
                 MoonOreType.UbiquitousMoonAsteroids,

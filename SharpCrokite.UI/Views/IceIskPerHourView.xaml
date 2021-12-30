@@ -72,10 +72,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding OxygenIsotopes}" Width="140">
+                <DataGridTextColumn Binding="{Binding OxygenIsotopes}" Width="125">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="OxygenIsotopes" VerticalAlignment="Center"/>
+                            <TextBlock Text="Oxygen Isotopes" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
@@ -86,7 +86,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding HeliumIsotopes}" Width="140">
+                <DataGridTextColumn Binding="{Binding HeliumIsotopes}" Width="125">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Helium Isotopes" VerticalAlignment="Center"/>
@@ -100,7 +100,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding HydrogenIsotopes}" Width="140">
+                <DataGridTextColumn Binding="{Binding HydrogenIsotopes}" Width="125">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Hydrogen Isotopes" VerticalAlignment="Center"/>
@@ -114,10 +114,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding NitrogenIsotopes}" Width="140">
+                <DataGridTextColumn Binding="{Binding NitrogenIsotopes}" Width="125">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="NitrogenIsotopes" VerticalAlignment="Center"/>
+                            <TextBlock Text="Nitrogen Isotopes" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
@@ -128,7 +128,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding HeavyWater}" Width="140">
+                <DataGridTextColumn Binding="{Binding HeavyWater}" Width="130">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Heavy Water" VerticalAlignment="Center"/>
@@ -142,7 +142,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding LiquidOzone}" Width="140">
+                <DataGridTextColumn Binding="{Binding LiquidOzone}" Width="130">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Liquid Ozone" VerticalAlignment="Center"/>
@@ -156,10 +156,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding StrontiumClathrates}" Width="140">
+                <DataGridTextColumn Binding="{Binding StrontiumClathrates}" Width="130">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Strontium Clathrates" VerticalAlignment="Center"/>
+                            <TextBlock Text="Strontium" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
