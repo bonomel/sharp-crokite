@@ -72,10 +72,11 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding OxygenIsotopes}" Width="125">
+                <DataGridTextColumn Binding="{Binding OxygenIsotopes}" Width="120">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Oxygen Isotopes" VerticalAlignment="Center"/>
+                            <Image Source="/Images/oxygen-isotopes-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Oxygen" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
@@ -86,10 +87,11 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding HeliumIsotopes}" Width="125">
+                <DataGridTextColumn Binding="{Binding HeliumIsotopes}" Width="120">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Helium Isotopes" VerticalAlignment="Center"/>
+                            <Image Source="/Images/helium-isotopes-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Helium" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
@@ -100,10 +102,11 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding HydrogenIsotopes}" Width="125">
+                <DataGridTextColumn Binding="{Binding HydrogenIsotopes}" Width="120">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Hydrogen Isotopes" VerticalAlignment="Center"/>
+                            <Image Source="/Images/hydrogen-isotopes-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Hydrogen" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
@@ -114,10 +117,11 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding NitrogenIsotopes}" Width="125">
+                <DataGridTextColumn Binding="{Binding NitrogenIsotopes}" Width="120">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Nitrogen Isotopes" VerticalAlignment="Center"/>
+                            <Image Source="/Images/nitrogen-isotopes-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Nitrogen" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
@@ -128,9 +132,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding HeavyWater}" Width="130">
+                <DataGridTextColumn Binding="{Binding HeavyWater}" Width="120">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/heavy-water-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
                             <TextBlock Text="Heavy Water" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
@@ -142,9 +147,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding LiquidOzone}" Width="130">
+                <DataGridTextColumn Binding="{Binding LiquidOzone}" Width="120">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/liquid-ozone-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
                             <TextBlock Text="Liquid Ozone" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
@@ -156,9 +162,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding StrontiumClathrates}" Width="130">
+                <DataGridTextColumn Binding="{Binding StrontiumClathrates}" Width="120">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/strontium-clathrates-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
                             <TextBlock Text="Strontium" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
