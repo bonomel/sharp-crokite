@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:SharpCrokite.UI.Views"
         mc:Ignorable="d"  ResizeMode="CanResizeWithGrip"
-        Title="Sharp Crokite" Height="1080" Width="1428"
+        Title="Sharp Crokite" Height="1000" Width="1500"
         WindowStartupLocation="CenterScreen" Icon="Images/sharp-crokite-icon.png">
     <Grid x:Name="MainGrid">
         <StackPanel Orientation="Vertical">
