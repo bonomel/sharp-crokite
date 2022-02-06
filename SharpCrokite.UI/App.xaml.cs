@@ -33,13 +33,12 @@ namespace SharpCrokite.UI
 
             services.AddSingleton<AsteroidIskPerHourView>();
             services.AddSingleton<AsteroidIskPerHourViewModel>();
+
             services.AddSingleton<MoonOreIskPerHourView>();
             services.AddSingleton<MoonOreIskPerHourViewModel>();
+
             services.AddSingleton<IceIskPerHourView>();
             services.AddSingleton<IceIskPerHourViewModel>();
-
-            services.AddSingleton<HarvestablesView>();
-            services.AddSingleton<HarvestablesViewModel>();
 
             return services.BuildServiceProvider();
         }

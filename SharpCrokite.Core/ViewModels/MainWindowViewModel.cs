@@ -5,6 +5,7 @@ using System.Windows;
 using JetBrains.Annotations;
 
 using SharpCrokite.Core.Commands;
+using SharpCrokite.Core.Models;
 using SharpCrokite.Core.PriceUpdater;
 using SharpCrokite.Core.StaticDataUpdater;
 using SharpCrokite.Core.StaticDataUpdater.Esi;
@@ -21,25 +22,21 @@ namespace SharpCrokite.Core.ViewModels
         private readonly MaterialRepository materialRepository;
 
         [UsedImplicitly]
-        public HarvestablesViewModel HarvestablesViewModel { get; }
+        public IskPerHourViewModel<AsteroidIskPerHour> AsteroidIskPerHourViewModel { get; }
 
         [UsedImplicitly]
-        public AsteroidIskPerHourViewModel AsteroidIskPerHourViewModel { get; }
+        public IskPerHourViewModel<MoonOreIskPerHour> MoonOreIskPerHourViewModel { get; }
 
         [UsedImplicitly]
-        public MoonOreIskPerHourViewModel MoonOreIskPerHourViewModel { get; }
+        public IskPerHourViewModel<IceIskPerHour> IceIskPerHourViewModel { get; }
 
-        [UsedImplicitly]
-        public IceIskPerHourViewModel IceIskPerHourViewModel { get; }
-
-        public MainWindowViewModel(HarvestablesViewModel harvestablesViewModel, AsteroidIskPerHourViewModel asteroidIskPerHourViewModel, 
-            MoonOreIskPerHourViewModel moonOreIskPerHourViewModel, IceIskPerHourViewModel iceIskPerHourViewModel, 
+        public MainWindowViewModel(AsteroidIskPerHourViewModel asteroidIskPerHourViewModel, 
+            MoonOreIskPerHourViewModel moonOreIskPerHourViewModel, IceIskPerHourViewModel iceIskPerHourViewModel,
             HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
 
-            HarvestablesViewModel = harvestablesViewModel;
             AsteroidIskPerHourViewModel = asteroidIskPerHourViewModel;
             MoonOreIskPerHourViewModel = moonOreIskPerHourViewModel;
             IceIskPerHourViewModel = iceIskPerHourViewModel;
@@ -61,9 +58,8 @@ namespace SharpCrokite.Core.ViewModels
         private void OnUpdatePrices()
         {
             PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
-
             priceUpdateController.UpdatePrices();
-            HarvestablesViewModel.UpdateHarvestables();
+
             AsteroidIskPerHourViewModel.UpdatePrices();
             MoonOreIskPerHourViewModel.UpdatePrices();
             IceIskPerHourViewModel.UpdatePrices();
@@ -80,9 +76,8 @@ namespace SharpCrokite.Core.ViewModels
         private void OnDeletePrices()
         {
             PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
-
             priceUpdateController.DeleteAllPrices();
-            HarvestablesViewModel.UpdateHarvestables();
+
             AsteroidIskPerHourViewModel.UpdatePrices();
             MoonOreIskPerHourViewModel.UpdatePrices();
             IceIskPerHourViewModel.UpdatePrices();
@@ -99,7 +94,6 @@ namespace SharpCrokite.Core.ViewModels
             try
             {
                 staticDataUpdateController.UpdateData();
-                HarvestablesViewModel.UpdateHarvestables();
                 AsteroidIskPerHourViewModel.ReloadStaticData();
                 MoonOreIskPerHourViewModel.ReloadStaticData();
                 IceIskPerHourViewModel.ReloadStaticData();
@@ -130,7 +124,6 @@ namespace SharpCrokite.Core.ViewModels
                 harvestableRepository, materialRepository);
 
             staticDataUpdateController.DeleteAllStaticData();
-            HarvestablesViewModel.UpdateHarvestables();
             AsteroidIskPerHourViewModel.ReloadStaticData();
             MoonOreIskPerHourViewModel.ReloadStaticData();
             IceIskPerHourViewModel.ReloadStaticData();

@@ -27,7 +27,7 @@ namespace SharpCrokite.Core.ViewModels
             UpdateCompressedIskPerHour();
         }
 
-        internal void UpdatePrices()
+        internal override void UpdatePrices()
         {
             UpdateMaterialPrices();
             UpdateCompressedVariantPrices();
@@ -42,6 +42,11 @@ namespace SharpCrokite.Core.ViewModels
         {
             IceHarvestableIskPerHourQuery iceHarvestableIskPerHourQuery = new(HarvestableRepository);
             return new ObservableCollection<IceIskPerHour>(iceHarvestableIskPerHourQuery.Execute());
+        }
+
+        internal sealed override void ReloadStaticData()
+        {
+            HarvestableIskPerHourCollection = LoadStaticData();
         }
 
         protected override void UpdateIskPerHour()

@@ -27,7 +27,7 @@ namespace SharpCrokite.Core.ViewModels
             UpdateCompressedIskPerHour();
         }
 
-        internal void UpdatePrices()
+        internal override void UpdatePrices()
         {
             UpdateMaterialPrices();
             UpdateCompressedVariantPrices();
@@ -42,6 +42,11 @@ namespace SharpCrokite.Core.ViewModels
         {
             AsteroidHarvestableIskPerHourQuery asteroidHarvestableIskPerHourQuery = new(HarvestableRepository);
             return new ObservableCollection<AsteroidIskPerHour>(asteroidHarvestableIskPerHourQuery.Execute());
+        }
+
+        internal sealed override void ReloadStaticData()
+        {
+            HarvestableIskPerHourCollection = LoadStaticData();
         }
 
         protected override void UpdateIskPerHour()
@@ -73,7 +78,10 @@ namespace SharpCrokite.Core.ViewModels
             decimal yieldPerSecondDividedByVolume = YieldPerSecond / asteroidIskPerHour.Volume.Amount;
             decimal batchSizeCompensatedVolume = yieldPerSecondDividedByVolume / BatchSize;
 
-            decimal unitMarketPrice = asteroidIskPerHour.CompressedPrices.Any() ? asteroidIskPerHour.CompressedPrices[SystemToUseForPrices].Amount : 0;
+            decimal unitMarketPrice = asteroidIskPerHour.CompressedPrices != null
+                                      && asteroidIskPerHour.CompressedPrices.Any()
+                                      ? asteroidIskPerHour.CompressedPrices[SystemToUseForPrices].Amount
+                                      : 0;
 
             decimal normalizedCompressedBatchValue = unitMarketPrice * batchSizeCompensatedVolume;
             decimal compressedValuePerHour = normalizedCompressedBatchValue * 60 * 60;

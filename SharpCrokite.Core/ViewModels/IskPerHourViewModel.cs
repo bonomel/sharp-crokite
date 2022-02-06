@@ -130,14 +130,13 @@ namespace SharpCrokite.Core.ViewModels
 
         protected abstract ObservableCollection<T> LoadStaticData();
 
+        internal abstract void ReloadStaticData();
+
+        internal abstract void UpdatePrices();
+
         protected virtual void UpdateIskPerHour()
         {
             UpdateMaterialIskPerHour();
-        }
-
-        internal void ReloadStaticData()
-        {
-            HarvestableIskPerHourCollection = LoadStaticData();
         }
 
         private void CalculateMaterialIskPerHour(T harvestableIskPerHour)

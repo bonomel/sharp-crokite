@@ -23,7 +23,7 @@ namespace SharpCrokite.Core.ViewModels
             UpdateMaterialIskPerHour();
         }
 
-        internal void UpdatePrices()
+        internal override void UpdatePrices()
         {
             UpdateMaterialPrices();
             UpdateMaterialIskPerHour();
@@ -35,6 +35,10 @@ namespace SharpCrokite.Core.ViewModels
         {
             MoonOreHarvestableIskPerHourQuery moonOreHarvestableIskPerHourQuery = new(HarvestableRepository);
             return new ObservableCollection<MoonOreIskPerHour>(moonOreHarvestableIskPerHourQuery.Execute());
+        }
+        internal override void ReloadStaticData()
+        {
+            HarvestableIskPerHourCollection = LoadStaticData();
         }
     }
 }
