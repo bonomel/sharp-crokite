@@ -7,14 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\heavy-water-icon.png" />
+    <None Remove="Images\helium-isotopes-icon.png" />
+    <None Remove="Images\hydrogen-isotopes-icon.png" />
     <None Remove="Images\isogen-icon.png" />
+    <None Remove="Images\liquid-ozone-icon.png" />
     <None Remove="Images\megacyte-icon.png" />
     <None Remove="Images\mexallon-icon.png" />
     <None Remove="Images\mining-laser-icon.png" />
+    <None Remove="Images\nitrogen-isotopes-icon.png" />
     <None Remove="Images\nocxium-icon.png" />
+    <None Remove="Images\oxygen-isotopes-icon.png" />
     <None Remove="Images\pyerite-icon.png" />
     <None Remove="Images\reprocessing-icon.png" />
     <None Remove="Images\sharp-crokite-icon.png" />
+    <None Remove="Images\strontium-clathrates-icon.png" />
     <None Remove="Images\tritanium-icon.png" />
     <None Remove="Images\zydrine-icon.png" />
   </ItemGroup>
@@ -24,14 +31,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\heavy-water-icon.png" />
+    <Resource Include="Images\helium-isotopes-icon.png" />
+    <Resource Include="Images\hydrogen-isotopes-icon.png" />
     <Resource Include="Images\isogen-icon.png" />
+    <Resource Include="Images\liquid-ozone-icon.png" />
     <Resource Include="Images\megacyte-icon.png" />
     <Resource Include="Images\mexallon-icon.png" />
     <Resource Include="Images\mining-laser-icon.png" />
+    <Resource Include="Images\nitrogen-isotopes-icon.png" />
     <Resource Include="Images\nocxium-icon.png" />
+    <Resource Include="Images\oxygen-isotopes-icon.png" />
     <Resource Include="Images\pyerite-icon.png" />
     <Resource Include="Images\reprocessing-icon.png" />
     <Resource Include="Images\sharp-crokite-icon.png" />
+    <Resource Include="Images\strontium-clathrates-icon.png" />
     <Resource Include="Images\tritanium-icon.png" />
     <Resource Include="Images\zydrine-icon.png" />
   </ItemGroup>
@@ -41,6 +55,10 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="MainWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\IceIskPerHourView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

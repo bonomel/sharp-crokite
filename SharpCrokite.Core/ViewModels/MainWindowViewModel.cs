@@ -29,8 +29,12 @@ namespace SharpCrokite.Core.ViewModels
         [UsedImplicitly]
         public MoonOreIskPerHourViewModel MoonOreIskPerHourViewModel { get; }
 
-        public MainWindowViewModel(HarvestablesViewModel harvestablesViewModel, AsteroidIskPerHourViewModel asteroidIskPerHourViewModel,
-            MoonOreIskPerHourViewModel moonOreIskPerHourViewModel, HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
+        [UsedImplicitly]
+        public IceIskPerHourViewModel IceIskPerHourViewModel { get; }
+
+        public MainWindowViewModel(HarvestablesViewModel harvestablesViewModel, AsteroidIskPerHourViewModel asteroidIskPerHourViewModel, 
+            MoonOreIskPerHourViewModel moonOreIskPerHourViewModel, IceIskPerHourViewModel iceIskPerHourViewModel, 
+            HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
@@ -38,6 +42,7 @@ namespace SharpCrokite.Core.ViewModels
             HarvestablesViewModel = harvestablesViewModel;
             AsteroidIskPerHourViewModel = asteroidIskPerHourViewModel;
             MoonOreIskPerHourViewModel = moonOreIskPerHourViewModel;
+            IceIskPerHourViewModel = iceIskPerHourViewModel;
 
             UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
             DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
@@ -48,7 +53,7 @@ namespace SharpCrokite.Core.ViewModels
         [UsedImplicitly]
         public RelayCommand UpdatePricesCommand { get; private set; }
 
-        private bool CanUpdatePrices()
+        private static bool CanUpdatePrices()
         {
             return true;
         }
@@ -61,12 +66,13 @@ namespace SharpCrokite.Core.ViewModels
             HarvestablesViewModel.UpdateHarvestables();
             AsteroidIskPerHourViewModel.UpdatePrices();
             MoonOreIskPerHourViewModel.UpdatePrices();
+            IceIskPerHourViewModel.UpdatePrices();
         }
 
         [UsedImplicitly]
         public RelayCommand DeletePricesCommand { get; private set; }
 
-        private bool CanDeletePrices()
+        private static bool CanDeletePrices()
         {
             return true;
         }
@@ -79,6 +85,7 @@ namespace SharpCrokite.Core.ViewModels
             HarvestablesViewModel.UpdateHarvestables();
             AsteroidIskPerHourViewModel.UpdatePrices();
             MoonOreIskPerHourViewModel.UpdatePrices();
+            IceIskPerHourViewModel.UpdatePrices();
         }
 
         [UsedImplicitly]
@@ -108,7 +115,7 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
-        private bool CanUpdateStaticData()
+        private static bool CanUpdateStaticData()
         {
             return true;
         }

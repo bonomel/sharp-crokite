@@ -21,8 +21,10 @@ namespace SharpCrokite.Core.ViewModels
 
         private const string MineralTypeString = "Mineral";
         private const string MoonMaterialsTypeString = "Moon Materials";
+        private const string IceProductsTypeString = "Ice Product";
         private const string TwoDecimalsFormatString = "F02";
-        private const int BatchSize = 100;
+
+        protected abstract int BatchSize { get; }
 
         private readonly CultureInfo invariantCultureInfo = new("en-us");
         private protected readonly int SystemToUseForPrices = 30000142; // Hard-coded Jita systemid - this will become a setting eventually
@@ -34,6 +36,7 @@ namespace SharpCrokite.Core.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
+        // ReSharper disable once InconsistentNaming
         private protected ObservableCollection<T> harvestableIskPerHourCollection = new();
         public ObservableCollection<T> HarvestableIskPerHourCollection
         {
@@ -137,11 +140,11 @@ namespace SharpCrokite.Core.ViewModels
             HarvestableIskPerHourCollection = LoadStaticData();
         }
 
-        private void CalculateMaterialIskPerHour(T moonOreIskPerHour)
+        private void CalculateMaterialIskPerHour(T harvestableIskPerHour)
         {
             decimal batchValueAfterReprocessing = 0m;
 
-            foreach (MaterialModel materialModel in moonOreIskPerHour.MaterialContent)
+            foreach (MaterialModel materialModel in harvestableIskPerHour.MaterialContent)
             {
                 int materialsAfterReprocessing = Convert.ToInt32(Math.Floor(materialModel.Quantity * reprocessingEfficiency));
 
@@ -151,16 +154,17 @@ namespace SharpCrokite.Core.ViewModels
             }
 
             decimal valuePerUnit = batchValueAfterReprocessing / BatchSize;
-            decimal valuePerSquareMeters = valuePerUnit / moonOreIskPerHour.Volume.Amount;
+            decimal valuePerSquareMeters = valuePerUnit / harvestableIskPerHour.Volume.Amount;
             decimal valuePerSecond = valuePerSquareMeters * YieldPerSecond;
             decimal valuePerHour = valuePerSecond * 60 * 60;
 
-            moonOreIskPerHour.MaterialIskPerHour = new Isk(valuePerHour);
+            harvestableIskPerHour.MaterialIskPerHour = new Isk(valuePerHour);
         }
 
         private protected void UpdateMaterialPrices()
         {
-            materialModels = materialRepository.Find(material => material.Type == MineralTypeString || material.Type == MoonMaterialsTypeString);
+            materialModels = materialRepository.Find(material => material.Type == MineralTypeString
+                || material.Type == MoonMaterialsTypeString || material.Type == IceProductsTypeString);
         }
 
         private protected void UpdateMaterialIskPerHour()

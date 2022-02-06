@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:SharpCrokite.UI.Views"
         mc:Ignorable="d"  ResizeMode="CanResizeWithGrip"
-        Title="Sharp Crokite" Height="1080" Width="1428"
+        Title="Sharp Crokite" Height="800" Width="1440"
         WindowStartupLocation="CenterScreen" Icon="Images/sharp-crokite-icon.png">
-    <Grid x:Name="MainGrid">
+    <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Height="45" VerticalAlignment="Top">
-                <Button Content="Update Static Data" Name="UpdateStaticDataButton" Command="{Binding UpdateStaticDataCommand}" Width="160" Margin="10,10,0,5"/>
-                <Button Content="Delete Static Data" Name="DeleteStaticDataButton" Command="{Binding DeleteStaticDataCommand}" Width="160" Margin="5,10,0,5"/>
-                <Button Content="Update Prices" Name="UpdatePriceDataButton" Command="{Binding UpdatePricesCommand}" Width="160" Margin="5,10,0,5"/>
-                <Button Content="Delete Prices" Name="DeletePriceDataButton" Command="{Binding DeletePricesCommand}" Width="160" Margin="5,10,0,5"/>
+                <Button Content="Update Static Data" Command="{Binding UpdateStaticDataCommand}" Width="160" Margin="10,10,0,5"/>
+                <Button Content="Delete Static Data" Command="{Binding DeleteStaticDataCommand}" Width="160" Margin="5,10,0,5"/>
+                <Button Content="Update Prices" Command="{Binding UpdatePricesCommand}" Width="160" Margin="5,10,0,5"/>
+                <Button Content="Delete Prices" Command="{Binding DeletePricesCommand}" Width="160" Margin="5,10,0,5"/>
             </StackPanel>
         </StackPanel>
         <TabControl Margin="10, 50, 10, 10">
@@ -22,6 +22,9 @@
             </TabItem>
             <TabItem Header="Moon Mining ISK/h">
                 <views:MoonOreIskPerHourView DataContext="{Binding MoonOreIskPerHourViewModel}"/>
+            </TabItem>
+            <TabItem Header="Ice Mining ISK/h">
+                <views:IceIskPerHourView DataContext="{Binding IceIskPerHourViewModel}"/>
             </TabItem>
             <!--<TabItem Header="Harvestables">
                 <views:HarvestablesView DataContext="{Binding HarvestablesViewModel}"/>

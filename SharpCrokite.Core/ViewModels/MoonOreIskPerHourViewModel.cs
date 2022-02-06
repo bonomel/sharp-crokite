@@ -29,10 +29,12 @@ namespace SharpCrokite.Core.ViewModels
             UpdateMaterialIskPerHour();
         }
 
+        protected override int BatchSize => 100;
+
         protected sealed override ObservableCollection<MoonOreIskPerHour> LoadStaticData()
         {
-            MoonOreQuery moonOreQuery = new(HarvestableRepository);
-            return new ObservableCollection<MoonOreIskPerHour>(moonOreQuery.Execute());
+            MoonOreHarvestableIskPerHourQuery moonOreHarvestableIskPerHourQuery = new(HarvestableRepository);
+            return new ObservableCollection<MoonOreIskPerHour>(moonOreHarvestableIskPerHourQuery.Execute());
         }
     }
 }
