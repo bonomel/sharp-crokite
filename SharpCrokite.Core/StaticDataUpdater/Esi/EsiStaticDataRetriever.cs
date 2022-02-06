@@ -198,33 +198,45 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
 
         private void LoadCategoriesFromEsi()
         {
-            using HttpClient client = new();
-            client.BaseAddress = new Uri(EsiBaseUrl);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage response = client.GetAsync($"{UniverseRoute}{CategoriesRoutePart}").Result;
-            if (response.IsSuccessStatusCode)
+            for (int currentTry = 1; currentTry <= maxTries; currentTry++)
             {
-                string responseString = response.Content.ReadAsStringAsync().Result;
+                using HttpClient client = new();
+                client.BaseAddress = new Uri(EsiBaseUrl);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = client.GetAsync($"{UniverseRoute}{CategoriesRoutePart}").Result;
 
-                responseString = responseString.TrimStart('[').TrimEnd(']');
-
-                IList<string> categoryIdList = responseString.Split(',').ToList();
-
-                List<EsiCategoryJson> listOfCategories = new();
-
-                foreach (string categoryId in categoryIdList)
+                if (response.IsSuccessStatusCode)
                 {
-                    listOfCategories.Add(GetCategoryInfo(client, categoryId));
+                    string responseString = response.Content.ReadAsStringAsync().Result;
+
+                    responseString = responseString.TrimStart('[').TrimEnd(']');
+
+                    IList<string> categoryIdList = responseString.Split(',').ToList();
+
+                    List<EsiCategoryJson> listOfCategories = new();
+
+                    foreach (string categoryId in categoryIdList)
+                    {
+                        listOfCategories.Add(GetCategoryInfo(client, categoryId));
+                    }
+
+                    categories = listOfCategories.Where(c => c.published).ToList();
+
+                    currentTry = maxTries;
+                }
+                else
+                {
+                    Debug.WriteLine($"The API call to {EsiBaseUrl}{UniverseRoute}{CategoriesRoutePart} failed. Try: {currentTry}");
+
+                    if (currentTry == 3)
+                    {
+                        throw new HttpRequestException($"The API call to {EsiBaseUrl}{UniverseRoute}{CategoriesRoutePart} failed three times!\n" +
+                                                       $"Reason:\n{response.ReasonPhrase}\n" +
+                                                       $"Statuscode:{response.StatusCode}");
+                    }
+                    currentTry += 1;
                 }
 
-                categories = listOfCategories.Where(c => c.published).ToList();
-            }
-            else
-            {
-                MessageBox.Show($"Call to {EsiBaseUrl}{UniverseRoute}{CategoriesRoutePart} failed!\nReason:\n{response.ReasonPhrase}\nStatuscode:{response.StatusCode}",
-                    "Failed during API call!",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
             }
         }
 
@@ -239,15 +251,13 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
 
                 return categoryJson;
             }
-            else
-            {
-                MessageBox.Show($"Call to {EsiBaseUrl}{UniverseRoute}{CategoriesRoutePart}{categoryId} failed!\nReason:\n{response.ReasonPhrase}\nStatuscode:{response.StatusCode}",
-                    "Failed during API call!",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
 
-                return null;
-            }
+            MessageBox.Show($"Call to {EsiBaseUrl}{UniverseRoute}{CategoriesRoutePart}{categoryId} failed!\nReason:\n{response.ReasonPhrase}\nStatuscode:{response.StatusCode}",
+                "Failed during API call!",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+
+            return null;
         }
 
         private IEnumerable<EsiGroupJson> GetGroupsFromCategory(HttpClient client, EsiCategoryJson category)

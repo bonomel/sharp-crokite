@@ -102,6 +102,7 @@ namespace SharpCrokite.Core.ViewModels
                 HarvestablesViewModel.UpdateHarvestables();
                 AsteroidIskPerHourViewModel.ReloadStaticData();
                 MoonOreIskPerHourViewModel.ReloadStaticData();
+                IceIskPerHourViewModel.ReloadStaticData();
             }
             catch (HttpRequestException ex)
             {
@@ -132,6 +133,7 @@ namespace SharpCrokite.Core.ViewModels
             HarvestablesViewModel.UpdateHarvestables();
             AsteroidIskPerHourViewModel.ReloadStaticData();
             MoonOreIskPerHourViewModel.ReloadStaticData();
+            IceIskPerHourViewModel.ReloadStaticData();
         }
 
         private bool CanDeleteStaticData()
