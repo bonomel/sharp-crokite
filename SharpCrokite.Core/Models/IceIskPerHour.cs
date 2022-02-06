@@ -6,7 +6,7 @@ using SharpCrokite.Infrastructure.Common;
 namespace SharpCrokite.Core.Models
 {
     [DebuggerDisplay("{Type} - {Name}")]
-    [UsedImplicitly]
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class IceIskPerHour : HarvestableIskPerHour
     {
         internal Dictionary<int, Isk> CompressedPrices { get; set; }

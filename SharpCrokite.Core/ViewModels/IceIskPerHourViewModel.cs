@@ -35,7 +35,7 @@ namespace SharpCrokite.Core.ViewModels
             UpdateMaterialIskPerHour();
             UpdateCompressedIskPerHour();
         }
-        
+
         protected override int BatchSize => 1;
 
         protected sealed override ObservableCollection<IceIskPerHour> LoadStaticData()
@@ -76,9 +76,12 @@ namespace SharpCrokite.Core.ViewModels
         private void CalculateCompressedIskPerHour(IceIskPerHour iceIskPerHour)
         {
             decimal yieldPerSecondDividedByVolume = YieldPerSecond / iceIskPerHour.Volume.Amount;
-            decimal batchSizeCompensatedVolume = yieldPerSecondDividedByVolume / BatchSize; //batch size
+            decimal batchSizeCompensatedVolume = yieldPerSecondDividedByVolume / BatchSize;
 
-            decimal unitMarketPrice = iceIskPerHour.CompressedPrices.Any() ? iceIskPerHour.CompressedPrices[SystemToUseForPrices].Amount : 0;
+            decimal unitMarketPrice = iceIskPerHour.CompressedPrices != null
+                                      && iceIskPerHour.CompressedPrices.Any()
+                                      ? iceIskPerHour.CompressedPrices[SystemToUseForPrices].Amount
+                                      : 0;
 
             decimal normalizedCompressedBatchValue = unitMarketPrice * batchSizeCompensatedVolume;
             decimal compressedValuePerHour = normalizedCompressedBatchValue * 60 * 60;
