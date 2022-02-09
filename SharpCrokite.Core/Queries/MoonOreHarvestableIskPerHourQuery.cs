@@ -16,7 +16,7 @@ namespace SharpCrokite.Core.Queries
 
         public MoonOreHarvestableIskPerHourQuery(HarvestableRepository harvestableRepository) : base(harvestableRepository)
         {
-            HarvestableTypes = new [] {
+            HarvestableTypes = new[] {
                 MoonOreType.UbiquitousMoonAsteroids,
                 MoonOreType.CommonMoonAsteroids,
                 MoonOreType.UncommonMoonAsteroids,

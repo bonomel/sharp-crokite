@@ -26,9 +26,6 @@
             <TabItem Header="Ice Mining ISK/h">
                 <views:IceIskPerHourView DataContext="{Binding IceIskPerHourViewModel}"/>
             </TabItem>
-            <!--<TabItem Header="Harvestables">
-                <views:HarvestablesView DataContext="{Binding HarvestablesViewModel}"/>
-            </TabItem>-->
         </TabControl>
     </Grid>
 </Window>

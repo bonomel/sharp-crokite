@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SharpCrokite.Core.Models;
+using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.Queries
@@ -45,6 +46,25 @@ namespace SharpCrokite.Core.Queries
                 AsteroidType.Bistot,
                 AsteroidType.Arkonor
             };
+        }
+
+        internal override IEnumerable<AsteroidIskPerHour> Execute()
+        {
+            IEnumerable<AsteroidIskPerHour> harvestableIskPerHourResult = base.Execute().ToList();
+
+            foreach (AsteroidIskPerHour asteroidIskPerHour in harvestableIskPerHourResult)
+            {
+                asteroidIskPerHour.CompressedVariantTypeId = FindCompressedVariantTypeId(asteroidIskPerHour);
+            }
+
+            return harvestableIskPerHourResult;
+        }
+
+        private int FindCompressedVariantTypeId(HarvestableIskPerHour asteroidIskPerHour)
+        {
+            Harvestable compressedVariant = HarvestableRepository.Find(h => h.IsCompressedVariantOfType == asteroidIskPerHour.HarvestableId).First();
+
+            return compressedVariant.HarvestableId;
         }
 
         protected override void SanitizeHarvestableCollection(List<AsteroidIskPerHour> harvestableIskPerHourCollection, string oreType)

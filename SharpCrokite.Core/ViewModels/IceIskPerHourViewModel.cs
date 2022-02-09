@@ -27,7 +27,7 @@ namespace SharpCrokite.Core.ViewModels
             UpdateCompressedIskPerHour();
         }
 
-        internal void UpdatePrices()
+        internal override void UpdatePrices()
         {
             UpdateMaterialPrices();
             UpdateCompressedVariantPrices();
@@ -35,13 +35,18 @@ namespace SharpCrokite.Core.ViewModels
             UpdateMaterialIskPerHour();
             UpdateCompressedIskPerHour();
         }
-        
+
         protected override int BatchSize => 1;
 
         protected sealed override ObservableCollection<IceIskPerHour> LoadStaticData()
         {
             IceHarvestableIskPerHourQuery iceHarvestableIskPerHourQuery = new(HarvestableRepository);
             return new ObservableCollection<IceIskPerHour>(iceHarvestableIskPerHourQuery.Execute());
+        }
+
+        internal sealed override void ReloadStaticData()
+        {
+            HarvestableIskPerHourCollection = LoadStaticData();
         }
 
         protected override void UpdateIskPerHour()
@@ -52,11 +57,11 @@ namespace SharpCrokite.Core.ViewModels
 
         private void UpdateCompressedVariantPrices()
         {
-            foreach (IceIskPerHour normalOreIskPerHour in HarvestableIskPerHourCollection)
+            foreach (IceIskPerHour iceIskPerHour in HarvestableIskPerHourCollection)
             {
-                Harvestable compressedVariant = HarvestableRepository.Find(h => h.HarvestableId == normalOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
+                Harvestable compressedVariant = HarvestableRepository.Find(h => h.HarvestableId == iceIskPerHour.CompressedVariantTypeId).SingleOrDefault();
 
-                normalOreIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
+                iceIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
             }
         }
 
@@ -71,9 +76,12 @@ namespace SharpCrokite.Core.ViewModels
         private void CalculateCompressedIskPerHour(IceIskPerHour iceIskPerHour)
         {
             decimal yieldPerSecondDividedByVolume = YieldPerSecond / iceIskPerHour.Volume.Amount;
-            decimal batchSizeCompensatedVolume = yieldPerSecondDividedByVolume / BatchSize; //batch size
+            decimal batchSizeCompensatedVolume = yieldPerSecondDividedByVolume / BatchSize;
 
-            decimal unitMarketPrice = iceIskPerHour.CompressedPrices.Any() ? iceIskPerHour.CompressedPrices[SystemToUseForPrices].Amount : 0;
+            decimal unitMarketPrice = iceIskPerHour.CompressedPrices != null
+                                      && iceIskPerHour.CompressedPrices.Any()
+                                      ? iceIskPerHour.CompressedPrices[SystemToUseForPrices].Amount
+                                      : 0;
 
             decimal normalizedCompressedBatchValue = unitMarketPrice * batchSizeCompensatedVolume;
             decimal compressedValuePerHour = normalizedCompressedBatchValue * 60 * 60;

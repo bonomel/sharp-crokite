@@ -1,30 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using JetBrains.Annotations;
-using SharpCrokite.Infrastructure.Common;
 
 namespace SharpCrokite.Core.Models
 {
     [DebuggerDisplay("{Type} - {Name}")]
-    [UsedImplicitly]
-    public class AsteroidIskPerHour : HarvestableIskPerHour
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    public class AsteroidIskPerHour : CompressableIskPerHour
     {
-        internal Dictionary<int, Isk> CompressedPrices { get; set; }
-
-        private Isk compressedIskPerHour = new(0);
-        public Isk CompressedIskPerHour
-        {
-            get => compressedIskPerHour;
-            internal set
-            {
-                if (compressedIskPerHour != value)
-                {
-                    compressedIskPerHour = value;
-                    NotifyPropertyChanged(nameof(CompressedIskPerHour));
-                }
-            }
-        }
-
         public int Tritanium => GetQuantityOrDefault(nameof(Tritanium));
         public int Pyerite => GetQuantityOrDefault(nameof(Pyerite));
         public int Mexallon => GetQuantityOrDefault(nameof(Mexallon));
