@@ -57,11 +57,11 @@ namespace SharpCrokite.Core.ViewModels
 
         private void UpdateCompressedVariantPrices()
         {
-            foreach (IceIskPerHour normalOreIskPerHour in HarvestableIskPerHourCollection)
+            foreach (IceIskPerHour iceIskPerHour in HarvestableIskPerHourCollection)
             {
-                Harvestable compressedVariant = HarvestableRepository.Find(h => h.HarvestableId == normalOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
+                Harvestable compressedVariant = HarvestableRepository.Find(h => h.HarvestableId == iceIskPerHour.CompressedVariantTypeId).SingleOrDefault();
 
-                normalOreIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
+                iceIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
             }
         }
 

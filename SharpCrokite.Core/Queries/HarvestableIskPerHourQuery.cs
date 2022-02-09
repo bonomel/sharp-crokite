@@ -12,25 +12,25 @@ namespace SharpCrokite.Core.Queries
     public abstract class HarvestableIskPerHourQuery<T> where T : HarvestableIskPerHour
     {
         private protected string[] HarvestableTypes;
-        private readonly HarvestableRepository harvestableRepository;
+        private protected readonly HarvestableRepository HarvestableRepository;
 
         protected HarvestableIskPerHourQuery(HarvestableRepository harvestableRepository)
         {
-            this.harvestableRepository = harvestableRepository;
+            this.HarvestableRepository = harvestableRepository;
         }
 
-        internal IEnumerable<T> Execute()
+        internal virtual IEnumerable<T> Execute()
         {
             List<T> harvestableIskPerHourCollection = new();
 
             IEnumerable<Harvestable> harvestableModels =
-                harvestableRepository.Find(h => HarvestableTypes.Contains(h.Type) && h.IsCompressedVariantOfType == null);
+                HarvestableRepository.Find(h => HarvestableTypes.Contains(h.Type) && h.IsCompressedVariantOfType == null);
 
             foreach (Harvestable harvestableModel in harvestableModels)
             {
                 T harvestableIskPerHour = Activator.CreateInstance<T>();
 
-                harvestableIskPerHour.CompressedVariantTypeId = FindCompressedVariantTypeId(harvestableModel);
+                harvestableIskPerHour.HarvestableId = harvestableModel.HarvestableId;
                 harvestableIskPerHour.Icon = harvestableModel.Icon;
                 harvestableIskPerHour.Name = harvestableModel.Name;
                 harvestableIskPerHour.Description = harvestableModel.Description;
@@ -81,14 +81,6 @@ namespace SharpCrokite.Core.Queries
                         .ForEach(o => o.IsImprovedVariant = true);
                 }
             }
-        }
-
-        private int? FindCompressedVariantTypeId(Harvestable harvestableModel)
-        {
-            Harvestable compressedVariant =
-                harvestableRepository.Find(h => h.IsCompressedVariantOfType == harvestableModel.HarvestableId).FirstOrDefault();
-
-            return compressedVariant?.HarvestableId;
         }
 
         private protected static T GetBasicHarvestableType(IEnumerable<T> harvestableTypeGroup)
