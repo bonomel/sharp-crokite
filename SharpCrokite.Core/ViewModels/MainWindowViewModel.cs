@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Windows;
 
@@ -29,6 +30,10 @@ namespace SharpCrokite.Core.ViewModels
 
         [UsedImplicitly]
         public IskPerHourViewModel<IceIskPerHour> IceIskPerHourViewModel { get; }
+
+        public IContentViewModel CurrentViewModel { get; }
+
+        private IEnumerable<IContentViewModel> contentViewModels;
 
         public MainWindowViewModel(AsteroidIskPerHourViewModel asteroidIskPerHourViewModel, 
             MoonOreIskPerHourViewModel moonOreIskPerHourViewModel, IceIskPerHourViewModel iceIskPerHourViewModel,
@@ -133,5 +138,9 @@ namespace SharpCrokite.Core.ViewModels
         {
             return true;
         }
+    }
+
+    public interface IContentViewModel
+    {
     }
 }

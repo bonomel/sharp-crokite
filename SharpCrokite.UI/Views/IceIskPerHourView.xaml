@@ -19,7 +19,7 @@
             <TextBox Height="20" Width="80" Text="{Binding Path=ReprocessingEfficiencyText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <CheckBox Content="Show improved variants" VerticalContentAlignment="Center" IsChecked="{Binding Path=ShowImprovedVariantsIsChecked, Mode=TwoWay}" Margin="15,0,0,0" />
         </StackPanel>
-        <DataGrid Name="MoonOreIskPerHourDataGrid" Margin="10,0,10,10" IsReadOnly="true" AutoGenerateColumns="False" Grid.Row="1"
+        <DataGrid Name="IceIskPerHourGrid" Margin="10,0,10,10" IsReadOnly="true" AutoGenerateColumns="False" Grid.Row="1"
                     HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" HeadersVisibility="Column"
                     CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="True"
                     CanUserReorderColumns="True" CanUserResizeColumns="False" ItemsSource="{Binding HarvestableIskPerHourCollection}"

@@ -8,7 +8,7 @@ using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.ViewModels
 {
-    public class MoonOreIskPerHourViewModel : IskPerHourViewModel<MoonOreIskPerHour>, INotifyPropertyChanged
+    public class MoonOreIskPerHourViewModel : IskPerHourViewModel<MoonOreIskPerHour>, INotifyPropertyChanged, IContentViewModel
     {
         public MoonOreIskPerHourViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
             : base(harvestableRepository, materialRepository)
