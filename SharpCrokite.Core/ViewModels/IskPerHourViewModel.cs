@@ -29,7 +29,8 @@ namespace SharpCrokite.Core.ViewModels
         private readonly CultureInfo invariantCultureInfo = new("en-us");
         private protected readonly int SystemToUseForPrices = 30000142; // Hard-coded Jita systemid - this will become a setting eventually
 
-        protected readonly HarvestableRepository HarvestableRepository;
+        protected HarvestableRepository HarvestableRepository { get; }
+
         private readonly MaterialRepository materialRepository;
 
         private IEnumerable<Material> materialModels;
@@ -92,7 +93,7 @@ namespace SharpCrokite.Core.ViewModels
 
         protected IskPerHourViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
-            HarvestableRepository = harvestableRepository;
+            this.HarvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
         }
 
