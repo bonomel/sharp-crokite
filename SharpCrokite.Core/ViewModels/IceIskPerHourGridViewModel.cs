@@ -10,9 +10,9 @@ using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.ViewModels
 {
-    public class IceIskPerHourViewModel : IskPerHourViewModel<IceIskPerHour>, INotifyPropertyChanged, IContentViewModel
+    public class IceIskPerHourGridViewModel : IskPerHourGridViewModel<IceIskPerHour>, INotifyPropertyChanged
     {
-        public IceIskPerHourViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
+        public IceIskPerHourGridViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
             : base(harvestableRepository, materialRepository)
         {
             HarvestableIskPerHourCollection = LoadStaticData();

@@ -14,7 +14,7 @@ using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.ViewModels
 {
-    public abstract class IskPerHourViewModel<T> where T : HarvestableIskPerHour
+    public abstract class IskPerHourGridViewModel<T> where T : HarvestableIskPerHour
     {
         [UsedImplicitly]
         public Guid Id { get; } = Guid.NewGuid();
@@ -91,7 +91,7 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
-        protected IskPerHourViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
+        protected IskPerHourGridViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
             this.HarvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;

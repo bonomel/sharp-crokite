@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:SharpCrokite.UI.Views"
         mc:Ignorable="d"  ResizeMode="CanResizeWithGrip"
-        Title="Sharp Crokite" Height="800" Width="1440"
+        Title="Sharp Crokite" Height="800" Width="1600"
         WindowStartupLocation="CenterScreen" Icon="Images/sharp-crokite-icon.png">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -25,15 +25,14 @@
         <views:NavigatorView Grid.Row="1" Grid.Column="0" Margin="10,0,0,10"></views:NavigatorView>
         <TabControl Margin="10,0,10,10" Grid.Row="1" Grid.Column="1">
             <TabItem Header="Asteroid Mining ISK/h">
-                <views:AsteroidIskPerHourView DataContext="{Binding AsteroidIskPerHourViewModel}"/>
+                <views:AsteroidIskPerHourGridView DataContext="{Binding AsteroidIskPerHourGridViewModel}"/>
             </TabItem>
             <TabItem Header="Moon Mining ISK/h">
-                <views:MoonOreIskPerHourView DataContext="{Binding MoonOreIskPerHourViewModel}"/>
+                <views:MoonOreIskPerHourGridView DataContext="{Binding MoonOreIskPerHourGridViewModel}"/>
             </TabItem>
             <TabItem Header="Ice Mining ISK/h">
-                <views:IceIskPerHourView DataContext="{Binding IceIskPerHourViewModel}"/>
+                <views:IceIskPerHourGridView DataContext="{Binding IceIskPerHourGridViewModel}"/>
             </TabItem>
         </TabControl>
     </Grid>
-    
 </Window>

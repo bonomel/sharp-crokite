@@ -1,8 +1,8 @@
 ﻿namespace SharpCrokite.UI.Views
 {
-    public partial class IceIskPerHourView
+    public partial class MoonOreIskPerHourGridView
     {
-        public IceIskPerHourView()
+        public MoonOreIskPerHourGridView()
         {
             InitializeComponent();
         }

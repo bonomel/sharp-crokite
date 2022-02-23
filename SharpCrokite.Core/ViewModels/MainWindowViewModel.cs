@@ -23,28 +23,28 @@ namespace SharpCrokite.Core.ViewModels
         private readonly MaterialRepository materialRepository;
 
         [UsedImplicitly]
-        public IskPerHourViewModel<AsteroidIskPerHour> AsteroidIskPerHourViewModel { get; }
+        public IskPerHourGridViewModel<AsteroidIskPerHour> AsteroidIskPerHourGridViewModel { get; }
 
         [UsedImplicitly]
-        public IskPerHourViewModel<MoonOreIskPerHour> MoonOreIskPerHourViewModel { get; }
+        public IskPerHourGridViewModel<MoonOreIskPerHour> MoonOreIskPerHourGridViewModel { get; }
 
         [UsedImplicitly]
-        public IskPerHourViewModel<IceIskPerHour> IceIskPerHourViewModel { get; }
+        public IskPerHourGridViewModel<IceIskPerHour> IceIskPerHourGridViewModel { get; }
 
-        public IContentViewModel CurrentViewModel { get; }
+        public IContentViewModel CurrentViewModel { get; private set; }
 
         private IEnumerable<IContentViewModel> contentViewModels;
 
-        public MainWindowViewModel(AsteroidIskPerHourViewModel asteroidIskPerHourViewModel, 
-            MoonOreIskPerHourViewModel moonOreIskPerHourViewModel, IceIskPerHourViewModel iceIskPerHourViewModel,
+        public MainWindowViewModel(AsteroidIskPerHourGridViewModel asteroidIskPerHourGridViewModel,
+            MoonOreIskPerHourGridViewModel moonOreIskPerHourGridViewModel, IceIskPerHourGridViewModel iceIskPerHourGridViewModel,
             HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
 
-            AsteroidIskPerHourViewModel = asteroidIskPerHourViewModel;
-            MoonOreIskPerHourViewModel = moonOreIskPerHourViewModel;
-            IceIskPerHourViewModel = iceIskPerHourViewModel;
+            AsteroidIskPerHourGridViewModel = asteroidIskPerHourGridViewModel;
+            MoonOreIskPerHourGridViewModel = moonOreIskPerHourGridViewModel;
+            IceIskPerHourGridViewModel = iceIskPerHourGridViewModel;
 
             UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
             DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
@@ -65,9 +65,9 @@ namespace SharpCrokite.Core.ViewModels
             PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
             priceUpdateController.UpdatePrices();
 
-            AsteroidIskPerHourViewModel.UpdatePrices();
-            MoonOreIskPerHourViewModel.UpdatePrices();
-            IceIskPerHourViewModel.UpdatePrices();
+            AsteroidIskPerHourGridViewModel.UpdatePrices();
+            MoonOreIskPerHourGridViewModel.UpdatePrices();
+            IceIskPerHourGridViewModel.UpdatePrices();
         }
 
         [UsedImplicitly]
@@ -83,9 +83,9 @@ namespace SharpCrokite.Core.ViewModels
             PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
             priceUpdateController.DeleteAllPrices();
 
-            AsteroidIskPerHourViewModel.UpdatePrices();
-            MoonOreIskPerHourViewModel.UpdatePrices();
-            IceIskPerHourViewModel.UpdatePrices();
+            AsteroidIskPerHourGridViewModel.UpdatePrices();
+            MoonOreIskPerHourGridViewModel.UpdatePrices();
+            IceIskPerHourGridViewModel.UpdatePrices();
         }
 
         [UsedImplicitly]
@@ -99,9 +99,9 @@ namespace SharpCrokite.Core.ViewModels
             try
             {
                 staticDataUpdateController.UpdateData();
-                AsteroidIskPerHourViewModel.ReloadStaticData();
-                MoonOreIskPerHourViewModel.ReloadStaticData();
-                IceIskPerHourViewModel.ReloadStaticData();
+                AsteroidIskPerHourGridViewModel.ReloadStaticData();
+                MoonOreIskPerHourGridViewModel.ReloadStaticData();
+                IceIskPerHourGridViewModel.ReloadStaticData();
             }
             catch (HttpRequestException ex)
             {
@@ -129,9 +129,9 @@ namespace SharpCrokite.Core.ViewModels
                 harvestableRepository, materialRepository);
 
             staticDataUpdateController.DeleteAllStaticData();
-            AsteroidIskPerHourViewModel.ReloadStaticData();
-            MoonOreIskPerHourViewModel.ReloadStaticData();
-            IceIskPerHourViewModel.ReloadStaticData();
+            AsteroidIskPerHourGridViewModel.ReloadStaticData();
+            MoonOreIskPerHourGridViewModel.ReloadStaticData();
+            IceIskPerHourGridViewModel.ReloadStaticData();
         }
 
         private bool CanDeleteStaticData()
