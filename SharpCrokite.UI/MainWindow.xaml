@@ -23,16 +23,6 @@
             <Button Content="Delete Prices" Command="{Binding DeletePricesCommand}" Width="160" Margin="0,0,5,0"/>
         </StackPanel>
         <views:NavigatorView Grid.Row="1" Grid.Column="0" Margin="10,0,0,10"></views:NavigatorView>
-        <TabControl Margin="10,0,10,10" Grid.Row="1" Grid.Column="1">
-            <TabItem Header="Asteroid Mining ISK/h">
-                <views:AsteroidIskPerHourGridView DataContext="{Binding AsteroidIskPerHourGridViewModel}"/>
-            </TabItem>
-            <TabItem Header="Moon Mining ISK/h">
-                <views:MoonOreIskPerHourGridView DataContext="{Binding MoonOreIskPerHourGridViewModel}"/>
-            </TabItem>
-            <TabItem Header="Ice Mining ISK/h">
-                <views:IceIskPerHourGridView DataContext="{Binding IceIskPerHourGridViewModel}"/>
-            </TabItem>
-        </TabControl>
+        <views:IskPerHourView Margin="10,0,10,10" Grid.Row="1" Grid.Column="1" DataContext="{Binding IskPerHourViewModel}"></views:IskPerHourView>
     </Grid>
 </Window>

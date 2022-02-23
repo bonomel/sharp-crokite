@@ -31,6 +31,8 @@ namespace SharpCrokite.UI
             services.AddSingleton<MainWindow>();
             services.AddSingleton<MainWindowViewModel>();
 
+            services.AddSingleton<IskPerHourViewModel>();
+
             services.AddSingleton<AsteroidIskPerHourGridView>();
             services.AddSingleton<AsteroidIskPerHourGridViewModel>();
 
