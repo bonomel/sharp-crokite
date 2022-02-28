@@ -21,12 +21,24 @@ namespace SharpCrokite.Core.ViewModels
         private readonly MaterialRepository materialRepository;
 
         [UsedImplicitly]
-        public IskPerHourViewModel IskPerHourViewModel { get; }
+        public NavigatorViewModel NavigatorViewModel { get; set; }
+
+        [UsedImplicitly]
+        public RelayCommand DeletePricesCommand { get; private set; }
+
+        [UsedImplicitly]
+        public RelayCommand UpdatePricesCommand { get; private set; }
+
+        [UsedImplicitly]
+        public RelayCommand UpdateStaticDataCommand { get; private set; }
+
+        [UsedImplicitly]
+        public RelayCommand DeleteStaticDataCommand { get; private set; }
 
         // private IEnumerable<IContentViewModel> contentViewModels;
 
-        public MainWindowViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository, 
-            IskPerHourViewModel iskPerHourViewModel)
+        public MainWindowViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository,
+            NavigatorViewModel navigatorViewModel)
         {
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
@@ -36,15 +48,8 @@ namespace SharpCrokite.Core.ViewModels
             UpdatePricesCommand = new RelayCommand(OnUpdatePrices, CanUpdatePrices);
             DeletePricesCommand = new RelayCommand(OnDeletePrices, CanDeletePrices);
 
-            IskPerHourViewModel = iskPerHourViewModel;
-        }
-
-        [UsedImplicitly]
-        public RelayCommand UpdatePricesCommand { get; private set; }
-
-        private static bool CanUpdatePrices()
-        {
-            return true;
+            //IskPerHourViewModel = iskPerHourViewModel;
+            NavigatorViewModel = navigatorViewModel;
         }
 
         private void OnUpdatePrices()
@@ -52,15 +57,7 @@ namespace SharpCrokite.Core.ViewModels
             PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
             priceUpdateController.UpdatePrices();
 
-            IskPerHourViewModel.UpdatePrices();
-        }
-
-        [UsedImplicitly]
-        public RelayCommand DeletePricesCommand { get; private set; }
-
-        private static bool CanDeletePrices()
-        {
-            return true;
+            //IskPerHourViewModel.UpdatePrices();
         }
 
         private void OnDeletePrices()
@@ -68,11 +65,8 @@ namespace SharpCrokite.Core.ViewModels
             PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
             priceUpdateController.DeleteAllPrices();
 
-            IskPerHourViewModel.UpdatePrices();
+            // IskPerHourViewModel.UpdatePrices();
         }
-
-        [UsedImplicitly]
-        public RelayCommand UpdateStaticDataCommand { get; private set; }
 
         private void OnUpdateStaticData()
         {
@@ -83,7 +77,7 @@ namespace SharpCrokite.Core.ViewModels
             {
                 staticDataUpdateController.UpdateData();
 
-                IskPerHourViewModel.ReloadStaticData();
+                //IskPerHourViewModel.ReloadStaticData();
             }
             catch (HttpRequestException ex)
             {
@@ -96,26 +90,32 @@ namespace SharpCrokite.Core.ViewModels
                     "Http Request Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        private static bool CanUpdateStaticData()
-        {
-            return true;
-        }
-
-        [UsedImplicitly]
-        public RelayCommand DeleteStaticDataCommand { get; private set; }
-
         private void OnDeleteStaticData()
         {
             var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(),
                 harvestableRepository, materialRepository);
 
             staticDataUpdateController.DeleteAllStaticData();
-            
-            IskPerHourViewModel.ReloadStaticData();
+
+            //IskPerHourViewModel.ReloadStaticData();
         }
 
-        private bool CanDeleteStaticData()
+        private static bool CanUpdatePrices()
+        {
+            return true;
+        }
+
+        private static bool CanDeletePrices()
+        {
+            return true;
+        }
+
+        private static bool CanUpdateStaticData()
+        {
+            return true;
+        }
+
+        private static bool CanDeleteStaticData()
         {
             return true;
         }

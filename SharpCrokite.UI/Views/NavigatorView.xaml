@@ -5,14 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="200">
-    <Grid>
-        <ListBox>
-            <ListBoxItem Height="40" BorderThickness="1">
-                Hello, this is a menu item
-            </ListBoxItem>
-            <ListBoxItem Height="40" BorderThickness="1">
-                And this is another
-            </ListBoxItem>
-        </ListBox>
+    <Grid Margin="0,10,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <RadioButton Grid.Row="0" Command="{Binding NavigationCommand}" CommandParameter="Test">This is a menu item</RadioButton>
+        <RadioButton Grid.Row="1" Command="{Binding NavigationCommand}" CommandParameter="Test2">This too!</RadioButton>
+        <RadioButton Grid.Row="2">Oh, look. Another.</RadioButton>
+        <RadioButton Grid.Row="3">Yaaaaawn.</RadioButton>
+        <StackPanel Grid.Row="4"></StackPanel>
     </Grid>
 </UserControl>

@@ -31,16 +31,14 @@ namespace SharpCrokite.UI
             services.AddSingleton<MainWindow>();
             services.AddSingleton<MainWindowViewModel>();
 
+            services.AddSingleton<NavigatorViewModel>();
+
             services.AddSingleton<IskPerHourViewModel>();
-
-            services.AddSingleton<AsteroidIskPerHourGridView>();
             services.AddSingleton<AsteroidIskPerHourGridViewModel>();
-
-            services.AddSingleton<MoonOreIskPerHourGridView>();
             services.AddSingleton<MoonOreIskPerHourGridViewModel>();
-
-            services.AddSingleton<IceIskPerHourGridView>();
             services.AddSingleton<IceIskPerHourGridViewModel>();
+
+            services.AddSingleton<SurveyCalculatorViewModel>();
 
             return services.BuildServiceProvider();
         }

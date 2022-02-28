@@ -1,8 +1,17 @@
 ﻿<Application x:Class="SharpCrokite.UI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewmodels="clr-namespace:SharpCrokite.Core.ViewModels;assembly=SharpCrokite.Core"
+             xmlns:views="clr-namespace:SharpCrokite.UI.Views"
              Startup="Startup_App">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <DataTemplate DataType="{x:Type viewmodels:IskPerHourViewModel}">
+                <views:IskPerHourView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:SurveyCalculatorViewModel}">
+                <views:SurveyCalculatorView/>
+            </DataTemplate>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
