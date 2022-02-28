@@ -35,20 +35,20 @@ namespace SharpCrokite.Core.ViewModels
         [UsedImplicitly]
         public RelayCommand DeleteStaticDataCommand { get; private set; }
 
-        // private IEnumerable<IContentViewModel> contentViewModels;
+        private readonly IskPerHourViewModel iskPerHourViewModel;
 
         public MainWindowViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository,
-            NavigatorViewModel navigatorViewModel)
+            NavigatorViewModel navigatorViewModel, IskPerHourViewModel iskPerHourViewModel)
         {
-            this.harvestableRepository = harvestableRepository;
-            this.materialRepository = materialRepository;
-
             UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
             DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
             UpdatePricesCommand = new RelayCommand(OnUpdatePrices, CanUpdatePrices);
             DeletePricesCommand = new RelayCommand(OnDeletePrices, CanDeletePrices);
 
-            //IskPerHourViewModel = iskPerHourViewModel;
+            this.harvestableRepository = harvestableRepository;
+            this.materialRepository = materialRepository;
+
+            this.iskPerHourViewModel = iskPerHourViewModel;
             NavigatorViewModel = navigatorViewModel;
         }
 
@@ -57,7 +57,7 @@ namespace SharpCrokite.Core.ViewModels
             PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
             priceUpdateController.UpdatePrices();
 
-            //IskPerHourViewModel.UpdatePrices();
+            iskPerHourViewModel.UpdatePrices();
         }
 
         private void OnDeletePrices()
@@ -65,7 +65,7 @@ namespace SharpCrokite.Core.ViewModels
             PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
             priceUpdateController.DeleteAllPrices();
 
-            // IskPerHourViewModel.UpdatePrices();
+            iskPerHourViewModel.UpdatePrices();
         }
 
         private void OnUpdateStaticData()
@@ -77,7 +77,7 @@ namespace SharpCrokite.Core.ViewModels
             {
                 staticDataUpdateController.UpdateData();
 
-                //IskPerHourViewModel.ReloadStaticData();
+                iskPerHourViewModel.ReloadStaticData();
             }
             catch (HttpRequestException ex)
             {
@@ -97,7 +97,7 @@ namespace SharpCrokite.Core.ViewModels
 
             staticDataUpdateController.DeleteAllStaticData();
 
-            //IskPerHourViewModel.ReloadStaticData();
+            iskPerHourViewModel.ReloadStaticData();
         }
 
         private static bool CanUpdatePrices()

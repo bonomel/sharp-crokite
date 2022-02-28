@@ -7,7 +7,7 @@ namespace SharpCrokite.Core.Commands
 {
     public class NavigationCommand : ICommand
     {
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged = delegate { };
 
         private readonly NavigatorViewModel navigatorViewModel;
 
