@@ -87,7 +87,7 @@ namespace SharpCrokite.Core.ViewModels
             catch (ArgumentNullException ex)
             {
                 _ = MessageBox.Show($"Something went wrong while updating the static data!\nMessage:\n{ex.Message}",
-                    "Http Request Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                    "Argument Null Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         private void OnDeleteStaticData()
