@@ -10,14 +10,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <RadioButton Grid.Row="0" Command="{Binding NavigationCommand}" CommandParameter="{x:Type viewModels:IskPerHourViewModel}">This is a menu item</RadioButton>
-        <RadioButton Grid.Row="1" Command="{Binding NavigationCommand}" CommandParameter="{x:Type viewModels:SurveyCalculatorViewModel}">This too!</RadioButton>
-        <RadioButton Grid.Row="2">Oh, look. Another.</RadioButton>
-        <RadioButton Grid.Row="3">Yaaaaawn.</RadioButton>
-        <StackPanel Grid.Row="4"></StackPanel>
+        <RadioButton Grid.Row="0" Command="{Binding NavigationCommand}" CommandParameter="{x:Type viewModels:IskPerHourViewModel}" IsChecked="True">Mining ISK per Hour</RadioButton>
+        <RadioButton Grid.Row="1" Command="{Binding NavigationCommand}" CommandParameter="{x:Type viewModels:SurveyCalculatorViewModel}">Survey Calculator</RadioButton>
     </Grid>
 </UserControl>
