@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Net.Http;
 using System.Windows;
 
@@ -12,33 +15,39 @@ using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.ViewModels
 {
-    public class MainWindowViewModel
+    public class MainWindowViewModel : INotifyPropertyChanged
     {
-        [UsedImplicitly]
-        public Guid Id { get; } = Guid.NewGuid();
+        [UsedImplicitly] public Guid Id { get; } = Guid.NewGuid();
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
-
-        [UsedImplicitly]
-        public NavigatorViewModel NavigatorViewModel { get; set; }
-
-        [UsedImplicitly]
-        public RelayCommand DeletePricesCommand { get; private set; }
-
-        [UsedImplicitly]
-        public RelayCommand UpdatePricesCommand { get; private set; }
-
-        [UsedImplicitly]
-        public RelayCommand UpdateStaticDataCommand { get; private set; }
-
-        [UsedImplicitly]
-        public RelayCommand DeleteStaticDataCommand { get; private set; }
-
         private readonly IskPerHourViewModel iskPerHourViewModel;
 
+        private IContentViewModel currentContentViewModel;
+        private readonly List<IContentViewModel> contentViewModels = new();
+
+        [UsedImplicitly] public NavigatorViewModel NavigatorViewModel { get; set; }
+
+        [UsedImplicitly] public RelayCommand DeletePricesCommand { get; private set; }
+        [UsedImplicitly] public RelayCommand UpdatePricesCommand { get; private set; }
+        [UsedImplicitly] public RelayCommand UpdateStaticDataCommand { get; private set; }
+        [UsedImplicitly] public RelayCommand DeleteStaticDataCommand { get; private set; }
+
+        [UsedImplicitly]
+        public IContentViewModel CurrentContentViewModel
+        {
+            get => currentContentViewModel;
+            set
+            {
+                currentContentViewModel = value;
+                NotifyPropertyChanged(nameof(CurrentContentViewModel));
+            }
+        }
+
         public MainWindowViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository,
-            NavigatorViewModel navigatorViewModel, IskPerHourViewModel iskPerHourViewModel)
+            NavigatorViewModel navigatorViewModel, IskPerHourViewModel iskPerHourViewModel, SurveyCalculatorViewModel surveyCalculatorViewModel)
         {
             UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
             DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
@@ -49,7 +58,18 @@ namespace SharpCrokite.Core.ViewModels
             this.materialRepository = materialRepository;
 
             this.iskPerHourViewModel = iskPerHourViewModel;
+            currentContentViewModel = iskPerHourViewModel;
+
+            contentViewModels.Add(iskPerHourViewModel);
+            contentViewModels.Add(surveyCalculatorViewModel);
+
             NavigatorViewModel = navigatorViewModel;
+            NavigatorViewModel.CurrentViewModelChanged += OnCurrentViewModelChanged;
+        }
+
+        private void OnCurrentViewModelChanged(Type parameter)
+        {
+            CurrentContentViewModel = contentViewModels.Single(viewmodel => viewmodel.GetType() == parameter);
         }
 
         private void OnUpdatePrices()
@@ -118,6 +138,14 @@ namespace SharpCrokite.Core.ViewModels
         private static bool CanDeleteStaticData()
         {
             return true;
+        }
+
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (!string.IsNullOrWhiteSpace(propertyName))
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

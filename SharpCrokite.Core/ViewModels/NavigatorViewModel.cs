@@ -1,46 +1,28 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows.Input;
+﻿using System;
 using JetBrains.Annotations;
 using SharpCrokite.Core.Commands;
 
 namespace SharpCrokite.Core.ViewModels
 {
-    public class NavigatorViewModel : INotifyPropertyChanged
+    public class NavigatorViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        [UsedImplicitly] public NavigationCommand NavigationCommand { get; private set; }
 
-        private IContentViewModel currentContentViewModel;
+        public event Action<Type> CurrentViewModelChanged;
 
-        public ICommand NavigationCommand => new NavigationCommand(this);
-
-        [UsedImplicitly]
-        public IContentViewModel CurrentContentViewModel
+        public NavigatorViewModel()
         {
-            get => currentContentViewModel;
-            set
-            {
-                currentContentViewModel = value;
-                NotifyPropertyChanged(nameof(CurrentContentViewModel));
-            }
+            NavigationCommand = new NavigationCommand(OnNavigation);
         }
 
-        public readonly List<IContentViewModel> ContentViewModels = new();
-        
-        public NavigatorViewModel(IskPerHourViewModel iskPerHourViewModel, SurveyCalculatorViewModel surveyCalculatorViewModel)
+        private void OnNavigation(object navigationTarget)
         {
-            currentContentViewModel = iskPerHourViewModel;
-
-            ContentViewModels.Add(iskPerHourViewModel);
-            ContentViewModels.Add(surveyCalculatorViewModel);
+            OnCurrentViewModelChanged(navigationTarget);
         }
 
-        private void NotifyPropertyChanged(string propertyName)
+        private void OnCurrentViewModelChanged(object navigationTarget)
         {
-            if (!string.IsNullOrWhiteSpace(propertyName))
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            CurrentViewModelChanged?.Invoke((Type)navigationTarget);
         }
     }
 }

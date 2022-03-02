@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Input;
-using SharpCrokite.Core.ViewModels;
 
 namespace SharpCrokite.Core.Commands
 {
@@ -9,11 +7,11 @@ namespace SharpCrokite.Core.Commands
     {
         public event EventHandler CanExecuteChanged = delegate { };
 
-        private readonly NavigatorViewModel navigatorViewModel;
+        private readonly Action<object> targetExecuteMethod;
 
-        public NavigationCommand(NavigatorViewModel navigatorViewModel)
+        public NavigationCommand(Action<object> executeMethod)
         {
-            this.navigatorViewModel = navigatorViewModel;
+            targetExecuteMethod = executeMethod;
         }
 
         public bool CanExecute(object parameter)
@@ -23,17 +21,7 @@ namespace SharpCrokite.Core.Commands
 
         public void Execute(object parameter)
         {
-            if (parameter is string)
-            {
-                if(parameter.Equals("Test"))
-                {
-                    navigatorViewModel.CurrentContentViewModel = navigatorViewModel.ContentViewModels.First();
-                }
-                if (parameter.Equals("Test2"))
-                {
-                    navigatorViewModel.CurrentContentViewModel = navigatorViewModel.ContentViewModels.Last();
-                }
-            }
+            targetExecuteMethod?.Invoke(parameter);
         }
     }
 }
