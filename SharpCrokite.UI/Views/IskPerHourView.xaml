@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TabControl>
+        <TabControl SelectedIndex="{Binding Path=SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <TabItem Header="Asteroid Mining ISK/h">
                 <local:AsteroidIskPerHourGridView DataContext="{Binding AsteroidIskPerHourGridViewModel}"/>
             </TabItem>

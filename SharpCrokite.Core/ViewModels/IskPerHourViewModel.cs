@@ -1,26 +1,63 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using System.ComponentModel;
+using System.Windows.Controls;
+using JetBrains.Annotations;
 using SharpCrokite.Core.Models;
 
 namespace SharpCrokite.Core.ViewModels
 {
     [UsedImplicitly]
-    public class IskPerHourViewModel : IContentViewModel
+    public class IskPerHourViewModel : IContentViewModel, INotifyPropertyChanged
     {
-        [UsedImplicitly]
-        public IskPerHourGridViewModel<AsteroidIskPerHour> AsteroidIskPerHourGridViewModel { get; }
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+
+        [UsedImplicitly] public IskPerHourGridViewModel<AsteroidIskPerHour> AsteroidIskPerHourGridViewModel { get; }
+
+        [UsedImplicitly] public IskPerHourGridViewModel<MoonOreIskPerHour> MoonOreIskPerHourGridViewModel { get; }
+
+        [UsedImplicitly] public IskPerHourGridViewModel<IceIskPerHour> IceIskPerHourGridViewModel { get; }
+
+        private int selectedIndex;
 
         [UsedImplicitly]
-        public IskPerHourGridViewModel<MoonOreIskPerHour> MoonOreIskPerHourGridViewModel { get; }
-
-        [UsedImplicitly]
-        public IskPerHourGridViewModel<IceIskPerHour> IceIskPerHourGridViewModel { get; }
+        public int SelectedIndex
+        {
+            get => selectedIndex;
+            set
+            {
+                if (selectedIndex.Equals(value) is false)
+                {
+                    selectedIndex = value;
+                    NotifyPropertyChanged(nameof(selectedIndex));
+                }
+            }
+        }
 
         public IskPerHourViewModel(AsteroidIskPerHourGridViewModel asteroidIskPerHourGridViewModel,
-            MoonOreIskPerHourGridViewModel moonOreIskPerHourGridViewModel, IceIskPerHourGridViewModel iceIskPerHourGridViewModel)
+            MoonOreIskPerHourGridViewModel moonOreIskPerHourGridViewModel, IceIskPerHourGridViewModel iceIskPerHourGridViewModel,
+            NavigatorViewModel navigatorViewModel)
         {
             AsteroidIskPerHourGridViewModel = asteroidIskPerHourGridViewModel;
             MoonOreIskPerHourGridViewModel = moonOreIskPerHourGridViewModel;
             IceIskPerHourGridViewModel = iceIskPerHourGridViewModel;
+
+            navigatorViewModel.CurrentViewModelChanged += OnCurrentViewModelChanged;
+        }
+
+        private void OnCurrentViewModelChanged(Type type)
+        {
+            if (type == typeof(IskPerHourViewModel))
+            {
+                SelectedIndex = selectedIndex;
+            }
+        }
+        
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (!string.IsNullOrWhiteSpace(propertyName))
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
         public void UpdatePrices()
@@ -36,9 +73,5 @@ namespace SharpCrokite.Core.ViewModels
             MoonOreIskPerHourGridViewModel.ReloadStaticData();
             IceIskPerHourGridViewModel.ReloadStaticData();
         }
-    }
-
-    public interface IContentViewModel
-    {
     }
 }
