@@ -89,9 +89,15 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
         {
             foreach (var harvestable in harvestables)
             {
-                if (harvestable.Name.Contains("Compressed"))
+                if (harvestable.Name.StartsWith("Compressed"))
                 {
-                    string lookupString = harvestable.Name.Replace("Compressed ", "");
+                    string lookupString = harvestable.Name.Replace("Compressed ", "").Trim();
+
+                    harvestable.IsCompressedVariantOfType = harvestables.Single(h => h.Name == lookupString).HarvestableId;
+                }
+                else if (harvestable.Name.StartsWith("Batch Compressed"))
+                {
+                    string lookupString = harvestable.Name.Replace("Batch Compressed ", "").Trim();
 
                     harvestable.IsCompressedVariantOfType = harvestables.Single(h => h.Name == lookupString).HarvestableId;
                 }

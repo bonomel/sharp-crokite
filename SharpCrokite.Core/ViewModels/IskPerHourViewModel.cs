@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Windows.Controls;
 using JetBrains.Annotations;
 using SharpCrokite.Core.Models;
 
@@ -44,6 +43,7 @@ namespace SharpCrokite.Core.ViewModels
             navigatorViewModel.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }
 
+        // This is necessary because switching viewmodels resets the selected tab, which we don't want
         private void OnCurrentViewModelChanged(Type type)
         {
             if (type == typeof(IskPerHourViewModel))
