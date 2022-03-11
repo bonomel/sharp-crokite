@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="SharpCrokite.UI.Views.NavigatorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:SharpCrokite.Core.ViewModels;assembly=SharpCrokite.Core"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="200">
+    <Grid Margin="0,10,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <RadioButton Grid.Row="0" Command="{Binding NavigationCommand}" CommandParameter="{x:Type viewModels:IskPerHourViewModel}" IsChecked="True">Mining ISK per Hour</RadioButton>
+        <RadioButton Grid.Row="1" Command="{Binding NavigationCommand}" CommandParameter="{x:Type viewModels:SurveyCalculatorViewModel}">Survey Calculator</RadioButton>
+    </Grid>
+</UserControl>

@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Net.Http;
 using System.Windows;
 
 using JetBrains.Annotations;
 
 using SharpCrokite.Core.Commands;
-using SharpCrokite.Core.Models;
 using SharpCrokite.Core.PriceUpdater;
 using SharpCrokite.Core.StaticDataUpdater;
 using SharpCrokite.Core.StaticDataUpdater.Esi;
@@ -13,46 +15,61 @@ using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.ViewModels
 {
-    public class MainWindowViewModel
+    public class MainWindowViewModel : INotifyPropertyChanged
     {
-        [UsedImplicitly]
-        public Guid Id { get; } = Guid.NewGuid();
+        [UsedImplicitly] public Guid Id { get; } = Guid.NewGuid();
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
+        private readonly IskPerHourViewModel iskPerHourViewModel;
+
+        private IContentViewModel currentContentViewModel;
+        private readonly List<IContentViewModel> contentViewModels = new();
+
+        [UsedImplicitly] public NavigatorViewModel NavigatorViewModel { get; set; }
+
+        [UsedImplicitly] public RelayCommand DeletePricesCommand { get; private set; }
+        [UsedImplicitly] public RelayCommand UpdatePricesCommand { get; private set; }
+        [UsedImplicitly] public RelayCommand UpdateStaticDataCommand { get; private set; }
+        [UsedImplicitly] public RelayCommand DeleteStaticDataCommand { get; private set; }
 
         [UsedImplicitly]
-        public IskPerHourViewModel<AsteroidIskPerHour> AsteroidIskPerHourViewModel { get; }
-
-        [UsedImplicitly]
-        public IskPerHourViewModel<MoonOreIskPerHour> MoonOreIskPerHourViewModel { get; }
-
-        [UsedImplicitly]
-        public IskPerHourViewModel<IceIskPerHour> IceIskPerHourViewModel { get; }
-
-        public MainWindowViewModel(AsteroidIskPerHourViewModel asteroidIskPerHourViewModel, 
-            MoonOreIskPerHourViewModel moonOreIskPerHourViewModel, IceIskPerHourViewModel iceIskPerHourViewModel,
-            HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
+        public IContentViewModel CurrentContentViewModel
         {
-            this.harvestableRepository = harvestableRepository;
-            this.materialRepository = materialRepository;
+            get => currentContentViewModel;
+            set
+            {
+                currentContentViewModel = value;
+                NotifyPropertyChanged(nameof(CurrentContentViewModel));
+            }
+        }
 
-            AsteroidIskPerHourViewModel = asteroidIskPerHourViewModel;
-            MoonOreIskPerHourViewModel = moonOreIskPerHourViewModel;
-            IceIskPerHourViewModel = iceIskPerHourViewModel;
-
+        public MainWindowViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository,
+            NavigatorViewModel navigatorViewModel, IskPerHourViewModel iskPerHourViewModel, SurveyCalculatorViewModel surveyCalculatorViewModel)
+        {
             UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
             DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
             UpdatePricesCommand = new RelayCommand(OnUpdatePrices, CanUpdatePrices);
             DeletePricesCommand = new RelayCommand(OnDeletePrices, CanDeletePrices);
+
+            this.harvestableRepository = harvestableRepository;
+            this.materialRepository = materialRepository;
+
+            this.iskPerHourViewModel = iskPerHourViewModel;
+            currentContentViewModel = iskPerHourViewModel;
+
+            contentViewModels.Add(iskPerHourViewModel);
+            contentViewModels.Add(surveyCalculatorViewModel);
+
+            NavigatorViewModel = navigatorViewModel;
+            NavigatorViewModel.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }
 
-        [UsedImplicitly]
-        public RelayCommand UpdatePricesCommand { get; private set; }
-
-        private static bool CanUpdatePrices()
+        private void OnCurrentViewModelChanged(Type parameter)
         {
-            return true;
+            CurrentContentViewModel = contentViewModels.Single(viewmodel => viewmodel.GetType() == parameter);
         }
 
         private void OnUpdatePrices()
@@ -60,17 +77,7 @@ namespace SharpCrokite.Core.ViewModels
             PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
             priceUpdateController.UpdatePrices();
 
-            AsteroidIskPerHourViewModel.UpdatePrices();
-            MoonOreIskPerHourViewModel.UpdatePrices();
-            IceIskPerHourViewModel.UpdatePrices();
-        }
-
-        [UsedImplicitly]
-        public RelayCommand DeletePricesCommand { get; private set; }
-
-        private static bool CanDeletePrices()
-        {
-            return true;
+            iskPerHourViewModel.UpdatePrices();
         }
 
         private void OnDeletePrices()
@@ -78,13 +85,8 @@ namespace SharpCrokite.Core.ViewModels
             PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
             priceUpdateController.DeleteAllPrices();
 
-            AsteroidIskPerHourViewModel.UpdatePrices();
-            MoonOreIskPerHourViewModel.UpdatePrices();
-            IceIskPerHourViewModel.UpdatePrices();
+            iskPerHourViewModel.UpdatePrices();
         }
-
-        [UsedImplicitly]
-        public RelayCommand UpdateStaticDataCommand { get; private set; }
 
         private void OnUpdateStaticData()
         {
@@ -94,9 +96,8 @@ namespace SharpCrokite.Core.ViewModels
             try
             {
                 staticDataUpdateController.UpdateData();
-                AsteroidIskPerHourViewModel.ReloadStaticData();
-                MoonOreIskPerHourViewModel.ReloadStaticData();
-                IceIskPerHourViewModel.ReloadStaticData();
+
+                iskPerHourViewModel.ReloadStaticData();
             }
             catch (HttpRequestException ex)
             {
@@ -106,8 +107,27 @@ namespace SharpCrokite.Core.ViewModels
             catch (ArgumentNullException ex)
             {
                 _ = MessageBox.Show($"Something went wrong while updating the static data!\nMessage:\n{ex.Message}",
-                    "Http Request Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                    "Argument Null Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+        private void OnDeleteStaticData()
+        {
+            var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(),
+                harvestableRepository, materialRepository);
+
+            staticDataUpdateController.DeleteAllStaticData();
+
+            iskPerHourViewModel.ReloadStaticData();
+        }
+
+        private static bool CanUpdatePrices()
+        {
+            return true;
+        }
+
+        private static bool CanDeletePrices()
+        {
+            return true;
         }
 
         private static bool CanUpdateStaticData()
@@ -115,23 +135,17 @@ namespace SharpCrokite.Core.ViewModels
             return true;
         }
 
-        [UsedImplicitly]
-        public RelayCommand DeleteStaticDataCommand { get; private set; }
-
-        private void OnDeleteStaticData()
-        {
-            var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(),
-                harvestableRepository, materialRepository);
-
-            staticDataUpdateController.DeleteAllStaticData();
-            AsteroidIskPerHourViewModel.ReloadStaticData();
-            MoonOreIskPerHourViewModel.ReloadStaticData();
-            IceIskPerHourViewModel.ReloadStaticData();
-        }
-
-        private bool CanDeleteStaticData()
+        private static bool CanDeleteStaticData()
         {
             return true;
+        }
+
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (!string.IsNullOrWhiteSpace(propertyName))
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

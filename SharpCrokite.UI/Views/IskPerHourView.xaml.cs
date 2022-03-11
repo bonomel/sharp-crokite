@@ -1,8 +1,8 @@
 ﻿namespace SharpCrokite.UI.Views
 {
-    public partial class AsteroidIskPerHourView
+    public partial class IskPerHourView
     {
-        public AsteroidIskPerHourView()
+        public IskPerHourView()
         {
             InitializeComponent();
         }

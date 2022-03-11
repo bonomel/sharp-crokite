@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SharpCrokite.UI.Views.IceIskPerHourView"
+﻿<UserControl x:Class="SharpCrokite.UI.Views.MoonOreIskPerHourGridView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -72,11 +72,19 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding OxygenIsotopes}" Width="120">
+                <DataGridTextColumn Header="Volume" Binding="{Binding Volume}" Width="60">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Margin" Value="5,5,5,5" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Rarity4}" Width="140">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/oxygen-isotopes-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
-                            <TextBlock Text="Oxygen" VerticalAlignment="Center"/>
+                            <TextBlock Text="Rarity 4 Material" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
@@ -87,11 +95,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding HeliumIsotopes}" Width="120">
+                <DataGridTextColumn Binding="{Binding Rarity8}" Width="140">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/helium-isotopes-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
-                            <TextBlock Text="Helium" VerticalAlignment="Center"/>
+                            <TextBlock Text="Rarity 8 Material" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
@@ -102,11 +109,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding HydrogenIsotopes}" Width="120">
+                <DataGridTextColumn Binding="{Binding Rarity16}" Width="140">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/hydrogen-isotopes-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
-                            <TextBlock Text="Hydrogen" VerticalAlignment="Center"/>
+                            <TextBlock Text="Rarity 16 Material" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
@@ -117,11 +123,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding NitrogenIsotopes}" Width="120">
+                <DataGridTextColumn Binding="{Binding Rarity32}" Width="140">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/nitrogen-isotopes-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
-                            <TextBlock Text="Nitrogen" VerticalAlignment="Center"/>
+                            <TextBlock Text="Rarity 32 Material" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
@@ -132,11 +137,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding HeavyWater}" Width="120">
+                <DataGridTextColumn Binding="{Binding Rarity64}" Width="140">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/heavy-water-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
-                            <TextBlock Text="Heavy Water" VerticalAlignment="Center"/>
+                            <TextBlock Text="Rarity 64 Material" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
@@ -147,11 +151,11 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding LiquidOzone}" Width="120">
+                <DataGridTextColumn Binding="{Binding Pyerite}" Width="100">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/liquid-ozone-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
-                            <TextBlock Text="Liquid Ozone" VerticalAlignment="Center"/>
+                            <Image Source="/Images/pyerite-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Pyerite" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
@@ -162,11 +166,11 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding StrontiumClathrates}" Width="120">
+                <DataGridTextColumn Binding="{Binding Mexallon}" Width="100">
                     <DataGridTextColumn.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Images/strontium-clathrates-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
-                            <TextBlock Text="Strontium" VerticalAlignment="Center"/>
+                            <Image Source="/Images/mexallon-icon.png" Width="24" Height="24" Margin="0,0,5,0" />
+                            <TextBlock Text="Mexallon" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
@@ -178,15 +182,6 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Materials ISK/hour" Binding="{Binding MaterialIskPerHour}" Width="140">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                            <Setter Property="HorizontalAlignment" Value="Right" />
-                            <Setter Property="Margin" Value="5,5,5,5" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Compressed ISK/hour" Binding="{Binding CompressedIskPerHour}" Width="140">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />

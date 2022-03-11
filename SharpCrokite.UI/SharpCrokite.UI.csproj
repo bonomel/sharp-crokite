@@ -58,11 +58,11 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\IceIskPerHourView.xaml">
+    <Page Update="Views\IceIskPerHourGridView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\MoonOreIskPerHourView.xaml">
+    <Page Update="Views\MoonOreIskPerHourGridView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>

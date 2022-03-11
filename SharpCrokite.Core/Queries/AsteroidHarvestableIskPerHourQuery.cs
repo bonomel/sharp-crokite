@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using SharpCrokite.Core.Models;
 using SharpCrokite.DataAccess.Models;
@@ -62,7 +63,7 @@ namespace SharpCrokite.Core.Queries
 
         private int FindCompressedVariantTypeId(HarvestableIskPerHour asteroidIskPerHour)
         {
-            Harvestable compressedVariant = HarvestableRepository.Find(h => h.IsCompressedVariantOfType == asteroidIskPerHour.HarvestableId).First();
+            Harvestable compressedVariant = HarvestableRepository.Find(h => h.IsCompressedVariantOfType == asteroidIskPerHour.HarvestableId && !h.Name.StartsWith("Batch", true, CultureInfo.InvariantCulture)).First();
 
             return compressedVariant.HarvestableId;
         }
