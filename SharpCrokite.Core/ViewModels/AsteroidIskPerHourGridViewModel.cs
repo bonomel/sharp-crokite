@@ -75,16 +75,14 @@ namespace SharpCrokite.Core.ViewModels
 
         private void CalculateCompressedIskPerHour(AsteroidIskPerHour asteroidIskPerHour)
         {
-            decimal yieldPerSecondDividedByVolume = YieldPerSecond / asteroidIskPerHour.Volume.Amount;
-            decimal batchSizeCompensatedVolume = yieldPerSecondDividedByVolume / BatchSize;
+            decimal unitsPerSecond = YieldPerSecond / asteroidIskPerHour.Volume.Amount;
 
             decimal unitMarketPrice = asteroidIskPerHour.CompressedPrices != null
                                       && asteroidIskPerHour.CompressedPrices.Any()
                                       ? asteroidIskPerHour.CompressedPrices[SystemToUseForPrices].Amount
                                       : 0;
 
-            decimal normalizedCompressedBatchValue = unitMarketPrice * batchSizeCompensatedVolume;
-            decimal compressedValuePerHour = normalizedCompressedBatchValue * 60 * 60;
+            decimal compressedValuePerHour = unitsPerSecond * unitMarketPrice * 3600;
 
             asteroidIskPerHour.CompressedIskPerHour = new Isk(compressedValuePerHour);
         }
