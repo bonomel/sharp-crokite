@@ -1,6 +1,6 @@
 ﻿namespace SharpCrokite.Core.PriceUpdater
 {
-    internal class PriceDto
+    public class PriceDto
     {
         public int TypeId { get; init; }
         public int SystemId { get; init; }

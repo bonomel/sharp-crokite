@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Windows;
 
-namespace SharpCrokite.Core.PriceUpdater
+namespace SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval
 {
     public class EveMarketerPriceRetrievalService : IPriceRetrievalService
     {
@@ -18,7 +18,7 @@ namespace SharpCrokite.Core.PriceUpdater
             { 30000142, "Jita" }
         };
 
-        internal IList<PriceDto> Retrieve(IList<int> allTypeIds)
+        public IEnumerable<PriceDto> Retrieve(IList<int> allTypeIds)
         {
             IList<IList<int>> batches = CreateBatches(allTypeIds);
 
@@ -26,12 +26,12 @@ namespace SharpCrokite.Core.PriceUpdater
 
             IEnumerable<EveMarketerPricesJson> priceJson = RetrievePricesAsJson(batchedUrls);
 
-            IList<PriceDto> priceDtos = MapJsonToPriceDto(priceJson);
+            IEnumerable<PriceDto> priceDtos = MapJsonToPriceDto(priceJson);
 
             return priceDtos;
         }
 
-        private static IList<PriceDto> MapJsonToPriceDto(IEnumerable<EveMarketerPricesJson> priceJson)
+        private static IEnumerable<PriceDto> MapJsonToPriceDto(IEnumerable<EveMarketerPricesJson> priceJson)
         {
             List<PriceDto> priceDtos = new();
 
@@ -118,9 +118,5 @@ namespace SharpCrokite.Core.PriceUpdater
 
             return stringBuilder.ToString();
         }
-    }
-
-    public interface IPriceRetrievalService
-    {
     }
 }

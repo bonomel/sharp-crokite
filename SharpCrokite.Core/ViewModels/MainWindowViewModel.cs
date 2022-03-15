@@ -9,6 +9,7 @@ using JetBrains.Annotations;
 
 using SharpCrokite.Core.Commands;
 using SharpCrokite.Core.PriceUpdater;
+using SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval;
 using SharpCrokite.Core.StaticDataUpdater;
 using SharpCrokite.Core.StaticDataUpdater.Esi;
 using SharpCrokite.Infrastructure.Repositories;

@@ -11,9 +11,9 @@ namespace SharpCrokite.Core.PriceUpdater
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
 
-        private readonly EveMarketerPriceRetrievalService priceRetrievalService;
+        private readonly IPriceRetrievalService priceRetrievalService;
 
-        public PriceUpdateController(EveMarketerPriceRetrievalService priceRetrievalService,
+        public PriceUpdateController(IPriceRetrievalService priceRetrievalService,
             HarvestableRepository harvestableRepository,
             MaterialRepository materialRepository)
         {
@@ -29,7 +29,7 @@ namespace SharpCrokite.Core.PriceUpdater
 
             IList<int> allTypeIds = listOfHarvestableIds.Concat(listOfMaterialIds).ToList();
 
-            IList<PriceDto> prices = priceRetrievalService.Retrieve(allTypeIds);
+            IEnumerable<PriceDto> prices = priceRetrievalService.Retrieve(allTypeIds);
 
             PriceUpdater priceUpdater = new(harvestableRepository, materialRepository);
 
