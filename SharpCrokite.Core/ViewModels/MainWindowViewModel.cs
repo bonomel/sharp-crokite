@@ -10,6 +10,7 @@ using JetBrains.Annotations;
 using SharpCrokite.Core.Commands;
 using SharpCrokite.Core.PriceUpdater;
 using SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval;
+using SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval;
 using SharpCrokite.Core.StaticDataUpdater;
 using SharpCrokite.Core.StaticDataUpdater.Esi;
 using SharpCrokite.Infrastructure.Repositories;
@@ -75,7 +76,7 @@ namespace SharpCrokite.Core.ViewModels
 
         private void OnUpdatePrices()
         {
-            PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetrievalService(), harvestableRepository, materialRepository);
+            PriceUpdateController priceUpdateController = new(new FuzzworkPriceRetrievalService(), harvestableRepository, materialRepository);
             priceUpdateController.UpdatePrices();
 
             iskPerHourViewModel.UpdatePrices();
@@ -83,7 +84,7 @@ namespace SharpCrokite.Core.ViewModels
 
         private void OnDeletePrices()
         {
-            PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetrievalService(), harvestableRepository, materialRepository);
+            PriceUpdateController priceUpdateController = new(new FuzzworkPriceRetrievalService(), harvestableRepository, materialRepository);
             priceUpdateController.DeleteAllPrices();
 
             iskPerHourViewModel.UpdatePrices();

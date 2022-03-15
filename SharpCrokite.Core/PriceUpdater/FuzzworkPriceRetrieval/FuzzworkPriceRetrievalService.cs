@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using System.Windows;
 
 namespace SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval
 {
@@ -12,21 +18,71 @@ namespace SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval
 
         public IEnumerable<PriceDto> Retrieve(IList<int> allTypeIds)
         {
-            IEnumerable<FuzzworkPricesJson> priceJson = RetrievePricesAsJson();
+            List<PriceDto> priceDtos = new();
 
-            IEnumerable<PriceDto> priceDtos = MapJsonToPriceDto(priceJson);
+            foreach (KeyValuePair<int, string> system in systemsToGetPricesFor)
+            {
+                Dictionary<string, FuzzworkPricesJson> pricesPerItemForSystem = RetrievePricesAsJson(BuildUrl(allTypeIds, system.Key));
+
+                priceDtos.AddRange(MapJsonToPriceDto(pricesPerItemForSystem, system.Key));
+            }
 
             return priceDtos;
         }
 
-        private IEnumerable<FuzzworkPricesJson> RetrievePricesAsJson()
+        private Dictionary<string, FuzzworkPricesJson> RetrievePricesAsJson(string url)
         {
-            throw new System.NotImplementedException();
+            Dictionary<string, FuzzworkPricesJson> priceJson = new();
+
+            using HttpClient client = new();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpResponseMessage response = client.GetAsync(url).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseString = response.Content.ReadAsStringAsync().Result;
+
+                return JsonSerializer.Deserialize<Dictionary<string, FuzzworkPricesJson>>(responseString);
+            }
+
+            _ = MessageBox.Show($"Something went wrong calling Fuzzwork API:\n{url}");
+
+            return priceJson;
         }
 
-        private IEnumerable<PriceDto> MapJsonToPriceDto(IEnumerable<FuzzworkPricesJson> priceJson)
+        private string BuildUrl(IEnumerable<int> allTypeIds, int systemKey)
         {
-            throw new System.NotImplementedException();
+            StringBuilder stringBuilder = new();
+
+            _ = stringBuilder.Append($"{BaseUrl}?region={systemKey}&types=");
+
+            foreach (int typeId in allTypeIds)
+            {
+                _ = stringBuilder.Append($"{typeId},");
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        private static IEnumerable<PriceDto> MapJsonToPriceDto(Dictionary<string, FuzzworkPricesJson> pricesAsJson, int systemKey)
+        {
+            List<PriceDto> priceDtos = new();
+
+            foreach ((string key, FuzzworkPricesJson value) in pricesAsJson)
+            {
+                priceDtos.Add(new PriceDto
+                {
+                    TypeId = Convert.ToInt32(key),
+                    SystemId = systemKey,
+                    BuyMax = Convert.ToDecimal(value.buy.max),
+                    BuyMin = Convert.ToDecimal(value.buy.min),
+                    BuyPercentile = Convert.ToDecimal(value.buy.percentile),
+                    SellMax = Convert.ToDecimal(value.sell.max),
+                    SellMin = Convert.ToDecimal(value.sell.min),
+                    SellPercentile = Convert.ToDecimal(value.sell.percentile),
+                });
+            }
+            return priceDtos;
         }
     }
 }
