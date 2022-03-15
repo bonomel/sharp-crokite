@@ -4,7 +4,6 @@ using System.Linq;
 
 using SharpCrokite.Core.Models;
 using SharpCrokite.Core.Queries;
-using SharpCrokite.Infrastructure.Common;
 using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.ViewModels
@@ -14,8 +13,6 @@ namespace SharpCrokite.Core.ViewModels
         public MoonOreIskPerHourGridViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
             : base(harvestableRepository, materialRepository)
         {
-            HarvestableIskPerHourCollection = LoadStaticData();
-
             if (harvestableIskPerHourCollection.Any())
             {
                 UpdateMaterialPrices();
@@ -37,29 +34,10 @@ namespace SharpCrokite.Core.ViewModels
 
         protected override int BatchSize => 100;
 
-        private ObservableCollection<MoonOreIskPerHour> LoadStaticData()
+        protected sealed override ObservableCollection<MoonOreIskPerHour> LoadStaticData()
         {
             MoonOreHarvestableIskPerHourQuery moonOreHarvestableIskPerHourQuery = new(HarvestableRepository);
             return new ObservableCollection<MoonOreIskPerHour>(moonOreHarvestableIskPerHourQuery.Execute());
-        }
-
-        internal override void ReloadStaticData()
-        {
-            HarvestableIskPerHourCollection = LoadStaticData();
-        }
-
-        protected override void CalculateCompressedIskPerHour(MoonOreIskPerHour iceIskPerHour)
-        {
-            decimal unitsPerSecond = YieldPerSecond / iceIskPerHour.Volume.Amount;
-
-            decimal unitMarketPrice = iceIskPerHour.CompressedPrices != null
-                                      && iceIskPerHour.CompressedPrices.Any()
-                ? iceIskPerHour.CompressedPrices[SystemToUseForPrices].Amount
-                : 0;
-
-            decimal compressedValuePerHour = unitsPerSecond * unitMarketPrice * 3600;
-
-            iceIskPerHour.CompressedIskPerHour = new Isk(compressedValuePerHour);
         }
     }
 }
