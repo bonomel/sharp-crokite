@@ -1,4 +1,7 @@
-﻿using SharpCrokite.Core.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using SharpCrokite.Core.Models;
+using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.Queries
@@ -23,6 +26,25 @@ namespace SharpCrokite.Core.Queries
                 MoonOreType.RareMoonAsteroids,
                 MoonOreType.ExceptionalMoonAsteroids
             };
+        }
+
+        internal override IEnumerable<MoonOreIskPerHour> Execute()
+        {
+            IEnumerable<MoonOreIskPerHour> harvestableIskPerHourResult = base.Execute().ToList();
+
+            foreach (MoonOreIskPerHour moonOreIskPerHour in harvestableIskPerHourResult)
+            {
+                moonOreIskPerHour.CompressedVariantTypeId = FindCompressedVariantTypeId(moonOreIskPerHour);
+            }
+
+            return harvestableIskPerHourResult;
+        }
+
+        private int FindCompressedVariantTypeId(HarvestableIskPerHour harvestableIskPerHour)
+        {
+            Harvestable compressedVariant = HarvestableRepository.Find(h => h.IsCompressedVariantOfType == harvestableIskPerHour.HarvestableId).First();
+
+            return compressedVariant.HarvestableId;
         }
     }
 }

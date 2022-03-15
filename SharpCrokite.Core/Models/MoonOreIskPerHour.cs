@@ -3,9 +3,9 @@ using JetBrains.Annotations;
 
 namespace SharpCrokite.Core.Models
 {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     [DebuggerDisplay("{Type} - {Name}")]
-    public class MoonOreIskPerHour : HarvestableIskPerHour
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    public class MoonOreIskPerHour : CompressableIskPerHour
     {
         public string Rarity4 => GetMaterialDisplayNameOrEmpty(nameof(Rarity4));
         public string Rarity8 => GetMaterialDisplayNameOrEmpty(nameof(Rarity8));
