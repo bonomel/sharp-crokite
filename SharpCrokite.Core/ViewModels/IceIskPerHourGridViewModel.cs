@@ -55,16 +55,6 @@ namespace SharpCrokite.Core.ViewModels
             UpdateCompressedIskPerHour();
         }
 
-        protected override void UpdateCompressedVariantPrices()
-        {
-            foreach (IceIskPerHour iceIskPerHour in HarvestableIskPerHourCollection)
-            {
-                Harvestable compressedVariant = HarvestableRepository.Find(h => h.HarvestableId == iceIskPerHour.CompressedVariantTypeId).SingleOrDefault();
-
-                iceIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
-            }
-        }
-
         protected override void UpdateCompressedIskPerHour()
         {
             foreach (IceIskPerHour iceIskPerHour in HarvestableIskPerHourCollection)

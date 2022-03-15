@@ -55,16 +55,6 @@ namespace SharpCrokite.Core.ViewModels
             UpdateCompressedIskPerHour();
         }
 
-        protected override void UpdateCompressedVariantPrices()
-        {
-            foreach (MoonOreIskPerHour moonOreIskPerHour in HarvestableIskPerHourCollection)
-            {
-                Harvestable compressedVariant = HarvestableRepository.Find(h => h.HarvestableId == moonOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
-
-                moonOreIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
-            }
-        }
-
         protected override void UpdateCompressedIskPerHour()
         {
             foreach (MoonOreIskPerHour normalOreIskPerHour in HarvestableIskPerHourCollection)

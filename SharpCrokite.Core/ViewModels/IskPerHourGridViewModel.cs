@@ -147,7 +147,7 @@ namespace SharpCrokite.Core.ViewModels
             UpdateMaterialIskPerHour();
         }
 
-        protected virtual void UpdateCompressedVariantPrices()
+        protected void UpdateCompressedVariantPrices()
         {
             foreach (T moonOreIskPerHour in HarvestableIskPerHourCollection)
             {
