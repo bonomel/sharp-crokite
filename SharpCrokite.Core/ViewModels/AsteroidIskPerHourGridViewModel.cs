@@ -4,7 +4,6 @@ using System.Linq;
 
 using SharpCrokite.Core.Models;
 using SharpCrokite.Core.Queries;
-using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Common;
 using SharpCrokite.Infrastructure.Repositories;
 
@@ -38,7 +37,7 @@ namespace SharpCrokite.Core.ViewModels
 
         protected override int BatchSize => 100;
 
-        protected sealed override ObservableCollection<AsteroidIskPerHour> LoadStaticData()
+        private ObservableCollection<AsteroidIskPerHour> LoadStaticData()
         {
             AsteroidHarvestableIskPerHourQuery asteroidHarvestableIskPerHourQuery = new(HarvestableRepository);
             return new ObservableCollection<AsteroidIskPerHour>(asteroidHarvestableIskPerHourQuery.Execute());
@@ -49,21 +48,7 @@ namespace SharpCrokite.Core.ViewModels
             HarvestableIskPerHourCollection = LoadStaticData();
         }
 
-        protected override void UpdateIskPerHour()
-        {
-            base.UpdateIskPerHour();
-            UpdateCompressedIskPerHour();
-        }
-
-        protected override void UpdateCompressedIskPerHour()
-        {
-            foreach (AsteroidIskPerHour normalOreIskPerHour in HarvestableIskPerHourCollection)
-            {
-                CalculateCompressedIskPerHour(normalOreIskPerHour);
-            }
-        }
-
-        private void CalculateCompressedIskPerHour(HarvestableIskPerHour asteroidIskPerHour)
+        protected override void CalculateCompressedIskPerHour(AsteroidIskPerHour asteroidIskPerHour)
         {
             decimal unitsPerSecond = YieldPerSecond / asteroidIskPerHour.Volume.Amount;
 

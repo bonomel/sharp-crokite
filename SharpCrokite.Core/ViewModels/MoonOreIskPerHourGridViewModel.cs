@@ -4,7 +4,6 @@ using System.Linq;
 
 using SharpCrokite.Core.Models;
 using SharpCrokite.Core.Queries;
-using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Common;
 using SharpCrokite.Infrastructure.Repositories;
 
@@ -38,7 +37,7 @@ namespace SharpCrokite.Core.ViewModels
 
         protected override int BatchSize => 100;
 
-        protected sealed override ObservableCollection<MoonOreIskPerHour> LoadStaticData()
+        private ObservableCollection<MoonOreIskPerHour> LoadStaticData()
         {
             MoonOreHarvestableIskPerHourQuery moonOreHarvestableIskPerHourQuery = new(HarvestableRepository);
             return new ObservableCollection<MoonOreIskPerHour>(moonOreHarvestableIskPerHourQuery.Execute());
@@ -49,32 +48,18 @@ namespace SharpCrokite.Core.ViewModels
             HarvestableIskPerHourCollection = LoadStaticData();
         }
 
-        protected override void UpdateIskPerHour()
+        protected override void CalculateCompressedIskPerHour(MoonOreIskPerHour iceIskPerHour)
         {
-            base.UpdateIskPerHour();
-            UpdateCompressedIskPerHour();
-        }
+            decimal unitsPerSecond = YieldPerSecond / iceIskPerHour.Volume.Amount;
 
-        protected override void UpdateCompressedIskPerHour()
-        {
-            foreach (MoonOreIskPerHour normalOreIskPerHour in HarvestableIskPerHourCollection)
-            {
-                CalculateCompressedIskPerHour(normalOreIskPerHour);
-            }
-        }
-
-        private void CalculateCompressedIskPerHour(HarvestableIskPerHour asteroidIskPerHour)
-        {
-            decimal unitsPerSecond = YieldPerSecond / asteroidIskPerHour.Volume.Amount;
-
-            decimal unitMarketPrice = asteroidIskPerHour.CompressedPrices != null
-                                      && asteroidIskPerHour.CompressedPrices.Any()
-                ? asteroidIskPerHour.CompressedPrices[SystemToUseForPrices].Amount
+            decimal unitMarketPrice = iceIskPerHour.CompressedPrices != null
+                                      && iceIskPerHour.CompressedPrices.Any()
+                ? iceIskPerHour.CompressedPrices[SystemToUseForPrices].Amount
                 : 0;
 
             decimal compressedValuePerHour = unitsPerSecond * unitMarketPrice * 3600;
 
-            asteroidIskPerHour.CompressedIskPerHour = new Isk(compressedValuePerHour);
+            iceIskPerHour.CompressedIskPerHour = new Isk(compressedValuePerHour);
         }
     }
 }

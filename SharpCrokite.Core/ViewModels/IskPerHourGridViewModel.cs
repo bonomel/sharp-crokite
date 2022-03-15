@@ -129,8 +129,6 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
-        protected abstract ObservableCollection<T> LoadStaticData();
-
         internal abstract void ReloadStaticData();
 
         internal virtual void UpdatePrices()
@@ -142,22 +140,31 @@ namespace SharpCrokite.Core.ViewModels
             UpdateCompressedIskPerHour();
         }
 
-        protected virtual void UpdateIskPerHour()
+        private void UpdateIskPerHour()
         {
             UpdateMaterialIskPerHour();
+            UpdateCompressedIskPerHour();
         }
 
         protected void UpdateCompressedVariantPrices()
         {
-            foreach (T moonOreIskPerHour in HarvestableIskPerHourCollection)
+            foreach (T harvestableIskPerHour in HarvestableIskPerHourCollection)
             {
-                Harvestable compressedVariant = HarvestableRepository.Find(h => h.HarvestableId == moonOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
+                Harvestable compressedVariant = HarvestableRepository.Find(h => h.HarvestableId == harvestableIskPerHour.CompressedVariantTypeId).SingleOrDefault();
 
-                moonOreIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
+                harvestableIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
             }
         }
 
-        protected abstract void UpdateCompressedIskPerHour();
+        protected void UpdateCompressedIskPerHour()
+        {
+            foreach (T harvestableIskPerHour in HarvestableIskPerHourCollection)
+            {
+                CalculateCompressedIskPerHour(harvestableIskPerHour);
+            }
+        }
+
+        protected abstract void CalculateCompressedIskPerHour(T iceIskPerHour);
 
         private void CalculateMaterialIskPerHour(T harvestableIskPerHour)
         {
@@ -175,7 +182,7 @@ namespace SharpCrokite.Core.ViewModels
             decimal valuePerUnit = batchValueAfterReprocessing / BatchSize;
             decimal valuePerSquareMeters = valuePerUnit / harvestableIskPerHour.Volume.Amount;
             decimal valuePerSecond = valuePerSquareMeters * YieldPerSecond;
-            decimal valuePerHour = valuePerSecond * 60 * 60;
+            decimal valuePerHour = valuePerSecond * 3600;
 
             harvestableIskPerHour.MaterialIskPerHour = new Isk(valuePerHour);
         }

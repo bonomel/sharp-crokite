@@ -4,7 +4,6 @@ using System.Linq;
 
 using SharpCrokite.Core.Models;
 using SharpCrokite.Core.Queries;
-using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Common;
 using SharpCrokite.Infrastructure.Repositories;
 
@@ -38,7 +37,7 @@ namespace SharpCrokite.Core.ViewModels
 
         protected override int BatchSize => 1;
 
-        protected sealed override ObservableCollection<IceIskPerHour> LoadStaticData()
+        private ObservableCollection<IceIskPerHour> LoadStaticData()
         {
             IceHarvestableIskPerHourQuery iceHarvestableIskPerHourQuery = new(HarvestableRepository);
             return new ObservableCollection<IceIskPerHour>(iceHarvestableIskPerHourQuery.Execute());
@@ -49,21 +48,7 @@ namespace SharpCrokite.Core.ViewModels
             HarvestableIskPerHourCollection = LoadStaticData();
         }
 
-        protected override void UpdateIskPerHour()
-        {
-            base.UpdateIskPerHour();
-            UpdateCompressedIskPerHour();
-        }
-
-        protected override void UpdateCompressedIskPerHour()
-        {
-            foreach (IceIskPerHour iceIskPerHour in HarvestableIskPerHourCollection)
-            {
-                CalculateCompressedIskPerHour(iceIskPerHour);
-            }
-        }
-
-        private void CalculateCompressedIskPerHour(IceIskPerHour iceIskPerHour)
+        protected override void CalculateCompressedIskPerHour(IceIskPerHour iceIskPerHour)
         {
             decimal yieldPerSecondDividedByVolume = YieldPerSecond / iceIskPerHour.Volume.Amount;
             decimal batchSizeCompensatedVolume = yieldPerSecondDividedByVolume / BatchSize;
@@ -74,7 +59,7 @@ namespace SharpCrokite.Core.ViewModels
                                       : 0;
 
             decimal normalizedCompressedBatchValue = unitMarketPrice * batchSizeCompensatedVolume;
-            decimal compressedValuePerHour = normalizedCompressedBatchValue * 60 * 60;
+            decimal compressedValuePerHour = normalizedCompressedBatchValue * 3600;
 
             iceIskPerHour.CompressedIskPerHour = new Isk(compressedValuePerHour);
         }
