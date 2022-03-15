@@ -69,7 +69,7 @@ namespace SharpCrokite.Core.Models
             }
         }
 
-        private protected void NotifyPropertyChanged(string propertyName)
+        private void NotifyPropertyChanged(string propertyName)
         {
             if (!string.IsNullOrWhiteSpace(propertyName))
             {
