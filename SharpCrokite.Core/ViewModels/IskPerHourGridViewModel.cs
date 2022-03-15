@@ -93,7 +93,7 @@ namespace SharpCrokite.Core.ViewModels
 
         protected IskPerHourGridViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
-            this.HarvestableRepository = harvestableRepository;
+            HarvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
         }
 
@@ -133,12 +133,23 @@ namespace SharpCrokite.Core.ViewModels
 
         internal abstract void ReloadStaticData();
 
-        internal abstract void UpdatePrices();
+        internal virtual void UpdatePrices()
+        {
+            UpdateMaterialPrices();
+            UpdateCompressedVariantPrices();
+
+            UpdateMaterialIskPerHour();
+            UpdateCompressedIskPerHour();
+        }
 
         protected virtual void UpdateIskPerHour()
         {
             UpdateMaterialIskPerHour();
         }
+
+        protected abstract void UpdateCompressedVariantPrices();
+
+        protected abstract void UpdateCompressedIskPerHour();
 
         private void CalculateMaterialIskPerHour(T harvestableIskPerHour)
         {

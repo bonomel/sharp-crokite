@@ -55,7 +55,7 @@ namespace SharpCrokite.Core.ViewModels
             UpdateCompressedIskPerHour();
         }
 
-        private void UpdateCompressedVariantPrices()
+        protected override void UpdateCompressedVariantPrices()
         {
             foreach (MoonOreIskPerHour moonOreIskPerHour in HarvestableIskPerHourCollection)
             {
@@ -65,7 +65,7 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
-        private void UpdateCompressedIskPerHour()
+        protected override void UpdateCompressedIskPerHour()
         {
             foreach (MoonOreIskPerHour normalOreIskPerHour in HarvestableIskPerHourCollection)
             {
