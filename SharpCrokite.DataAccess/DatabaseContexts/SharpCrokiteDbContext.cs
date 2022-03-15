@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.IO;
+using System.Linq;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 
 using SharpCrokite.DataAccess.Models;
 
@@ -15,7 +19,18 @@ namespace SharpCrokite.DataAccess.DatabaseContexts
 
         public SharpCrokiteDbContext()
         {
-            DbPath = @"C:\Projects\sharp-crokite\SharpCrokite.DataAccess\myevetool.db";
+            DbPath = $"{Path.Combine(TryGetSolutionDirectoryInfo().FullName)}\\SharpCrokite.DataAccess\\SharpCrokite.SQLite.db";
+        }
+
+        private static DirectoryInfo TryGetSolutionDirectoryInfo(string currentPath = null)
+        {
+            var directory = new DirectoryInfo(currentPath ?? Directory.GetCurrentDirectory());
+            while (directory != null && !directory.GetFiles("*.sln").Any())
+            {
+                directory = directory.Parent;
+            }
+
+            return directory;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

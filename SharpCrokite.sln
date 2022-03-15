@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpCrokite.Core", "SharpCrokite.Core\SharpCrokite.Core.csproj", "{E5C6CD5A-DFED-4DDA-AB47-14D3376768F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrokite.Infrastructure", "SharpCrokite.Infrastructure\SharpCrokite.Infrastructure.csproj", "{3A3FF1EF-3737-4A87-9E3B-1B03C82675C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpCrokite.Infrastructure", "SharpCrokite.Infrastructure\SharpCrokite.Infrastructure.csproj", "{3A3FF1EF-3737-4A87-9E3B-1B03C82675C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrokite.DataAccess", "SharpCrokite.DataAccess\SharpCrokite.DataAccess.csproj", "{F70B70C2-D238-470F-8A2F-3C129D92236F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpCrokite.DataAccess", "SharpCrokite.DataAccess\SharpCrokite.DataAccess.csproj", "{F70B70C2-D238-470F-8A2F-3C129D92236F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCrokite.UI", "SharpCrokite.UI\SharpCrokite.UI.csproj", "{228ACF17-EDA6-4FBC-A253-9DC51CF235E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpCrokite.UI", "SharpCrokite.UI\SharpCrokite.UI.csproj", "{228ACF17-EDA6-4FBC-A253-9DC51CF235E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
