@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace SharpCrokite.Core.PriceUpdater
 {
-    public class EveMarketerPriceRetriever
+    public class EveMarketerPriceRetrievalService : IPriceRetrievalService
     {
         private const string BaseUrl = "http://api.evemarketer.com/ec/marketstat/json";
         private const int BatchSize = 200;
@@ -118,5 +118,9 @@ namespace SharpCrokite.Core.PriceUpdater
 
             return stringBuilder.ToString();
         }
+    }
+
+    public interface IPriceRetrievalService
+    {
     }
 }

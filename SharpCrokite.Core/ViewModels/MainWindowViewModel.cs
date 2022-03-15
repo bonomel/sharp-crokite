@@ -74,7 +74,7 @@ namespace SharpCrokite.Core.ViewModels
 
         private void OnUpdatePrices()
         {
-            PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
+            PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetrievalService(), harvestableRepository, materialRepository);
             priceUpdateController.UpdatePrices();
 
             iskPerHourViewModel.UpdatePrices();
@@ -82,7 +82,7 @@ namespace SharpCrokite.Core.ViewModels
 
         private void OnDeletePrices()
         {
-            PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
+            PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetrievalService(), harvestableRepository, materialRepository);
             priceUpdateController.DeleteAllPrices();
 
             iskPerHourViewModel.UpdatePrices();
@@ -110,6 +110,7 @@ namespace SharpCrokite.Core.ViewModels
                     "Argument Null Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         private void OnDeleteStaticData()
         {
             var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(),
