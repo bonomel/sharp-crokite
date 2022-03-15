@@ -5,7 +5,7 @@ namespace SharpCrokite.Core.Models
 {
     [DebuggerDisplay("{Type} - {Name}")]
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public class MoonOreIskPerHour : CompressableIskPerHour
+    public class MoonOreIskPerHour : HarvestableIskPerHour
     {
         public string Rarity4 => GetMaterialDisplayNameOrEmpty(nameof(Rarity4));
         public string Rarity8 => GetMaterialDisplayNameOrEmpty(nameof(Rarity8));

@@ -147,7 +147,15 @@ namespace SharpCrokite.Core.ViewModels
             UpdateMaterialIskPerHour();
         }
 
-        protected abstract void UpdateCompressedVariantPrices();
+        protected virtual void UpdateCompressedVariantPrices()
+        {
+            foreach (T moonOreIskPerHour in HarvestableIskPerHourCollection)
+            {
+                Harvestable compressedVariant = HarvestableRepository.Find(h => h.HarvestableId == moonOreIskPerHour.CompressedVariantTypeId).SingleOrDefault();
+
+                moonOreIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
+            }
+        }
 
         protected abstract void UpdateCompressedIskPerHour();
 

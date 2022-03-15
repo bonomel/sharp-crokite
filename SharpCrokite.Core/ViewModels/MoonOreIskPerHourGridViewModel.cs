@@ -73,7 +73,7 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
-        private void CalculateCompressedIskPerHour(CompressableIskPerHour asteroidIskPerHour)
+        private void CalculateCompressedIskPerHour(HarvestableIskPerHour asteroidIskPerHour)
         {
             decimal unitsPerSecond = YieldPerSecond / asteroidIskPerHour.Volume.Amount;
 

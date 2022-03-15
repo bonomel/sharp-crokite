@@ -53,6 +53,21 @@ namespace SharpCrokite.Core.Models
             return MaterialContent.Find(materialModel => materialModel.Name == materialName) != null
                 ? MaterialContent.Single(materialModel => materialModel.Name == materialName).Quantity : 0;
         }
+        internal Dictionary<int, Isk> CompressedPrices { get; set; }
+
+        private Isk compressedIskPerHour = new(0);
+        public Isk CompressedIskPerHour
+        {
+            get => compressedIskPerHour;
+            internal set
+            {
+                if (compressedIskPerHour != value)
+                {
+                    compressedIskPerHour = value;
+                    NotifyPropertyChanged(nameof(CompressedIskPerHour));
+                }
+            }
+        }
 
         private protected void NotifyPropertyChanged(string propertyName)
         {

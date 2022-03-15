@@ -5,7 +5,7 @@ namespace SharpCrokite.Core.Models
 {
     [DebuggerDisplay("{Type} - {Name}")]
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public class IceIskPerHour : CompressableIskPerHour
+    public class IceIskPerHour : HarvestableIskPerHour
     {
         public int OxygenIsotopes => GetQuantityOrDefault("Oxygen Isotopes");
         public int HeliumIsotopes => GetQuantityOrDefault("Helium Isotopes");
