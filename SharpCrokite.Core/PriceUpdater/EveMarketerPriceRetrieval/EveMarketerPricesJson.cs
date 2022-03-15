@@ -1,7 +1,7 @@
 ﻿// ReSharper disable InconsistentNaming
 // ReSharper disable ClassNeverInstantiated.Global
 #pragma warning disable IDE1006 // Naming Styles
-namespace SharpCrokite.Core.PriceUpdater
+namespace SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval
 {
     public class EveMarketerPricesJson
     {

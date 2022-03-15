@@ -9,6 +9,8 @@ using JetBrains.Annotations;
 
 using SharpCrokite.Core.Commands;
 using SharpCrokite.Core.PriceUpdater;
+using SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval;
+using SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval;
 using SharpCrokite.Core.StaticDataUpdater;
 using SharpCrokite.Core.StaticDataUpdater.Esi;
 using SharpCrokite.Infrastructure.Repositories;
@@ -46,6 +48,30 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
+        private PriceRetrievalServiceOption selectedPriceRetrievalServiceServiceOption;
+
+        [UsedImplicitly] public IEnumerable<PriceRetrievalServiceOption> PriceRetrievalServiceOptions { get; set; }
+
+        [UsedImplicitly]
+        public PriceRetrievalServiceOption SelectedPriceRetrievalServiceOption
+        {
+            get
+            {
+                if (selectedPriceRetrievalServiceServiceOption == null)
+                {
+                    selectedPriceRetrievalServiceServiceOption = PriceRetrievalServiceOptions.First();
+                    return selectedPriceRetrievalServiceServiceOption;
+                }
+
+                return selectedPriceRetrievalServiceServiceOption;
+            }
+            set
+            {
+                selectedPriceRetrievalServiceServiceOption = value;
+                NotifyPropertyChanged(nameof(SelectedPriceRetrievalServiceOption));
+            }
+        }
+
         public MainWindowViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository,
             NavigatorViewModel navigatorViewModel, IskPerHourViewModel iskPerHourViewModel, SurveyCalculatorViewModel surveyCalculatorViewModel)
         {
@@ -65,6 +91,8 @@ namespace SharpCrokite.Core.ViewModels
 
             NavigatorViewModel = navigatorViewModel;
             NavigatorViewModel.CurrentViewModelChanged += OnCurrentViewModelChanged;
+
+            PriceRetrievalServiceOptions = PriceRetrievalOptionsBuilder.Build();
         }
 
         private void OnCurrentViewModelChanged(Type parameter)
@@ -74,7 +102,7 @@ namespace SharpCrokite.Core.ViewModels
 
         private void OnUpdatePrices()
         {
-            PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
+            PriceUpdateController priceUpdateController = new((IPriceRetrievalService)Activator.CreateInstance(SelectedPriceRetrievalServiceOption.ServiceType), harvestableRepository, materialRepository);
             priceUpdateController.UpdatePrices();
 
             iskPerHourViewModel.UpdatePrices();
@@ -82,7 +110,7 @@ namespace SharpCrokite.Core.ViewModels
 
         private void OnDeletePrices()
         {
-            PriceUpdateController priceUpdateController = new(new EveMarketerPriceRetriever(), harvestableRepository, materialRepository);
+            PriceUpdateController priceUpdateController = new((IPriceRetrievalService)Activator.CreateInstance(SelectedPriceRetrievalServiceOption.ServiceType), harvestableRepository, materialRepository);
             priceUpdateController.DeleteAllPrices();
 
             iskPerHourViewModel.UpdatePrices();
@@ -110,6 +138,7 @@ namespace SharpCrokite.Core.ViewModels
                     "Argument Null Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         private void OnDeleteStaticData()
         {
             var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(),
