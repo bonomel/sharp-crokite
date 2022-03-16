@@ -27,7 +27,7 @@ namespace SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval
 
         public class Sell
         {
-            public ForQuery forQuery { get; set; }
+            //public ForQuery forQuery { get; set; }
             //public ulong volume { get; set; }
             //public float wavg { get; set; }
             //public float avg { get; set; }
@@ -43,9 +43,9 @@ namespace SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval
 
         public class ForQuery
         {
-            public bool bid { get; set; }
+            //public bool bid { get; set; }
             public int[] types { get; set; }
-            public int[] regions { get; set; }
+            //public int[] regions { get; set; }
             public int[] systems { get; set; }
             //public int hours { get; set; }
             //public int minq { get; set; }
