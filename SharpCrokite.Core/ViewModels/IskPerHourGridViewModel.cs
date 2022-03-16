@@ -27,7 +27,7 @@ namespace SharpCrokite.Core.ViewModels
         protected abstract int BatchSize { get; }
 
         private readonly CultureInfo invariantCultureInfo = new("en-us");
-        private protected readonly int SystemToUseForPrices = 30000142; // Hard-coded Jita systemid - this will become a setting eventually
+        private const int SystemToUseForPrices = 30000142; // Hard-coded Jita systemid - this will become a setting eventually
 
         protected HarvestableRepository HarvestableRepository { get; }
 
@@ -51,26 +51,26 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
-        private protected decimal YieldPerSecond = 50m;
+        private decimal yieldPerSecond = 50m;
         [UsedImplicitly]
         public string YieldPerSecondText
         {
-            get => YieldPerSecond.ToString(TwoDecimalsFormatString, invariantCultureInfo);
+            get => yieldPerSecond.ToString(TwoDecimalsFormatString, invariantCultureInfo);
             set
             {
-                if (YieldPerSecond.ToString(TwoDecimalsFormatString, invariantCultureInfo) != value)
+                if (yieldPerSecond.ToString(TwoDecimalsFormatString, invariantCultureInfo) != value)
                 {
                     if (string.IsNullOrEmpty(value))
                     {
-                        YieldPerSecond = 0;
+                        yieldPerSecond = 0;
                         UpdateIskPerHour();
                         NotifyPropertyChanged(nameof(YieldPerSecondText));
                     }
                     else if (decimal.TryParse(value, NumberStyles.Float, invariantCultureInfo, out decimal result))
                     {
-                        if (YieldPerSecond != Math.Round(result, 2))
+                        if (yieldPerSecond != Math.Round(result, 2))
                         {
-                            YieldPerSecond = result;
+                            yieldPerSecond = result;
                             UpdateIskPerHour();
                             NotifyPropertyChanged(nameof(YieldPerSecondText));
                         }
@@ -93,8 +93,11 @@ namespace SharpCrokite.Core.ViewModels
 
         protected IskPerHourGridViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
         {
-            this.HarvestableRepository = harvestableRepository;
+            HarvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
+
+            // ReSharper disable once VirtualMemberCallInConstructor
+            HarvestableIskPerHourCollection = LoadStaticData();
         }
 
         private decimal reprocessingEfficiency = 0.782m;
@@ -129,15 +132,58 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
+        internal void ReloadStaticData()
+        {
+            HarvestableIskPerHourCollection = LoadStaticData();
+        }
+
         protected abstract ObservableCollection<T> LoadStaticData();
 
-        internal abstract void ReloadStaticData();
+        internal virtual void UpdatePrices()
+        {
+            UpdateMaterialPrices();
+            UpdateCompressedVariantPrices();
 
-        internal abstract void UpdatePrices();
+            UpdateMaterialIskPerHour();
+            UpdateCompressedIskPerHour();
+        }
 
-        protected virtual void UpdateIskPerHour()
+        private void UpdateIskPerHour()
         {
             UpdateMaterialIskPerHour();
+            UpdateCompressedIskPerHour();
+        }
+
+        protected void UpdateCompressedVariantPrices()
+        {
+            foreach (T harvestableIskPerHour in HarvestableIskPerHourCollection)
+            {
+                Harvestable compressedVariant = HarvestableRepository.Find(h => h.HarvestableId == harvestableIskPerHour.CompressedVariantTypeId).SingleOrDefault();
+
+                harvestableIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
+            }
+        }
+
+        protected void UpdateCompressedIskPerHour()
+        {
+            foreach (T harvestableIskPerHour in HarvestableIskPerHourCollection)
+            {
+                CalculateCompressedIskPerHour(harvestableIskPerHour);
+            }
+        }
+
+        private void CalculateCompressedIskPerHour(T harvestableIskPerHour)
+        {
+            decimal unitsPerSecond = yieldPerSecond / harvestableIskPerHour.Volume.Amount;
+
+            decimal unitMarketPrice = harvestableIskPerHour.CompressedPrices != null
+                                      && harvestableIskPerHour.CompressedPrices.Any()
+                ? harvestableIskPerHour.CompressedPrices[SystemToUseForPrices].Amount
+                : 0;
+
+            decimal compressedValuePerHour = unitsPerSecond * unitMarketPrice * 3600;
+
+            harvestableIskPerHour.CompressedIskPerHour = new Isk(compressedValuePerHour);
         }
 
         private void CalculateMaterialIskPerHour(T harvestableIskPerHour)
@@ -155,8 +201,8 @@ namespace SharpCrokite.Core.ViewModels
 
             decimal valuePerUnit = batchValueAfterReprocessing / BatchSize;
             decimal valuePerSquareMeters = valuePerUnit / harvestableIskPerHour.Volume.Amount;
-            decimal valuePerSecond = valuePerSquareMeters * YieldPerSecond;
-            decimal valuePerHour = valuePerSecond * 60 * 60;
+            decimal valuePerSecond = valuePerSquareMeters * yieldPerSecond;
+            decimal valuePerHour = valuePerSecond * 3600;
 
             harvestableIskPerHour.MaterialIskPerHour = new Isk(valuePerHour);
         }

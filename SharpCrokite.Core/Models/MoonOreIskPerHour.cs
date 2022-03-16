@@ -3,8 +3,8 @@ using JetBrains.Annotations;
 
 namespace SharpCrokite.Core.Models
 {
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     [DebuggerDisplay("{Type} - {Name}")]
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class MoonOreIskPerHour : HarvestableIskPerHour
     {
         public string Rarity4 => GetMaterialDisplayNameOrEmpty(nameof(Rarity4));

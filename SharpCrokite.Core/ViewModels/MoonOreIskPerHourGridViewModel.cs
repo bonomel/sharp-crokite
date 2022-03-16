@@ -13,20 +13,23 @@ namespace SharpCrokite.Core.ViewModels
         public MoonOreIskPerHourGridViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository)
             : base(harvestableRepository, materialRepository)
         {
-            HarvestableIskPerHourCollection = LoadStaticData();
-
             if (harvestableIskPerHourCollection.Any())
             {
                 UpdateMaterialPrices();
+                UpdateCompressedVariantPrices();
             }
 
             UpdateMaterialIskPerHour();
+            UpdateCompressedIskPerHour();
         }
 
         internal override void UpdatePrices()
         {
             UpdateMaterialPrices();
+            UpdateCompressedVariantPrices();
+
             UpdateMaterialIskPerHour();
+            UpdateCompressedIskPerHour();
         }
 
         protected override int BatchSize => 100;
@@ -35,10 +38,6 @@ namespace SharpCrokite.Core.ViewModels
         {
             MoonOreHarvestableIskPerHourQuery moonOreHarvestableIskPerHourQuery = new(HarvestableRepository);
             return new ObservableCollection<MoonOreIskPerHour>(moonOreHarvestableIskPerHourQuery.Execute());
-        }
-        internal override void ReloadStaticData()
-        {
-            HarvestableIskPerHourCollection = LoadStaticData();
         }
     }
 }

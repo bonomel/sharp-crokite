@@ -5,7 +5,7 @@ namespace SharpCrokite.Core.Models
 {
     [DebuggerDisplay("{Type} - {Name}")]
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public class AsteroidIskPerHour : CompressableIskPerHour
+    public class AsteroidIskPerHour : HarvestableIskPerHour
     {
         public int Tritanium => GetQuantityOrDefault(nameof(Tritanium));
         public int Pyerite => GetQuantityOrDefault(nameof(Pyerite));

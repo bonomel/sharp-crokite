@@ -19,11 +19,11 @@
             <TextBox Height="20" Width="80" Text="{Binding Path=ReprocessingEfficiencyText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <CheckBox Content="Show improved variants" VerticalContentAlignment="Center" IsChecked="{Binding Path=ShowImprovedVariantsIsChecked, Mode=TwoWay}" Margin="15,0,0,0" />
         </StackPanel>
-        <DataGrid Name="MoonOreIskPerHourDataGrid" Margin="10,0,10,10" IsReadOnly="true" AutoGenerateColumns="False" Grid.Row="1"
+        <DataGrid Margin="10,0,10,10" IsReadOnly="true" AutoGenerateColumns="False" Grid.Row="1"
                     HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray" HeadersVisibility="Column"
                     CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserSortColumns="True"
                     CanUserReorderColumns="True" CanUserResizeColumns="False" ItemsSource="{Binding HarvestableIskPerHourCollection}"
-                    FontSize="13" FontFamily="Terminus" AlternatingRowBackground="#e6e6e6" RowBackground="#f6f6f6">
+                    FontSize="13" FontFamily="Terminus">
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Height" Value="32" />
@@ -48,6 +48,9 @@
                         <DataTrigger Binding="{Binding Visible}" Value="False">
                             <Setter Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#e6e6e6"></Setter>
+                        </Trigger>
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
@@ -182,6 +185,15 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Materials ISK/hour" Binding="{Binding MaterialIskPerHour}" Width="140">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Margin" Value="5,5,5,5" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Compressed ISK/hour" Binding="{Binding CompressedIskPerHour}" Width="140">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="VerticalAlignment" Value="Center" />
