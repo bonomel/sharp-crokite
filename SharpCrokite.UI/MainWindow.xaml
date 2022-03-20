@@ -6,7 +6,7 @@
         xmlns:views="clr-namespace:SharpCrokite.UI.Views"
         mc:Ignorable="d"  ResizeMode="CanResizeWithGrip"
         Title="Sharp Crokite" Height="800" Width="1740"
-        WindowStartupLocation="CenterScreen" Icon="Images/sharp-crokite-icon.png">
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"></ColumnDefinition>

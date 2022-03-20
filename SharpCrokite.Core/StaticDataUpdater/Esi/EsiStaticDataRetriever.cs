@@ -19,7 +19,7 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
     {
         private const string EsiBaseUrl = "https://esi.evetech.net/latest/";
         private const string MaterialContentUrl = "http://sde.zzeve.com/invTypeMaterials.json";
-        private const string EveTechBaseUrl = "https://images.evetech.net/types/";
+        private const string EveTechBaseUrl = "https://images.evetech.net/types/"; // DOCS: https://docs.esi.evetech.net/docs/image_server.html
         private const string UniverseRoute = "universe/";
         private const string CategoriesRoutePart = "categories/";
         private const string GroupsRoutePart = "groups/";

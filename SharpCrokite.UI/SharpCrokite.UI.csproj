@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>sharp-crokite-icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,10 +21,15 @@
     <None Remove="Images\oxygen-isotopes-icon.png" />
     <None Remove="Images\pyerite-icon.png" />
     <None Remove="Images\reprocessing-icon.png" />
+    <None Remove="Images\sharp-crokite-icon.ico" />
     <None Remove="Images\sharp-crokite-icon.png" />
     <None Remove="Images\strontium-clathrates-icon.png" />
     <None Remove="Images\tritanium-icon.png" />
     <None Remove="Images\zydrine-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Images\sharp-crokite-icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
