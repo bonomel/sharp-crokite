@@ -160,7 +160,7 @@ namespace SharpCrokite.Core.ViewModels
             {
                 Harvestable compressedVariant = HarvestableRepository.Get(harvestableIskPerHour.CompressedVariantTypeId);
 
-                harvestableIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
+                harvestableIskPerHour.CompressedPrices = compressedVariant.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
             }
         }
 
