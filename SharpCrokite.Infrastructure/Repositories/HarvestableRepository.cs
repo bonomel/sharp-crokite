@@ -31,7 +31,8 @@ namespace SharpCrokite.Infrastructure.Repositories
             harvestable.Volume = entity.Volume;
             harvestable.Type = entity.Type;
             harvestable.Icon = entity.Icon;
-            harvestable.IsCompressedVariantOfType = entity.IsCompressedVariantOfType;
+            harvestable.IsCompressedVariantOfTypeId = entity.IsCompressedVariantOfTypeId;
+            harvestable.CompressedVariantTypeId = entity.CompressedVariantTypeId;
             harvestable.MaterialContents = entity.MaterialContents;
             harvestable.Prices = entity.Prices;
 
@@ -55,6 +56,12 @@ namespace SharpCrokite.Infrastructure.Repositories
                 .Include(h => h.MaterialContents)
                 .ThenInclude(mc => mc.Material)
                 .ToList();
+        }
+
+        public override Harvestable Get(int id)
+        {
+            return dbContext.Harvestables.Where(harvestable => harvestable.HarvestableId == id).Include(h => h.Prices)
+                .SingleOrDefault();
         }
     }
 }

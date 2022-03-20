@@ -85,21 +85,25 @@ namespace SharpCrokite.Core.StaticDataUpdater.Esi
             return Regex.Replace(stringToRemoveFrom, "<.*?>", string.Empty);
         }
 
-        private static void SetCompressedVariantIds(IEnumerable<HarvestableDto> harvestables)
+        private static void SetCompressedVariantIds(IEnumerable<HarvestableDto> allHarvestables)
         {
-            foreach (var harvestable in harvestables)
+            foreach (var harvestable in allHarvestables)
             {
                 if (harvestable.Name.StartsWith("Compressed"))
                 {
                     string lookupString = harvestable.Name.Replace("Compressed ", "").Trim();
 
-                    harvestable.IsCompressedVariantOfType = harvestables.Single(h => h.Name == lookupString).HarvestableId;
+                    HarvestableDto rawHarvestable = allHarvestables.Single(h => h.Name == lookupString);
+
+                    harvestable.IsCompressedVariantOfType = rawHarvestable.HarvestableId;
+                    rawHarvestable.CompressedVariantTypeId = harvestable.HarvestableId;
                 }
+                // TODO: look into removing batch compressed, as it is not being used
                 else if (harvestable.Name.StartsWith("Batch Compressed"))
                 {
                     string lookupString = harvestable.Name.Replace("Batch Compressed ", "").Trim();
 
-                    harvestable.IsCompressedVariantOfType = harvestables.Single(h => h.Name == lookupString).HarvestableId;
+                    harvestable.IsCompressedVariantOfType = allHarvestables.Single(h => h.Name == lookupString).HarvestableId;
                 }
             }
         }

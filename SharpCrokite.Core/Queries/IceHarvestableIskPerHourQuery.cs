@@ -24,19 +24,7 @@ namespace SharpCrokite.Core.Queries
         {
             IEnumerable<IceIskPerHour> harvestableIskPerHourResult = base.Execute().ToList();
 
-            foreach (IceIskPerHour iceIskPerHour in harvestableIskPerHourResult)
-            {
-                iceIskPerHour.CompressedVariantTypeId = FindCompressedVariantTypeId(iceIskPerHour);
-            }
-
             return harvestableIskPerHourResult;
-        }
-
-        private int FindCompressedVariantTypeId(HarvestableIskPerHour harvestableIskPerHour)
-        {
-            Harvestable compressedVariant = HarvestableRepository.Find(h => h.IsCompressedVariantOfType == harvestableIskPerHour.HarvestableId).First();
-
-            return compressedVariant.HarvestableId;
         }
     }
 }

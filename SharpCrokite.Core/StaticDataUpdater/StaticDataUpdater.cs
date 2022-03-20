@@ -29,7 +29,8 @@ namespace SharpCrokite.Core.StaticDataUpdater
                     existingHarvestable.Description = harvestableDto.Description;
                     existingHarvestable.Volume = harvestableDto.Volume;
                     existingHarvestable.Icon = harvestableDto.Icon;
-                    existingHarvestable.IsCompressedVariantOfType = harvestableDto.IsCompressedVariantOfType;
+                    existingHarvestable.IsCompressedVariantOfTypeId = harvestableDto.IsCompressedVariantOfType;
+                    existingHarvestable.CompressedVariantTypeId = harvestableDto.CompressedVariantTypeId;
                     existingHarvestable.MaterialContents = harvestableDto.MaterialContents.Select(dto => new MaterialContent()
                     {
                         HarvestableId = dto.HarvestableId,
@@ -49,7 +50,8 @@ namespace SharpCrokite.Core.StaticDataUpdater
                         Description = harvestableDto.Description,
                         Volume = harvestableDto.Volume,
                         Icon = harvestableDto.Icon,
-                        IsCompressedVariantOfType = harvestableDto.IsCompressedVariantOfType,
+                        IsCompressedVariantOfTypeId = harvestableDto.IsCompressedVariantOfType,
+                        CompressedVariantTypeId = harvestableDto.CompressedVariantTypeId,
                         MaterialContents = harvestableDto.MaterialContents.Select(dto => new MaterialContent()
                         {
                             HarvestableId = dto.HarvestableId,
