@@ -158,7 +158,7 @@ namespace SharpCrokite.Core.ViewModels
         {
             foreach (T harvestableIskPerHour in HarvestableIskPerHourCollection)
             {
-                Harvestable compressedVariant = HarvestableRepository.Find(h => h.HarvestableId == harvestableIskPerHour.CompressedVariantTypeId).SingleOrDefault();
+                Harvestable compressedVariant = HarvestableRepository.Get(harvestableIskPerHour.CompressedVariantTypeId);
 
                 harvestableIskPerHour.CompressedPrices = compressedVariant?.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
             }
@@ -209,8 +209,10 @@ namespace SharpCrokite.Core.ViewModels
 
         private protected void UpdateMaterialPrices()
         {
-            materialModels = materialRepository.Find(material => material.Type == MineralTypeString
-                || material.Type == MoonMaterialsTypeString || material.Type == IceProductsTypeString);
+            materialModels = materialRepository.Find(material =>
+                material.Type == MineralTypeString
+                || material.Type == MoonMaterialsTypeString
+                || material.Type == IceProductsTypeString);
         }
 
         private protected void UpdateMaterialIskPerHour()
