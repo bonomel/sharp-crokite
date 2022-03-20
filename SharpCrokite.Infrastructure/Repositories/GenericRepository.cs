@@ -3,58 +3,57 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-using SharpCrokite.DataAccess.DatabaseContexts;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace SharpCrokite.Infrastructure.Repositories
 {
     public abstract class GenericRepository<T> : IRepository<T> where T : class
     {
-        protected readonly SharpCrokiteDbContext DbContext;
+        private readonly DbContext dbContext;
 
-        protected GenericRepository(SharpCrokiteDbContext dbContext)
+        protected GenericRepository(DbContext dbContext)
         {
-            DbContext = dbContext;
+            this.dbContext = dbContext;
         }
 
         public virtual T Add(T entity)
         {
-            return DbContext.Add(entity).Entity;
+            return dbContext.Add(entity).Entity;
         }
 
         public virtual IEnumerable<T> All()
         {
-            return DbContext.Set<T>().ToList();
+            return dbContext.Set<T>().ToList();
         }
 
         public virtual IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
         {
-            return DbContext.Set<T>().AsQueryable().Where(predicate).ToList();
+            return dbContext.Set<T>().AsQueryable().Where(predicate).ToList();
         }
 
         public virtual T Get(int id)
         {
-            return DbContext.Find<T>(id);
+            return dbContext.Find<T>(id);
         }
 
         public virtual void SaveChanges()
         {
-            DbContext.SaveChanges();
+            dbContext.SaveChanges();
         }
 
         public virtual T Update(T entity)
         {
-            return DbContext.Update(entity).Entity;
+            return dbContext.Update(entity).Entity;
         }
 
         public virtual T Delete(T entity)
         {
-            return DbContext.Remove(entity).Entity;
+            return dbContext.Remove(entity).Entity;
         }
 
         public virtual void DeleteAll()
         {
-            DbContext.Set<T>().RemoveRange(All());
+            dbContext.Set<T>().RemoveRange(All());
         }
     }
 }

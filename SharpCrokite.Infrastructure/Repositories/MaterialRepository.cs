@@ -11,13 +11,16 @@ namespace SharpCrokite.Infrastructure.Repositories
 {
     public class MaterialRepository : GenericRepository<Material>
     {
+        private readonly SharpCrokiteDbContext dbContext;
+
         public MaterialRepository(SharpCrokiteDbContext dbContext) : base(dbContext)
         {
+            this.dbContext = dbContext;
         }
 
         public override Material Update(Material entity)
         {
-            var material = DbContext.Materials
+            var material = dbContext.Materials
                 .Include(m => m.Prices)
                 .Single(m => m.MaterialId == entity.MaterialId);
 
@@ -33,7 +36,7 @@ namespace SharpCrokite.Infrastructure.Repositories
 
         public override IEnumerable<Material> Find(Expression<Func<Material, bool>> predicate)
         {
-            return DbContext.Materials
+            return dbContext.Materials
                 .Include(m => m.Prices)
                 .Where(predicate)
                 .ToList();
@@ -41,7 +44,7 @@ namespace SharpCrokite.Infrastructure.Repositories
 
         public override IEnumerable<Material> All()
         {
-            return DbContext.Materials
+            return dbContext.Materials
                 .Include(m => m.Prices)
                 .ToList();
         }

@@ -1,22 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SharpCrokite.DataAccess.DatabaseContexts;
-using SharpCrokite.DataAccess.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+
+using Microsoft.EntityFrameworkCore;
+
+using SharpCrokite.DataAccess.DatabaseContexts;
+using SharpCrokite.DataAccess.Models;
 
 namespace SharpCrokite.Infrastructure.Repositories
 {
     public class HarvestableRepository : GenericRepository<Harvestable>
     {
+        private readonly SharpCrokiteDbContext dbContext;
+
         public HarvestableRepository(SharpCrokiteDbContext dbContext) : base(dbContext)
         {
+            this.dbContext = dbContext;
         }
 
         public override Harvestable Update(Harvestable entity)
         {
-            var harvestable = DbContext.Harvestables
+            var harvestable = dbContext.Harvestables
                 .Include(h => h.Prices)
                 .Include(h => h.MaterialContents)
                 .Single(h => h.HarvestableId == entity.HarvestableId);
@@ -35,7 +40,7 @@ namespace SharpCrokite.Infrastructure.Repositories
 
         public override IEnumerable<Harvestable> Find(Expression<Func<Harvestable, bool>> predicate)
         {
-            return DbContext.Harvestables
+            return dbContext.Harvestables
                 .Include(h => h.Prices)
                 .Include(h => h.MaterialContents)
                 .ThenInclude(mc => mc.Material)
@@ -45,7 +50,7 @@ namespace SharpCrokite.Infrastructure.Repositories
 
         public override IEnumerable<Harvestable> All()
         {
-            return DbContext.Harvestables
+            return dbContext.Harvestables
                 .Include(h => h.Prices)
                 .Include(h => h.MaterialContents)
                 .ThenInclude(mc => mc.Material)
