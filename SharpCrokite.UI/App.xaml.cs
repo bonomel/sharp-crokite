@@ -44,6 +44,8 @@ namespace SharpCrokite.UI
 
         private void Startup_App(object sender, StartupEventArgs e)
         {
+            serviceProvider.GetService<SharpCrokiteDbContext>().RunMigrations();
+
             MainWindow window = serviceProvider.GetRequiredService<MainWindow>();
             window.DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>();
 

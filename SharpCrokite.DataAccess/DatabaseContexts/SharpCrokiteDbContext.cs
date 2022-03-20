@@ -11,15 +11,19 @@ namespace SharpCrokite.DataAccess.DatabaseContexts
     public class SharpCrokiteDbContext : DbContext
     {
         public DbSet<Harvestable> Harvestables { get; set; }
-        public DbSet<MaterialContent> MaterialContents { get; set; }
         public DbSet<Material> Materials { get; set; }
         public DbSet<Price> Prices { get; set; }
+        public DbSet<MaterialContent> MaterialContents { get; set; }
 
-        public string DbPath { get; set; }
+        private string DbPath { get; }
 
         public SharpCrokiteDbContext()
         {
+#if DEBUG
+            DbPath = $"{Path.Combine(TryGetSolutionDirectoryInfo().FullName)}\\SharpCrokite.DataAccess\\SharpCrokite-Debug.SQLite.db";
+#else
             DbPath = $"{Path.Combine(TryGetSolutionDirectoryInfo().FullName)}\\SharpCrokite.DataAccess\\SharpCrokite.SQLite.db";
+#endif
         }
 
         private static DirectoryInfo TryGetSolutionDirectoryInfo(string currentPath = null)
@@ -35,14 +39,19 @@ namespace SharpCrokite.DataAccess.DatabaseContexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite($"Data Source={DbPath}");
+            _ = optionsBuilder.UseSqlite($"Data Source={DbPath}");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
+        { 
+            _ = modelBuilder.Entity<Harvestable>().HasMany(h => h.Prices).WithOne(p => p.Harvestable).OnDelete(DeleteBehavior.Cascade).IsRequired(false);
+            _ = modelBuilder.Entity<Material>().HasMany(m => m.Prices).WithOne(p => p.Material).OnDelete(DeleteBehavior.Cascade).IsRequired(false);
+            _ = modelBuilder.Entity<MaterialContent>().HasOne(m => m.Material).WithMany().OnDelete(DeleteBehavior.SetNull).IsRequired(false);
+        }
+
+        public void RunMigrations()
         {
-            modelBuilder.Entity<Harvestable>().HasMany(h => h.Prices).WithOne(p => p.Harvestable).OnDelete(DeleteBehavior.Cascade).IsRequired(false);
-            modelBuilder.Entity<Material>().HasMany(m => m.Prices).WithOne(p => p.Material).OnDelete(DeleteBehavior.Cascade).IsRequired(false);
-            modelBuilder.Entity<MaterialContent>().HasOne(m => m.Material).WithMany().OnDelete(DeleteBehavior.SetNull).IsRequired(false);
+            Database.Migrate();
         }
     }
 }
