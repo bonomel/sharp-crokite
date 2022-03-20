@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 using SharpCrokite.DataAccess.Models;
@@ -22,7 +21,7 @@ namespace SharpCrokite.DataAccess.DatabaseContexts
 #if DEBUG
             DbPath = $"{Path.Combine(TryGetSolutionDirectoryInfo().FullName)}\\SharpCrokite.DataAccess\\SharpCrokite-Debug.SQLite.db";
 #else
-            DbPath = $"{Path.Combine(TryGetSolutionDirectoryInfo().FullName)}\\SharpCrokite.DataAccess\\SharpCrokite.SQLite.db";
+            DbPath = $"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory)}\\SharpCrokite.SQLite.db";
 #endif
         }
 
