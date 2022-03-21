@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows;
 
 using JetBrains.Annotations;
@@ -29,7 +30,7 @@ namespace SharpCrokite.Core.ViewModels
         [UsedImplicitly] public NavigatorViewModel NavigatorViewModel { get; set; }
 
         [UsedImplicitly] public RelayCommand DeletePricesCommand { get; private set; }
-        [UsedImplicitly] public RelayCommand UpdatePricesCommand { get; private set; }
+        [UsedImplicitly] public AsyncRelayCommand UpdatePricesCommand { get; private set; }
         [UsedImplicitly] public RelayCommand UpdateStaticDataCommand { get; private set; }
         [UsedImplicitly] public RelayCommand DeleteStaticDataCommand { get; private set; }
 
@@ -71,7 +72,7 @@ namespace SharpCrokite.Core.ViewModels
         {
             UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
             DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
-            UpdatePricesCommand = new RelayCommand(OnUpdatePrices, CanUpdatePrices);
+            UpdatePricesCommand = new AsyncRelayCommand(OnUpdatePrices, CanUpdatePrices);
             DeletePricesCommand = new RelayCommand(OnDeletePrices, CanDeletePrices);
 
             this.harvestableRepository = harvestableRepository;
@@ -94,10 +95,10 @@ namespace SharpCrokite.Core.ViewModels
             CurrentContentViewModel = contentViewModels.Single(viewmodel => viewmodel.GetType() == parameter);
         }
 
-        private void OnUpdatePrices()
+        private async Task OnUpdatePrices()
         {
             PriceUpdateController priceUpdateController = new((IPriceRetrievalService)Activator.CreateInstance(SelectedPriceRetrievalServiceOption.ServiceType), harvestableRepository, materialRepository);
-            priceUpdateController.UpdatePrices();
+            await priceUpdateController.UpdatePrices();
 
             iskPerHourViewModel.UpdatePrices();
         }

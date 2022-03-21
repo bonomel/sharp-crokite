@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SharpCrokite.Core.PriceUpdater
 {
     public interface IPriceRetrievalService
     {
-        public IEnumerable<PriceDto> Retrieve(IList<int> allTypeIds);
+        public Task<IEnumerable<PriceDto>> Retrieve(IList<int> allTypeIds);
     }
 }

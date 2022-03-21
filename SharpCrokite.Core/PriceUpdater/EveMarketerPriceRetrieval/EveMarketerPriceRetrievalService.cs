@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval
@@ -18,13 +19,13 @@ namespace SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval
             { 30000142, "Jita" }
         };
 
-        public IEnumerable<PriceDto> Retrieve(IList<int> allTypeIds)
+        public async Task<IEnumerable<PriceDto>> Retrieve(IList<int> allTypeIds)
         {
             IList<IList<int>> batches = CreateBatches(allTypeIds);
 
             IEnumerable<string> batchedUrls = CreateBatchedUrls(batches);
 
-            IEnumerable<EveMarketerPricesJson> priceJson = RetrievePricesAsJson(batchedUrls);
+            IEnumerable<EveMarketerPricesJson> priceJson = await RetrievePricesAsJson(batchedUrls);
 
             IEnumerable<PriceDto> priceDtos = MapJsonToPriceDto(priceJson);
 
@@ -52,14 +53,14 @@ namespace SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval
             return priceDtos;
         }
 
-        private static IEnumerable<EveMarketerPricesJson> RetrievePricesAsJson(IEnumerable<string> batchedUrls)
+        private static async Task<IEnumerable<EveMarketerPricesJson>> RetrievePricesAsJson(IEnumerable<string> batchedUrls)
         {
             using HttpClient client = new();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             List<EveMarketerPricesJson> priceJson = new();
             foreach(string url in batchedUrls)
             {
-                HttpResponseMessage response = client.GetAsync(url).Result;
+                HttpResponseMessage response = await client.GetAsync(url);
 
                 if(response.IsSuccessStatusCode)
                 {

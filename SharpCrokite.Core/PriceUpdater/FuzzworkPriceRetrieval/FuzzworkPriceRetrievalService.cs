@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval
@@ -17,13 +18,13 @@ namespace SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval
             { 30000142, "Jita" }
         };
 
-        public IEnumerable<PriceDto> Retrieve(IList<int> allTypeIds)
+        public async Task<IEnumerable<PriceDto>> Retrieve(IList<int> allTypeIds)
         {
             List<PriceDto> priceDtos = new();
 
             foreach (int systemId in systemsToGetPricesFor.Keys)
             {
-                Dictionary<string, FuzzworkPricesJson> pricesPerItemForSystem = RetrievePricesAsJson(BuildUrl(allTypeIds, systemId));
+                Dictionary<string, FuzzworkPricesJson> pricesPerItemForSystem = await RetrievePricesAsJson(BuildUrl(allTypeIds, systemId));
 
                 priceDtos.AddRange(MapJsonToPriceDto(pricesPerItemForSystem, systemId));
             }
@@ -31,7 +32,7 @@ namespace SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval
             return priceDtos;
         }
 
-        private static Dictionary<string, FuzzworkPricesJson> RetrievePricesAsJson(string url)
+        private static async Task<Dictionary<string, FuzzworkPricesJson>> RetrievePricesAsJson(string url)
         {
             Dictionary<string, FuzzworkPricesJson> priceJson = new();
 
@@ -41,7 +42,7 @@ namespace SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval
 
             if (response.IsSuccessStatusCode)
             {
-                string responseString = response.Content.ReadAsStringAsync().Result;
+                string responseString = await response.Content.ReadAsStringAsync();
 
                 return JsonSerializer.Deserialize<Dictionary<string, FuzzworkPricesJson>>(responseString);
             }

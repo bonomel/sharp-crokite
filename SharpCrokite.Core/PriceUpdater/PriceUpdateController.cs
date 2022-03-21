@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Repositories;
 
@@ -22,14 +22,14 @@ namespace SharpCrokite.Core.PriceUpdater
             this.materialRepository = materialRepository;
         }
 
-        public void UpdatePrices()
+        public async Task UpdatePrices()
         {
             IList<int> listOfHarvestableIds = harvestableRepository.All().Select(h => h.HarvestableId).ToList();
             IList<int> listOfMaterialIds = materialRepository.All().Select(m => m.MaterialId).ToList();
 
             IList<int> allTypeIds = listOfHarvestableIds.Concat(listOfMaterialIds).ToList();
 
-            IEnumerable<PriceDto> prices = priceRetrievalService.Retrieve(allTypeIds);
+            IEnumerable<PriceDto> prices = await priceRetrievalService.Retrieve(allTypeIds);
 
             PriceUpdater priceUpdater = new(harvestableRepository, materialRepository);
 
