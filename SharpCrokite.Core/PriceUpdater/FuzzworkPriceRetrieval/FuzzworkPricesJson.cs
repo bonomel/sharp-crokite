@@ -42,6 +42,4 @@ namespace SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval
             public decimal percentile { get; set; }
         }
     }
-
-    
 }

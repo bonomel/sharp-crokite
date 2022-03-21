@@ -11,6 +11,7 @@ namespace SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval
     public class FuzzworkPriceRetrievalService : IPriceRetrievalService
     {
         private const string BaseUrl = "https://market.fuzzwork.co.uk/aggregates/";
+
         private readonly Dictionary<int, string> systemsToGetPricesFor = new() // TODO: pull up
         {
             { 30000142, "Jita" }
@@ -20,17 +21,17 @@ namespace SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval
         {
             List<PriceDto> priceDtos = new();
 
-            foreach (KeyValuePair<int, string> system in systemsToGetPricesFor)
+            foreach (int systemId in systemsToGetPricesFor.Keys)
             {
-                Dictionary<string, FuzzworkPricesJson> pricesPerItemForSystem = RetrievePricesAsJson(BuildUrl(allTypeIds, system.Key));
+                Dictionary<string, FuzzworkPricesJson> pricesPerItemForSystem = RetrievePricesAsJson(BuildUrl(allTypeIds, systemId));
 
-                priceDtos.AddRange(MapJsonToPriceDto(pricesPerItemForSystem, system.Key));
+                priceDtos.AddRange(MapJsonToPriceDto(pricesPerItemForSystem, systemId));
             }
 
             return priceDtos;
         }
 
-        private Dictionary<string, FuzzworkPricesJson> RetrievePricesAsJson(string url)
+        private static Dictionary<string, FuzzworkPricesJson> RetrievePricesAsJson(string url)
         {
             Dictionary<string, FuzzworkPricesJson> priceJson = new();
 
@@ -45,16 +46,16 @@ namespace SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval
                 return JsonSerializer.Deserialize<Dictionary<string, FuzzworkPricesJson>>(responseString);
             }
 
-            _ = MessageBox.Show($"Something went wrong calling Fuzzwork API:\n{url}");
+            _ = MessageBox.Show($"Something went wrong while calling Fuzzwork API:\n{url}");
 
             return priceJson;
         }
 
-        private string BuildUrl(IEnumerable<int> allTypeIds, int systemKey)
+        private static string BuildUrl(IEnumerable<int> allTypeIds, int systemId)
         {
             StringBuilder stringBuilder = new();
 
-            _ = stringBuilder.Append($"{BaseUrl}?region={systemKey}&types=");
+            _ = stringBuilder.Append($"{BaseUrl}?region={systemId}&types=");
 
             foreach (int typeId in allTypeIds)
             {
@@ -79,7 +80,7 @@ namespace SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval
                     BuyPercentile = Convert.ToDecimal(value.buy.percentile),
                     SellMax = Convert.ToDecimal(value.sell.max),
                     SellMin = Convert.ToDecimal(value.sell.min),
-                    SellPercentile = Convert.ToDecimal(value.sell.percentile),
+                    SellPercentile = Convert.ToDecimal(value.sell.percentile)
                 });
             }
             return priceDtos;

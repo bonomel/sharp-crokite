@@ -12,11 +12,11 @@ namespace SharpCrokite.Core.Queries
     public abstract class HarvestableIskPerHourQuery<T> where T : HarvestableIskPerHour
     {
         private protected string[] HarvestableTypes;
-        private protected readonly HarvestableRepository HarvestableRepository;
+        private readonly HarvestableRepository harvestableRepository;
 
         protected HarvestableIskPerHourQuery(HarvestableRepository harvestableRepository)
         {
-            this.HarvestableRepository = harvestableRepository;
+            this.harvestableRepository = harvestableRepository;
         }
 
         internal virtual IEnumerable<T> Execute()
@@ -24,7 +24,7 @@ namespace SharpCrokite.Core.Queries
             List<T> harvestableIskPerHourCollection = new();
 
             IEnumerable<Harvestable> harvestableModels =
-                HarvestableRepository.Find(h => HarvestableTypes.Contains(h.Type) && h.IsCompressedVariantOfType == null);
+                harvestableRepository.Find(harvestable => HarvestableTypes.Contains(harvestable.Type) && harvestable.IsCompressedVariantOfTypeId == null);
 
             foreach (Harvestable harvestableModel in harvestableModels)
             {
@@ -43,6 +43,9 @@ namespace SharpCrokite.Core.Queries
                         Quantity = materialContent.Quantity,
                         Quality = materialContent.Material.Quality
                     }).ToList();
+
+                if (harvestableModel.CompressedVariantTypeId != null)
+                    harvestableIskPerHour.CompressedVariantTypeId = (int)harvestableModel.CompressedVariantTypeId;
 
                 harvestableIskPerHourCollection.Add(harvestableIskPerHour);
             }

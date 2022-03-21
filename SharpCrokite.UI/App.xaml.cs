@@ -20,33 +20,31 @@ namespace SharpCrokite.UI
 
         private static IServiceProvider CreateServiceProvider()
         {
-            IServiceCollection services = new ServiceCollection();
+            return new ServiceCollection()
+                .AddDbContext<SharpCrokiteDbContext>(ServiceLifetime.Singleton)
 
-            services.AddDbContext<SharpCrokiteDbContext>(ServiceLifetime.Singleton);
+                .AddSingleton<HarvestableRepository>()
+                .AddSingleton<MaterialRepository>()
 
-            services.AddSingleton<HarvestableRepository>();
-            services.AddSingleton<MaterialRepository>();
+                .AddSingleton<MainWindow>()
 
-            services.AddSingleton<MainWindow>();
-            services.AddSingleton<MainWindowViewModel>();
+                .AddSingleton<MainWindowViewModel>()
+                .AddSingleton<NavigatorViewModel>()
+                .AddSingleton<IskPerHourViewModel>()
+                .AddSingleton<AsteroidIskPerHourGridViewModel>()
+                .AddSingleton<MoonOreIskPerHourGridViewModel>()
+                .AddSingleton<IceIskPerHourGridViewModel>()
+                .AddSingleton<SurveyCalculatorViewModel>()
 
-            services.AddSingleton<NavigatorViewModel>();
-
-            services.AddSingleton<IskPerHourViewModel>();
-            services.AddSingleton<AsteroidIskPerHourGridViewModel>();
-            services.AddSingleton<MoonOreIskPerHourGridViewModel>();
-            services.AddSingleton<IceIskPerHourGridViewModel>();
-
-            services.AddSingleton<SurveyCalculatorViewModel>();
-
-            return services.BuildServiceProvider();
+                .BuildServiceProvider();
         }
 
         private void Startup_App(object sender, StartupEventArgs e)
         {
+            serviceProvider.GetRequiredService<SharpCrokiteDbContext>().RunMigrations();
+
             MainWindow window = serviceProvider.GetRequiredService<MainWindow>();
             window.DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>();
-
             window.Show();
         }
     }

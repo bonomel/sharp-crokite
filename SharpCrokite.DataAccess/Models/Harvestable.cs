@@ -14,6 +14,7 @@ namespace SharpCrokite.DataAccess.Models
         public decimal Volume { get; set; }
         public List<MaterialContent> MaterialContents { get; set; } = new();
         public List<Price> Prices { get; set; } = new();
-        public int? IsCompressedVariantOfType { get; set; }
+        public int? IsCompressedVariantOfTypeId { get; set; }
+        public int? CompressedVariantTypeId { get; set; }
     }
 }

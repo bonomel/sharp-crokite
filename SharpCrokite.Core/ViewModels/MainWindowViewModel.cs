@@ -9,8 +9,6 @@ using JetBrains.Annotations;
 
 using SharpCrokite.Core.Commands;
 using SharpCrokite.Core.PriceUpdater;
-using SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval;
-using SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval;
 using SharpCrokite.Core.StaticDataUpdater;
 using SharpCrokite.Core.StaticDataUpdater.Esi;
 using SharpCrokite.Infrastructure.Repositories;
@@ -19,16 +17,14 @@ namespace SharpCrokite.Core.ViewModels
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        [UsedImplicitly] public Guid Id { get; } = Guid.NewGuid();
-
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
         private readonly IskPerHourViewModel iskPerHourViewModel;
-
-        private IContentViewModel currentContentViewModel;
         private readonly List<IContentViewModel> contentViewModels = new();
+        private IContentViewModel currentContentViewModel;
+        private PriceRetrievalServiceOption selectedPriceRetrievalServiceServiceOption;
+
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         [UsedImplicitly] public NavigatorViewModel NavigatorViewModel { get; set; }
 
@@ -47,8 +43,6 @@ namespace SharpCrokite.Core.ViewModels
                 NotifyPropertyChanged(nameof(CurrentContentViewModel));
             }
         }
-
-        private PriceRetrievalServiceOption selectedPriceRetrievalServiceServiceOption;
 
         [UsedImplicitly] public IEnumerable<PriceRetrievalServiceOption> PriceRetrievalServiceOptions { get; set; }
 

@@ -10,14 +10,12 @@ namespace SharpCrokite.Core.Models
     {
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        public int? CompressedVariantTypeId { get; set; }
+        public int CompressedVariantTypeId { get; set; }
         public int HarvestableId { get; set; }
-        [UsedImplicitly]
-        public byte[] Icon { get; set; }
+        [UsedImplicitly] public byte[] Icon { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
-        [UsedImplicitly]
-        public string Description { get; set; }
+        [UsedImplicitly] public string Description { get; set; }
         public Volume Volume { get; set; }
         public bool IsImprovedVariant { get; set; }
 

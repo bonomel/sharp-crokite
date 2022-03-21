@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval;
 using SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval;
 
@@ -9,7 +10,7 @@ namespace SharpCrokite.Core.PriceUpdater
     {
         public static IEnumerable<PriceRetrievalServiceOption> Build()
         {
-            return new List<PriceRetrievalServiceOption>()
+            return new List<PriceRetrievalServiceOption>
             {
                 new()
                 {
@@ -27,7 +28,7 @@ namespace SharpCrokite.Core.PriceUpdater
 
     public class PriceRetrievalServiceOption
     {
-        public string HumanReadableOptionValue { get; set; }
-        public Type ServiceType { get; set; }
+        [UsedImplicitly] public string HumanReadableOptionValue { get; set; }
+        public Type ServiceType { get; init; }
     }
 }
