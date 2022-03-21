@@ -27,7 +27,8 @@ namespace SharpCrokite.Core.Commands
             {
                 return targetCanExecuteMethod();
             }
-            else if (targetExecuteMethod != null)
+
+            if (targetExecuteMethod != null)
             {
                 return true;
             }
