@@ -53,7 +53,7 @@ namespace SharpCrokite.Core.Commands
 
         void ICommand.Execute(object parameter)
         {
-            ExecuteAsync().FireAndForgetSafeAsync();
+            ExecuteAsync().FireAndForgetAsync();
         }
 
 

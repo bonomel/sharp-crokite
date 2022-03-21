@@ -64,7 +64,7 @@ namespace SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval
 
                 if(response.IsSuccessStatusCode)
                 {
-                    string responseString = response.Content.ReadAsStringAsync().Result;
+                    string responseString = await response.Content.ReadAsStringAsync();
 
                     List<EveMarketerPricesJson> batchJsonResult = JsonSerializer.Deserialize<List<EveMarketerPricesJson>>(responseString);
 

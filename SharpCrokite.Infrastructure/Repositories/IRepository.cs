@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace SharpCrokite.Infrastructure.Repositories
 {
@@ -14,5 +15,6 @@ namespace SharpCrokite.Infrastructure.Repositories
         void DeleteAll();
         IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
         void SaveChanges();
+        Task SaveChangesAsync();
     }
 }

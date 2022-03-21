@@ -1,24 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace SharpCrokite.Core.Commands
 {
     public static class TaskExtensions
     {
-
-#pragma warning disable RECS0165 // Asynchronous methods should return a Task instead of void
-
-        public static async void FireAndForgetSafeAsync(this Task task)
-#pragma warning restore RECS0165 // Asynchronous methods should return a Task instead of void
+        public static async void FireAndForgetAsync(this Task task)
         {
-            try
-            {
-                await task;
-            }
-            catch (Exception ex)
-            {
-                
-            }
+            await task;
+            //TODO: add error handling, see: https://johnthiriet.com/mvvm-going-async-with-async-command/ & https://johnthiriet.com/removing-async-void/
         }
     }
 }

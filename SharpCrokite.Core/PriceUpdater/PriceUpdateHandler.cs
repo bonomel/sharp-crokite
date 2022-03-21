@@ -6,14 +6,14 @@ using SharpCrokite.Infrastructure.Repositories;
 
 namespace SharpCrokite.Core.PriceUpdater
 {
-    public class PriceUpdateController
+    public class PriceUpdateHandler
     {
         private readonly HarvestableRepository harvestableRepository;
         private readonly MaterialRepository materialRepository;
 
         private readonly IPriceRetrievalService priceRetrievalService;
 
-        public PriceUpdateController(IPriceRetrievalService priceRetrievalService,
+        public PriceUpdateHandler(IPriceRetrievalService priceRetrievalService,
             HarvestableRepository harvestableRepository,
             MaterialRepository materialRepository)
         {
