@@ -26,6 +26,7 @@
     <None Remove="Images\strontium-clathrates-icon.png" />
     <None Remove="Images\tritanium-icon.png" />
     <None Remove="Images\zydrine-icon.png" />
+    <None Remove="sharp-crokite-icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,6 +55,7 @@
     <Resource Include="Images\strontium-clathrates-icon.png" />
     <Resource Include="Images\tritanium-icon.png" />
     <Resource Include="Images\zydrine-icon.png" />
+    <Resource Include="sharp-crokite-icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
