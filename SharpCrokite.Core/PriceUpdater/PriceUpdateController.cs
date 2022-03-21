@@ -33,7 +33,7 @@ namespace SharpCrokite.Core.PriceUpdater
 
             PriceUpdater priceUpdater = new(harvestableRepository, materialRepository);
 
-            priceUpdater.Update(prices);
+            await priceUpdater.Update(prices);
         }
 
         public void DeleteAllPrices()

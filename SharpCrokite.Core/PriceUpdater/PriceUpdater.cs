@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Repositories;
 
@@ -17,7 +17,7 @@ namespace SharpCrokite.Core.PriceUpdater
             this.materialRepository = materialRepository;
         }
 
-        internal void Update(IEnumerable<PriceDto> priceDtos)
+        internal async Task Update(IEnumerable<PriceDto> priceDtos)
         {
             foreach(PriceDto dto in priceDtos)
             {
@@ -80,8 +80,8 @@ namespace SharpCrokite.Core.PriceUpdater
                 }
             }
 
-            harvestableRepository.SaveChanges();
-            materialRepository.SaveChanges();
+            await harvestableRepository.SaveChangesAsync();
+            await materialRepository.SaveChangesAsync();
         }
     }
 }

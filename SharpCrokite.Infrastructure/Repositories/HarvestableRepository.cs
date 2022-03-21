@@ -58,7 +58,7 @@ namespace SharpCrokite.Infrastructure.Repositories
                 .ToList();
         }
 
-        public override Harvestable Get(int id)
+        public Harvestable GetWithPrices(int id)
         {
             return dbContext.Harvestables.Where(harvestable => harvestable.HarvestableId == id).Include(h => h.Prices)
                 .SingleOrDefault();

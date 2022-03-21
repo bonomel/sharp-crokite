@@ -158,7 +158,7 @@ namespace SharpCrokite.Core.ViewModels
         {
             foreach (T harvestableIskPerHour in HarvestableIskPerHourCollection)
             {
-                Harvestable compressedVariant = HarvestableRepository.Get(harvestableIskPerHour.CompressedVariantTypeId);
+                Harvestable compressedVariant = HarvestableRepository.GetWithPrices(harvestableIskPerHour.CompressedVariantTypeId);
 
                 harvestableIskPerHour.CompressedPrices = compressedVariant.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
             }
