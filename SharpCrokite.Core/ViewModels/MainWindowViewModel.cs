@@ -98,9 +98,9 @@ namespace SharpCrokite.Core.ViewModels
         private async Task OnUpdatePrices()
         {
             PriceUpdateHandler priceUpdateHandler = new((IPriceRetrievalService)Activator.CreateInstance(SelectedPriceRetrievalServiceOption.ServiceType), harvestableRepository, materialRepository);
-            await priceUpdateHandler.UpdatePrices();
 
-            iskPerHourViewModel.UpdatePrices();
+            await Task.Run(() => priceUpdateHandler.UpdatePrices());
+            await Task.Run(() => iskPerHourViewModel.UpdatePrices());
         }
 
         private void OnDeletePrices()
@@ -108,7 +108,7 @@ namespace SharpCrokite.Core.ViewModels
             PriceUpdateHandler priceUpdateHandler = new((IPriceRetrievalService)Activator.CreateInstance(SelectedPriceRetrievalServiceOption.ServiceType), harvestableRepository, materialRepository);
             priceUpdateHandler.DeleteAllPrices();
 
-            iskPerHourViewModel.UpdatePrices();
+            iskPerHourViewModel.UpdatePrices().FireAndForgetAsync();
         }
 
         private void OnUpdateStaticData()

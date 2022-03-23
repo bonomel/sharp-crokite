@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 using SharpCrokite.DataAccess.DatabaseContexts;
@@ -62,6 +62,14 @@ namespace SharpCrokite.Infrastructure.Repositories
         {
             return dbContext.Harvestables.Where(harvestable => harvestable.HarvestableId == id).Include(h => h.Prices)
                 .SingleOrDefault();
+        }
+
+        public Task<Harvestable> GetWithPricesAsync(int id)
+        {
+            return dbContext.Harvestables
+                .Where(harvestable => harvestable.HarvestableId == id)
+                .Include(h => h.Prices)
+                .SingleOrDefaultAsync();
         }
     }
 }

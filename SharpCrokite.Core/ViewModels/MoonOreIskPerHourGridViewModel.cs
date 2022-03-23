@@ -1,7 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-
+using System.Threading.Tasks;
+using SharpCrokite.Core.Commands;
 using SharpCrokite.Core.Models;
 using SharpCrokite.Core.Queries;
 using SharpCrokite.Infrastructure.Repositories;
@@ -14,19 +15,19 @@ namespace SharpCrokite.Core.ViewModels
             : base(harvestableRepository, materialRepository)
         {
             if (harvestableIskPerHourCollection.Any())
-            {
-                UpdateMaterialPrices();
-                UpdateCompressedVariantPrices();
+            { 
+                UpdateMaterialPrices().FireAndForgetAsync();
+                UpdateCompressedVariantPrices().FireAndForgetAsync();
             }
 
             UpdateMaterialIskPerHour();
             UpdateCompressedIskPerHour();
         }
 
-        internal override void UpdatePrices()
+        internal override async Task UpdatePrices()
         {
-            UpdateMaterialPrices();
-            UpdateCompressedVariantPrices();
+            await UpdateMaterialPrices();
+            await UpdateCompressedVariantPrices();
 
             UpdateMaterialIskPerHour();
             UpdateCompressedIskPerHour();

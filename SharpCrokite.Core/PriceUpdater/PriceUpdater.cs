@@ -21,8 +21,8 @@ namespace SharpCrokite.Core.PriceUpdater
         {
             foreach(PriceDto dto in priceDtos)
             {
-                Harvestable harvestable = harvestableRepository.Get(dto.TypeId);
-                Material material = materialRepository.Get(dto.TypeId);
+                Harvestable harvestable = await harvestableRepository.GetAsync(dto.TypeId);
+                Material material = await materialRepository.GetAsync(dto.TypeId);
 
                 if(harvestable != null)
                 {
@@ -66,7 +66,7 @@ namespace SharpCrokite.Core.PriceUpdater
                     }
                     else
                     {
-                        material.Prices.Add(new Price()
+                        material.Prices.Add(new Price
                         {
                             SystemId = dto.SystemId,
                             BuyMax = dto.BuyMax,

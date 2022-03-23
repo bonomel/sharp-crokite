@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-
+using System.Threading.Tasks;
 using JetBrains.Annotations;
-
+using SharpCrokite.Core.Commands;
 using SharpCrokite.Core.Models;
 using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Common;
@@ -139,10 +139,10 @@ namespace SharpCrokite.Core.ViewModels
 
         protected abstract ObservableCollection<T> LoadStaticData();
 
-        internal virtual void UpdatePrices()
+        internal virtual async Task UpdatePrices()
         {
-            UpdateMaterialPrices();
-            UpdateCompressedVariantPrices();
+            await UpdateMaterialPrices();
+            await UpdateCompressedVariantPrices();
 
             UpdateMaterialIskPerHour();
             UpdateCompressedIskPerHour();
@@ -154,11 +154,11 @@ namespace SharpCrokite.Core.ViewModels
             UpdateCompressedIskPerHour();
         }
 
-        protected void UpdateCompressedVariantPrices()
+        protected async Task UpdateCompressedVariantPrices()
         {
             foreach (T harvestableIskPerHour in HarvestableIskPerHourCollection)
             {
-                Harvestable compressedVariant = HarvestableRepository.GetWithPrices(harvestableIskPerHour.CompressedVariantTypeId);
+                Harvestable compressedVariant = await HarvestableRepository.GetWithPricesAsync(harvestableIskPerHour.CompressedVariantTypeId);
 
                 harvestableIskPerHour.CompressedPrices = compressedVariant.Prices.ToDictionary(p => p.SystemId, p => new Isk(p.SellPercentile));
             }
@@ -207,9 +207,9 @@ namespace SharpCrokite.Core.ViewModels
             harvestableIskPerHour.MaterialIskPerHour = new Isk(valuePerHour);
         }
 
-        private protected void UpdateMaterialPrices()
+        private protected async Task UpdateMaterialPrices()
         {
-            materialModels = materialRepository.Find(material =>
+            materialModels = await materialRepository.FindAsync(material =>
                 material.Type == MineralTypeString
                 || material.Type == MoonMaterialsTypeString
                 || material.Type == IceProductsTypeString);

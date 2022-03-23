@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-
+using System.Threading.Tasks;
 using SharpCrokite.DataAccess.DatabaseContexts;
 using SharpCrokite.DataAccess.Models;
 
@@ -37,15 +37,23 @@ namespace SharpCrokite.Infrastructure.Repositories
         public override IEnumerable<Material> Find(Expression<Func<Material, bool>> predicate)
         {
             return dbContext.Materials
-                .Include(m => m.Prices)
+                .Include(material => material.Prices)
                 .Where(predicate)
                 .ToList();
+        }
+
+        public Task<List<Material>> FindAsync(Expression<Func<Material, bool>> predicate)
+        {
+            return dbContext.Materials
+                .Include(material => material.Prices)
+                .Where(predicate)
+                .ToListAsync();
         }
 
         public override IEnumerable<Material> All()
         {
             return dbContext.Materials
-                .Include(m => m.Prices)
+                .Include(material => material.Prices)
                 .ToList();
         }
     }

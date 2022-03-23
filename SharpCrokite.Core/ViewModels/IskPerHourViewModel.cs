@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
+using SharpCrokite.Core.Commands;
 using SharpCrokite.Core.Models;
 
 namespace SharpCrokite.Core.ViewModels
@@ -60,11 +62,11 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
-        public void UpdatePrices()
+        public async Task UpdatePrices()
         {
-            AsteroidIskPerHourGridViewModel.UpdatePrices();
-            MoonOreIskPerHourGridViewModel.UpdatePrices();
-            IceIskPerHourGridViewModel.UpdatePrices();
+            await AsteroidIskPerHourGridViewModel.UpdatePrices();
+            await MoonOreIskPerHourGridViewModel.UpdatePrices();
+            await IceIskPerHourGridViewModel.UpdatePrices();
         }
 
         public void ReloadStaticData()

@@ -36,6 +36,11 @@ namespace SharpCrokite.Infrastructure.Repositories
             return dbContext.Find<T>(id);
         }
 
+        public virtual ValueTask<T> GetAsync(int id)
+        {
+            return dbContext.FindAsync<T>(id);
+        }
+
         public virtual void SaveChanges()
         {
             dbContext.SaveChanges();
