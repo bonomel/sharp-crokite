@@ -106,6 +106,7 @@ namespace SharpCrokite.Core.ViewModels
         private void OnDeletePrices()
         {
             PriceUpdateHandler priceUpdateHandler = new((IPriceRetrievalService)Activator.CreateInstance(SelectedPriceRetrievalServiceOption.ServiceType), harvestableRepository, materialRepository);
+
             priceUpdateHandler.DeleteAllPrices();
 
             iskPerHourViewModel.UpdatePrices().FireAndForgetAsync();
