@@ -34,23 +34,17 @@ namespace SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval
 
         private static IEnumerable<PriceDto> MapJsonToPriceDto(IEnumerable<EveMarketerPricesJson> priceJson)
         {
-            List<PriceDto> priceDtos = new();
-
-            foreach(EveMarketerPricesJson json in priceJson)
+            return priceJson.Select(json => new PriceDto
             {
-                priceDtos.Add(new PriceDto
-                {
-                    TypeId = json.buy.forQuery.types.First(),
-                    SystemId = json.buy.forQuery.systems.First(),
-                    BuyMax = json.buy.max,
-                    BuyMin = json.buy.min,
-                    BuyPercentile = json.buy.fivePercent,
-                    SellMax = json.sell.max,
-                    SellMin = json.sell.min,
-                    SellPercentile = json.sell.fivePercent
-                });
-            }
-            return priceDtos;
+                TypeId = json.buy.forQuery.types.First(),
+                SystemId = json.buy.forQuery.systems.First(),
+                BuyMax = json.buy.max,
+                BuyMin = json.buy.min,
+                BuyPercentile = json.buy.fivePercent,
+                SellMax = json.sell.max,
+                SellMin = json.sell.min,
+                SellPercentile = json.sell.fivePercent
+            }).ToList();
         }
 
         private static async Task<IEnumerable<EveMarketerPricesJson>> RetrievePricesAsJson(IEnumerable<string> batchedUrls)
@@ -58,11 +52,11 @@ namespace SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval
             using HttpClient client = new();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             List<EveMarketerPricesJson> priceJson = new();
-            foreach(string url in batchedUrls)
+            foreach (string url in batchedUrls)
             {
                 HttpResponseMessage response = await client.GetAsync(url);
 
-                if(response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
                     string responseString = await response.Content.ReadAsStringAsync();
 
@@ -112,7 +106,7 @@ namespace SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval
 
             _ = stringBuilder.Append($"{BaseUrl}?usesystem={systemKey}");
 
-            foreach(int typeId in typeIds)
+            foreach (int typeId in typeIds)
             {
                 _ = stringBuilder.Append($"&typeid={typeId}");
             }

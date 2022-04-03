@@ -11,7 +11,6 @@ namespace SharpCrokite.Core.Models
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public int CompressedVariantTypeId { get; set; }
-        public int HarvestableId { get; set; }
         [UsedImplicitly] public byte[] Icon { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }

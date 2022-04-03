@@ -30,7 +30,6 @@ namespace SharpCrokite.Core.Queries
             {
                 T harvestableIskPerHour = Activator.CreateInstance<T>();
 
-                harvestableIskPerHour.HarvestableId = harvestableModel.HarvestableId;
                 harvestableIskPerHour.Icon = harvestableModel.Icon;
                 harvestableIskPerHour.Name = harvestableModel.Name;
                 harvestableIskPerHour.Description = harvestableModel.Description;
