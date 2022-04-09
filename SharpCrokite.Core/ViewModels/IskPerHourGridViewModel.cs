@@ -99,7 +99,7 @@ namespace SharpCrokite.Core.ViewModels
             HarvestableIskPerHourCollection = LoadStaticData();
         }
 
-        private decimal reprocessingEfficiency = 0.782m;
+        private decimal reprocessingEfficiency = 0.829m;
         [UsedImplicitly]
         public string ReprocessingEfficiencyText
         {
