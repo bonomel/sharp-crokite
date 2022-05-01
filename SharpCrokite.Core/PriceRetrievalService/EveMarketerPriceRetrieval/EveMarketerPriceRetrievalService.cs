@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace SharpCrokite.Core.PriceRetrievalService.EveMarketerPriceRetrieval
 {
-    public class EveMarketerPriceRetrievalService : IPriceRetrievalService
+    internal class EveMarketerPriceRetrievalService : PriceRetrievalServiceBase
     {
         private const string BaseUrl = "http://api.evemarketer.com/ec/marketstat/json";
         private const int BatchSize = 200;
@@ -19,7 +19,9 @@ namespace SharpCrokite.Core.PriceRetrievalService.EveMarketerPriceRetrieval
             { 30000142, "Jita" }
         };
 
-        public async Task<IEnumerable<PriceDto>> Retrieve(IList<int> allTypeIds)
+        public override string OptionName => "Eve Marketer";
+
+        protected override async Task<IEnumerable<PriceDto>> RetrievePricesFromService(IList<int> allTypeIds)
         {
             IList<IList<int>> batches = CreateBatches(allTypeIds);
 

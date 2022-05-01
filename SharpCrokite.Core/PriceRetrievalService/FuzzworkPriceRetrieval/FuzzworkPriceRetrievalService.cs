@@ -10,7 +10,7 @@ using SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval;
 
 namespace SharpCrokite.Core.PriceRetrievalService.FuzzworkPriceRetrieval
 {
-    public class FuzzworkPriceRetrievalService : IPriceRetrievalService
+    public class FuzzworkPriceRetrievalService : PriceRetrievalServiceBase
     {
         private const string BaseUrl = "https://market.fuzzwork.co.uk/aggregates/";
 
@@ -19,7 +19,9 @@ namespace SharpCrokite.Core.PriceRetrievalService.FuzzworkPriceRetrieval
             { 30000142, "Jita" }
         };
 
-        public async Task<IEnumerable<PriceDto>> Retrieve(IList<int> allTypeIds)
+        public override string OptionName => "Fuzzwork";
+
+        protected override async Task<IEnumerable<PriceDto>> RetrievePricesFromService(IList<int> allTypeIds)
         {
             List<PriceDto> priceDtos = new();
 

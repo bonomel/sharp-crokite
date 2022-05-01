@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
-using SharpCrokite.Core.PriceRetrievalService.EveMarketerPriceRetrieval;
-using SharpCrokite.Core.PriceRetrievalService.FuzzworkPriceRetrieval;
 
 namespace SharpCrokite.Core.PriceRetrievalService
 {
@@ -10,19 +9,18 @@ namespace SharpCrokite.Core.PriceRetrievalService
     {
         public static IEnumerable<PriceRetrievalServiceOption> Build()
         {
-            return new List<PriceRetrievalServiceOption>
+            List<PriceRetrievalServiceOption> priceRetrievalServiceOptions = new();
+            foreach (Type type in typeof(PriceRetrievalServiceBase).Assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(PriceRetrievalServiceBase))))
             {
-                new()
-                {
-                    OptionName = "Eve Marketer",
-                    ServiceType = typeof(EveMarketerPriceRetrievalService)
-                },
-                new()
-                {
-                    OptionName = "Fuzzwork",
-                    ServiceType = typeof(FuzzworkPriceRetrievalService)
-                }
-            };
+                priceRetrievalServiceOptions.Add(
+                    new PriceRetrievalServiceOption
+                    {
+                        OptionName = ((PriceRetrievalServiceBase)Activator.CreateInstance(type))?.OptionName,
+                        ServiceType = type
+                    }
+                );
+            }
+            return priceRetrievalServiceOptions;
         }
     }
 
