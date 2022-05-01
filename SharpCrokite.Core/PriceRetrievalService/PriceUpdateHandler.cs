@@ -31,7 +31,7 @@ namespace SharpCrokite.Core.PriceRetrievalService
 
             IEnumerable<PriceDto> prices = await priceRetrievalService.Retrieve(allTypeIds);
 
-            PriceUpdater.PriceUpdater priceUpdater = new(harvestableRepository, materialRepository);
+            PriceUpdater priceUpdater = new(harvestableRepository, materialRepository);
 
             await priceUpdater.Update(prices);
         }

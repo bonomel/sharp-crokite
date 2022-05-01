@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using SharpCrokite.Core.PriceRetrievalService.EveMarketerPriceRetrieval;
 using SharpCrokite.Core.PriceRetrievalService.FuzzworkPriceRetrieval;
-using SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval;
 
 namespace SharpCrokite.Core.PriceRetrievalService
 {
