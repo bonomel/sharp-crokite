@@ -15,7 +15,7 @@ namespace SharpCrokite.Core.PriceRetrievalService
                 priceRetrievalServiceOptions.Add(
                     new PriceRetrievalServiceOption
                     {
-                        OptionName = ((PriceRetrievalServiceBase)Activator.CreateInstance(type))?.OptionName,
+                        OptionName = ((PriceRetrievalServiceBase)Activator.CreateInstance(type))?.ServiceName,
                         ServiceType = type
                     }
                 );

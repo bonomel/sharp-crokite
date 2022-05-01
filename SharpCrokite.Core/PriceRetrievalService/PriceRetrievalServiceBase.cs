@@ -5,7 +5,13 @@ namespace SharpCrokite.Core.PriceRetrievalService
 {
     public abstract class PriceRetrievalServiceBase : IPriceRetrievalService
     {
-        public abstract string OptionName { get; }
+        // to be made configurable
+        protected readonly Dictionary<int, string> SystemsToGetPricesFor = new()
+        {
+            { 30000142, "Jita" }
+        };
+
+        public abstract string ServiceName { get; }
 
         public Task<IEnumerable<PriceDto>> Retrieve(IList<int> allTypeIds)
         {

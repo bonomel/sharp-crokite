@@ -14,12 +14,8 @@ namespace SharpCrokite.Core.PriceRetrievalService.EveMarketerPriceRetrieval
     {
         private const string BaseUrl = "http://api.evemarketer.com/ec/marketstat/json";
         private const int BatchSize = 200;
-        private readonly Dictionary<int, string> systemsToGetPricesFor = new()
-        {
-            { 30000142, "Jita" }
-        };
 
-        public override string OptionName => "Eve Marketer";
+        public override string ServiceName => "Eve Marketer";
 
         protected override async Task<IEnumerable<PriceDto>> RetrievePricesFromService(IList<int> allTypeIds)
         {
@@ -91,7 +87,7 @@ namespace SharpCrokite.Core.PriceRetrievalService.EveMarketerPriceRetrieval
         {
             List<string> batchedUrls = new();
             
-            foreach (KeyValuePair<int, string> system in systemsToGetPricesFor)
+            foreach (KeyValuePair<int, string> system in SystemsToGetPricesFor)
             {
                 foreach (IList<int> batch in batches)
                 {

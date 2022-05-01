@@ -10,22 +10,17 @@ using SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval;
 
 namespace SharpCrokite.Core.PriceRetrievalService.FuzzworkPriceRetrieval
 {
-    public class FuzzworkPriceRetrievalService : PriceRetrievalServiceBase
+    internal class FuzzworkPriceRetrievalService : PriceRetrievalServiceBase
     {
         private const string BaseUrl = "https://market.fuzzwork.co.uk/aggregates/";
 
-        private readonly Dictionary<int, string> systemsToGetPricesFor = new() // TODO: pull up
-        {
-            { 30000142, "Jita" }
-        };
-
-        public override string OptionName => "Fuzzwork";
+        public override string ServiceName => "Fuzzwork";
 
         protected override async Task<IEnumerable<PriceDto>> RetrievePricesFromService(IList<int> allTypeIds)
         {
             List<PriceDto> priceDtos = new();
 
-            foreach (int systemId in systemsToGetPricesFor.Keys)
+            foreach (int systemId in SystemsToGetPricesFor.Keys)
             {
                 Dictionary<string, FuzzworkPricesJson> pricesPerItemForSystem = await RetrievePricesAsJson(BuildUrl(allTypeIds, systemId));
 
