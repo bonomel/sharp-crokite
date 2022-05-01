@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Repositories;
 
-namespace SharpCrokite.Core.PriceUpdater
+namespace SharpCrokite.Core.PriceRetrievalService
 {
     public class PriceUpdateHandler
     {
@@ -31,7 +31,7 @@ namespace SharpCrokite.Core.PriceUpdater
 
             IEnumerable<PriceDto> prices = await priceRetrievalService.Retrieve(allTypeIds);
 
-            PriceUpdater priceUpdater = new(harvestableRepository, materialRepository);
+            PriceUpdater.PriceUpdater priceUpdater = new(harvestableRepository, materialRepository);
 
             await priceUpdater.Update(prices);
         }

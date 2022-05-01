@@ -1,4 +1,4 @@
-﻿namespace SharpCrokite.Core.PriceUpdater
+﻿namespace SharpCrokite.Core.PriceRetrievalService
 {
     public class PriceDto
     {

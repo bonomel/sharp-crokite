@@ -6,8 +6,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval;
 
-namespace SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval
+namespace SharpCrokite.Core.PriceRetrievalService.FuzzworkPriceRetrieval
 {
     public class FuzzworkPriceRetrievalService : IPriceRetrievalService
     {

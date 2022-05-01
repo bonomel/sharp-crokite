@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SharpCrokite.Core.PriceUpdater
+namespace SharpCrokite.Core.PriceRetrievalService
 {
     public interface IPriceRetrievalService
     {

@@ -7,8 +7,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval;
 
-namespace SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval
+namespace SharpCrokite.Core.PriceRetrievalService.EveMarketerPriceRetrieval
 {
     public class EveMarketerPriceRetrievalService : IPriceRetrievalService
     {
@@ -49,29 +50,39 @@ namespace SharpCrokite.Core.PriceUpdater.EveMarketerPriceRetrieval
 
         private static async Task<IEnumerable<EveMarketerPricesJson>> RetrievePricesAsJson(IEnumerable<string> batchedUrls)
         {
-            using HttpClient client = new();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             List<EveMarketerPricesJson> priceJson = new();
-            foreach (string url in batchedUrls)
+            try
             {
-                HttpResponseMessage response = await client.GetAsync(url);
-
-                if (response.IsSuccessStatusCode)
+                using HttpClient client = new();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                foreach (string url in batchedUrls)
                 {
-                    string responseString = await response.Content.ReadAsStringAsync();
+                    HttpResponseMessage response = await client.GetAsync(url);
 
-                    List<EveMarketerPricesJson> batchJsonResult = JsonSerializer.Deserialize<List<EveMarketerPricesJson>>(responseString);
-
-                    if (batchJsonResult != null)
+                    if (response.IsSuccessStatusCode)
                     {
-                        priceJson.AddRange(batchJsonResult);
+                        string responseString = await response.Content.ReadAsStringAsync();
+
+                        List<EveMarketerPricesJson> batchJsonResult = JsonSerializer.Deserialize<List<EveMarketerPricesJson>>(responseString);
+
+                        if (batchJsonResult != null)
+                        {
+                            priceJson.AddRange(batchJsonResult);
+                        }
+                    }
+                    else
+                    {
+                        throw new HttpRequestException(
+                            $"Something went wrong while retrieving prices.\nBase URL: {BaseUrl}\nResponse code: {response.StatusCode}\nReason: {response.ReasonPhrase}",
+                            null, response.StatusCode);
                     }
                 }
-                else
-                {
-                    _ = MessageBox.Show($"Something went wrong calling API:\n{url}");
-                }
             }
+            catch (HttpRequestException ex)
+            {
+                _ = MessageBox.Show(ex.Message, nameof(HttpRequestException), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             return priceJson;
         }
 

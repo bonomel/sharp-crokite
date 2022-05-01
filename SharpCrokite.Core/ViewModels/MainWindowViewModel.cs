@@ -9,7 +9,7 @@ using System.Windows;
 using JetBrains.Annotations;
 
 using SharpCrokite.Core.Commands;
-using SharpCrokite.Core.PriceUpdater;
+using SharpCrokite.Core.PriceRetrievalService;
 using SharpCrokite.Core.StaticDataUpdater;
 using SharpCrokite.Core.StaticDataUpdater.Esi;
 using SharpCrokite.Infrastructure.Repositories;
@@ -87,7 +87,7 @@ namespace SharpCrokite.Core.ViewModels
             NavigatorViewModel = navigatorViewModel;
             NavigatorViewModel.CurrentViewModelChanged += OnCurrentViewModelChanged;
 
-            PriceRetrievalServiceOptions = PriceRetrievalOptionsBuilder.Build();
+            PriceRetrievalServiceOptions = PriceRetrievalOptionsProvider.Build();
         }
 
         private void OnCurrentViewModelChanged(Type parameter)

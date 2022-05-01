@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using SharpCrokite.DataAccess.Models;
 using SharpCrokite.Infrastructure.Repositories;
 
-namespace SharpCrokite.Core.PriceUpdater
+namespace SharpCrokite.Core.PriceRetrievalService
 {
     public class PriceUpdater
     {
