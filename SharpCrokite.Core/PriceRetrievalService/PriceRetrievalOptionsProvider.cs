@@ -20,7 +20,8 @@ namespace SharpCrokite.Core.PriceRetrievalService
                     }
                 );
             }
-            return priceRetrievalServiceOptions;
+            
+            return priceRetrievalServiceOptions.OrderBy(option => option.OptionName);
         }
     }
 
