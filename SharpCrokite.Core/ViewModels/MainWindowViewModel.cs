@@ -67,24 +67,14 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
-        private bool updatePricesButtonEnabled = true;
-        [UsedImplicitly]
-        public bool UpdatePricesButtonEnabled
-        {
-            get => updatePricesButtonEnabled;
-            set
-            {
-                updatePricesButtonEnabled = value;
-                NotifyPropertyChanged(nameof(UpdatePricesButtonEnabled));
-            }
-        }
+        [UsedImplicitly] public bool UpdatePricesButtonEnabled => !UpdatePricesCommand.IsExecuting;
 
         public MainWindowViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository,
             NavigatorViewModel navigatorViewModel, IskPerHourViewModel iskPerHourViewModel, SurveyCalculatorViewModel surveyCalculatorViewModel)
         {
             UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
             DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
-            UpdatePricesCommand = new AsyncRelayCommand(OnUpdatePrices, CanUpdatePrices);
+            UpdatePricesCommand = new AsyncRelayCommand(OnUpdatePrices, CanUpdatePrices, () => NotifyPropertyChanged(nameof(UpdatePricesButtonEnabled)));
             DeletePricesCommand = new RelayCommand(OnDeletePrices, CanDeletePrices);
 
             this.harvestableRepository = harvestableRepository;
@@ -109,14 +99,10 @@ namespace SharpCrokite.Core.ViewModels
 
         private async Task OnUpdatePrices()
         {
-            UpdatePricesButtonEnabled = false;
-
             PriceUpdateHandler priceUpdateHandler = new((IPriceRetrievalService)Activator.CreateInstance(SelectedPriceRetrievalServiceOption.ServiceType), harvestableRepository, materialRepository);
 
             await Task.Run(() => priceUpdateHandler.UpdatePrices());
             await Task.Run(() => iskPerHourViewModel.UpdatePrices());
-
-            UpdatePricesButtonEnabled = true;
         }
 
         private void OnDeletePrices()
