@@ -29,7 +29,7 @@ namespace SharpCrokite.Core.ViewModels
 
         [UsedImplicitly] public NavigatorViewModel NavigatorViewModel { get; set; }
 
-        [UsedImplicitly] public RelayCommand DeletePricesCommand { get; private set; }
+        [UsedImplicitly] public AsyncRelayCommand DeletePricesCommand { get; private set; }
         [UsedImplicitly] public AsyncRelayCommand UpdatePricesCommand { get; private set; }
         [UsedImplicitly] public RelayCommand UpdateStaticDataCommand { get; private set; }
         [UsedImplicitly] public RelayCommand DeleteStaticDataCommand { get; private set; }
@@ -69,13 +69,15 @@ namespace SharpCrokite.Core.ViewModels
 
         [UsedImplicitly] public bool UpdatePricesButtonEnabled => !UpdatePricesCommand.IsExecuting;
 
+        [UsedImplicitly] public bool DeletePricesButtonEnabled => !DeletePricesCommand.IsExecuting;
+
         public MainWindowViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository,
             NavigatorViewModel navigatorViewModel, IskPerHourViewModel iskPerHourViewModel, SurveyCalculatorViewModel surveyCalculatorViewModel)
         {
             UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
             DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
             UpdatePricesCommand = new AsyncRelayCommand(OnUpdatePrices, CanUpdatePrices, () => NotifyPropertyChanged(nameof(UpdatePricesButtonEnabled)));
-            DeletePricesCommand = new RelayCommand(OnDeletePrices, CanDeletePrices);
+            DeletePricesCommand = new AsyncRelayCommand(OnDeletePrices, CanDeletePrices, () => NotifyPropertyChanged(nameof(DeletePricesButtonEnabled)));
 
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
@@ -105,13 +107,12 @@ namespace SharpCrokite.Core.ViewModels
             await Task.Run(() => iskPerHourViewModel.UpdatePrices());
         }
 
-        private void OnDeletePrices()
+        private async Task OnDeletePrices()
         {
             PriceUpdateHandler priceUpdateHandler = new((IPriceRetrievalService)Activator.CreateInstance(SelectedPriceRetrievalServiceOption.ServiceType), harvestableRepository, materialRepository);
 
-            priceUpdateHandler.DeleteAllPrices();
-
-            iskPerHourViewModel.UpdatePrices().FireAndForgetAsync();
+            await Task.Run(() => priceUpdateHandler.DeleteAllPrices());
+            await Task.Run(() => iskPerHourViewModel.UpdatePrices());
         }
 
         private void OnUpdateStaticData()

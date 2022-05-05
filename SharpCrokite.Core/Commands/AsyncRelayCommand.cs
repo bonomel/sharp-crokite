@@ -8,7 +8,7 @@ namespace SharpCrokite.Core.Commands
     {
         public event EventHandler CanExecuteChanged = delegate { };
 
-        public bool IsExecuting;
+        public bool IsExecuting { get; private set; }
 
         private readonly Func<Task> targetExecuteMethod;
         private readonly Func<bool> targetCanExecuteMethod;

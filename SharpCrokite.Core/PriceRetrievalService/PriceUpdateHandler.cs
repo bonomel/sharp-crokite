@@ -36,13 +36,13 @@ namespace SharpCrokite.Core.PriceRetrievalService
             await priceUpdater.Update(prices);
         }
 
-        public void DeleteAllPrices()
+        public async Task DeleteAllPrices()
         {
             harvestableRepository.All().ToList().ForEach(h => h.Prices = new List<Price>());
             materialRepository.All().ToList().ForEach(m => m.Prices = new List<Price>());
 
-            harvestableRepository.SaveChanges();
-            materialRepository.SaveChanges();
+            await harvestableRepository.SaveChangesAsync();
+            await materialRepository.SaveChangesAsync();
         }
     }
 }
