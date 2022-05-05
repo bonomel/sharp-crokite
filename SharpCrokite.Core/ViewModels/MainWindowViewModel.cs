@@ -67,6 +67,18 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
+        private bool updatePricesButtonEnabled = true;
+        [UsedImplicitly]
+        public bool UpdatePricesButtonEnabled
+        {
+            get => updatePricesButtonEnabled;
+            set
+            {
+                updatePricesButtonEnabled = value;
+                NotifyPropertyChanged(nameof(UpdatePricesButtonEnabled));
+            }
+        }
+
         public MainWindowViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository,
             NavigatorViewModel navigatorViewModel, IskPerHourViewModel iskPerHourViewModel, SurveyCalculatorViewModel surveyCalculatorViewModel)
         {
@@ -97,10 +109,14 @@ namespace SharpCrokite.Core.ViewModels
 
         private async Task OnUpdatePrices()
         {
+            UpdatePricesButtonEnabled = false;
+
             PriceUpdateHandler priceUpdateHandler = new((IPriceRetrievalService)Activator.CreateInstance(SelectedPriceRetrievalServiceOption.ServiceType), harvestableRepository, materialRepository);
 
             await Task.Run(() => priceUpdateHandler.UpdatePrices());
             await Task.Run(() => iskPerHourViewModel.UpdatePrices());
+
+            UpdatePricesButtonEnabled = true;
         }
 
         private void OnDeletePrices()
