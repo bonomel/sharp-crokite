@@ -15,7 +15,7 @@ namespace SharpCrokite.Core.ViewModels
             : base(harvestableRepository, materialRepository)
         {
             if (harvestableIskPerHourCollection.Any())
-            { 
+            {
                 UpdateMaterialPrices().FireAndForgetAsync();
                 UpdateCompressedVariantPrices().FireAndForgetAsync();
             }

@@ -45,7 +45,8 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
-        [UsedImplicitly] public IEnumerable<PriceRetrievalServiceOption> PriceRetrievalServiceOptions { get; set; }
+        [UsedImplicitly]
+        public IEnumerable<PriceRetrievalServiceOption> PriceRetrievalServiceOptions { get; set; } = PriceRetrievalOptionsProvider.Build();
 
         [UsedImplicitly]
         public PriceRetrievalServiceOption SelectedPriceRetrievalServiceOption
@@ -81,13 +82,11 @@ namespace SharpCrokite.Core.ViewModels
 
             NavigatorViewModel = navigatorViewModel;
             NavigatorViewModel.CurrentViewModelChanged += OnCurrentViewModelChanged;
-
-            PriceRetrievalServiceOptions = PriceRetrievalOptionsProvider.Build();
         }
 
-        private void OnCurrentViewModelChanged(Type parameter)
+        private void OnCurrentViewModelChanged(Type viewModelType)
         {
-            CurrentContentViewModel = contentViewModels.Single(viewmodel => viewmodel.GetType() == parameter);
+            CurrentContentViewModel = contentViewModels.Single(viewmodel => viewmodel.GetType() == viewModelType);
         }
 
         private async Task OnUpdatePrices()
