@@ -50,16 +50,7 @@ namespace SharpCrokite.Core.ViewModels
         [UsedImplicitly]
         public PriceRetrievalServiceOption SelectedPriceRetrievalServiceOption
         {
-            get
-            {
-                if (selectedPriceRetrievalServiceServiceOption == null)
-                {
-                    selectedPriceRetrievalServiceServiceOption = PriceRetrievalServiceOptions.First();
-                    return selectedPriceRetrievalServiceServiceOption;
-                }
-
-                return selectedPriceRetrievalServiceServiceOption;
-            }
+            get => selectedPriceRetrievalServiceServiceOption ??= PriceRetrievalServiceOptions.First();
             set
             {
                 selectedPriceRetrievalServiceServiceOption = value;

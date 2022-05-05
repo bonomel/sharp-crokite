@@ -9,19 +9,13 @@ namespace SharpCrokite.Core.PriceRetrievalService
     {
         public static IEnumerable<PriceRetrievalServiceOption> Build()
         {
-            List<PriceRetrievalServiceOption> priceRetrievalServiceOptions = new();
-            foreach (Type type in typeof(PriceRetrievalServiceBase).Assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(PriceRetrievalServiceBase))))
-            {
-                priceRetrievalServiceOptions.Add(
+            return typeof(PriceRetrievalServiceBase).Assembly.GetTypes().Where(type =>
+                type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(PriceRetrievalServiceBase))).Select(type =>
                     new PriceRetrievalServiceOption
                     {
-                        OptionName = ((PriceRetrievalServiceBase)Activator.CreateInstance(type))?.ServiceName,
+                        OptionName = (Activator.CreateInstance(type) as PriceRetrievalServiceBase)?.ServiceName,
                         ServiceType = type
-                    }
-                );
-            }
-            
-            return priceRetrievalServiceOptions.OrderBy(option => option.OptionName);
+                    }).ToList().OrderBy(option => option.OptionName);
         }
     }
 
