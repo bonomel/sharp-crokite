@@ -19,13 +19,18 @@ namespace SharpCrokite.Core.Commands
             this.targetExecuteMethod = targetExecuteMethod;
         }
 
-        public AsyncRelayCommand(Func<Task> targetExecuteMethod, Func<bool> targetCanExecuteMethod = null)
+        public AsyncRelayCommand(Func<Task> targetExecuteMethod, Func<bool> targetCanExecuteMethod)
         {
             this.targetExecuteMethod = targetExecuteMethod;
             this.targetCanExecuteMethod = targetCanExecuteMethod;
         }
+        public AsyncRelayCommand(Func<Task> targetExecuteMethod, Action targetNotifyPropertyChanged)
+        {
+            this.targetExecuteMethod = targetExecuteMethod;
+            this.targetNotifyPropertyChanged = targetNotifyPropertyChanged;
+        }
 
-        public AsyncRelayCommand(Func<Task> targetExecuteMethod, Func<bool> targetCanExecuteMethod = null, Action targetNotifyPropertyChanged = null)
+        public AsyncRelayCommand(Func<Task> targetExecuteMethod, Func<bool> targetCanExecuteMethod, Action targetNotifyPropertyChanged)
         {
             this.targetExecuteMethod = targetExecuteMethod;
             this.targetCanExecuteMethod = targetCanExecuteMethod;
