@@ -117,8 +117,7 @@ namespace SharpCrokite.Core.ViewModels
 
         private void OnUpdateStaticData()
         {
-            var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(),
-                harvestableRepository, materialRepository);
+            StaticDataUpdateController staticDataUpdateController = new(new EsiStaticDataRetriever(), harvestableRepository, materialRepository);
 
             try
             {
@@ -140,8 +139,7 @@ namespace SharpCrokite.Core.ViewModels
 
         private void OnDeleteStaticData()
         {
-            var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(),
-                harvestableRepository, materialRepository);
+            StaticDataUpdateController staticDataUpdateController = new(new EsiStaticDataRetriever(), harvestableRepository, materialRepository);
 
             staticDataUpdateController.DeleteAllStaticData();
 
