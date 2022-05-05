@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace SharpCrokite.Core.Commands
 {
-    interface IAsyncCommand : ICommand
+    internal interface IAsyncCommand : ICommand
     {
         Task ExecuteAsync();
         bool CanExecute();
