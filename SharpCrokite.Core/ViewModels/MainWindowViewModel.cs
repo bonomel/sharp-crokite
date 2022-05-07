@@ -66,10 +66,10 @@ namespace SharpCrokite.Core.ViewModels
         public MainWindowViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository,
             NavigatorViewModel navigatorViewModel, IskPerHourViewModel iskPerHourViewModel, SurveyCalculatorViewModel surveyCalculatorViewModel)
         {
-            UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
-            DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
-            UpdatePricesCommand = new AsyncRelayCommand(OnUpdatePrices, CanUpdatePrices, () => NotifyPropertyChanged(nameof(UpdatePricesButtonEnabled)));
-            DeletePricesCommand = new AsyncRelayCommand(OnDeletePrices, CanDeletePrices, () => NotifyPropertyChanged(nameof(DeletePricesButtonEnabled)));
+            UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData);
+            DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData);
+            UpdatePricesCommand = new AsyncRelayCommand(OnUpdatePrices, () => NotifyPropertyChanged(nameof(UpdatePricesButtonEnabled)));
+            DeletePricesCommand = new AsyncRelayCommand(OnDeletePrices, () => NotifyPropertyChanged(nameof(DeletePricesButtonEnabled)));
 
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
@@ -134,26 +134,6 @@ namespace SharpCrokite.Core.ViewModels
             staticDataUpdateController.DeleteAllStaticData();
 
             iskPerHourViewModel.ReloadStaticData();
-        }
-
-        private static bool CanUpdatePrices()
-        {
-            return true;
-        }
-
-        private static bool CanDeletePrices()
-        {
-            return true;
-        }
-
-        private static bool CanUpdateStaticData()
-        {
-            return true;
-        }
-
-        private static bool CanDeleteStaticData()
-        {
-            return true;
         }
 
         private void NotifyPropertyChanged(string propertyName)

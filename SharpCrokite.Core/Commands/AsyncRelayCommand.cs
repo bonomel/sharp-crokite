@@ -8,11 +8,20 @@ namespace SharpCrokite.Core.Commands
     {
         public event EventHandler CanExecuteChanged = delegate { };
 
-        public bool IsExecuting { get; private set; }
+        private bool isExecuting;
+        public bool IsExecuting
+        {
+            get => isExecuting;
+            private set
+            {
+                isExecuting = value;
+                targetNotifyIsExecutingChanged?.Invoke();
+            }
+        }
 
         private readonly Func<Task> targetExecuteMethod;
         private readonly Func<bool> targetCanExecuteMethod;
-        private readonly Action targetNotifyPropertyChanged;
+        private readonly Action targetNotifyIsExecutingChanged;
 
         public AsyncRelayCommand(Func<Task> targetExecuteMethod)
         {
@@ -24,17 +33,17 @@ namespace SharpCrokite.Core.Commands
             this.targetExecuteMethod = targetExecuteMethod;
             this.targetCanExecuteMethod = targetCanExecuteMethod;
         }
-        public AsyncRelayCommand(Func<Task> targetExecuteMethod, Action targetNotifyPropertyChanged)
+        public AsyncRelayCommand(Func<Task> targetExecuteMethod, Action targetNotifyIsExecutingChanged)
         {
             this.targetExecuteMethod = targetExecuteMethod;
-            this.targetNotifyPropertyChanged = targetNotifyPropertyChanged;
+            this.targetNotifyIsExecutingChanged = targetNotifyIsExecutingChanged;
         }
 
-        public AsyncRelayCommand(Func<Task> targetExecuteMethod, Func<bool> targetCanExecuteMethod, Action targetNotifyPropertyChanged)
+        public AsyncRelayCommand(Func<Task> targetExecuteMethod, Func<bool> targetCanExecuteMethod, Action targetNotifyIsExecutingChanged)
         {
             this.targetExecuteMethod = targetExecuteMethod;
             this.targetCanExecuteMethod = targetCanExecuteMethod;
-            this.targetNotifyPropertyChanged = targetNotifyPropertyChanged;
+            this.targetNotifyIsExecutingChanged = targetNotifyIsExecutingChanged;
         }
 
         public bool CanExecute()
@@ -48,13 +57,11 @@ namespace SharpCrokite.Core.Commands
                 try
                 {
                     IsExecuting = true;
-                    targetNotifyPropertyChanged?.Invoke();
                     await targetExecuteMethod();
                 }
                 finally
                 {
                     IsExecuting = false;
-                    targetNotifyPropertyChanged?.Invoke();
                 }
             }
 
