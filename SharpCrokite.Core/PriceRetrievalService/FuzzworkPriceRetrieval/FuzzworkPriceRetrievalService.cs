@@ -4,26 +4,27 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows;
+using JetBrains.Annotations;
+using SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval;
 
-namespace SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval
+namespace SharpCrokite.Core.PriceRetrievalService.FuzzworkPriceRetrieval
 {
-    public class FuzzworkPriceRetrievalService : IPriceRetrievalService
+    [UsedImplicitly]
+    internal class FuzzworkPriceRetrievalService : PriceRetrievalServiceBase
     {
         private const string BaseUrl = "https://market.fuzzwork.co.uk/aggregates/";
 
-        private readonly Dictionary<int, string> systemsToGetPricesFor = new() // TODO: pull up
-        {
-            { 30000142, "Jita" }
-        };
+        public override string ServiceName => "Fuzzwork";
 
-        public IEnumerable<PriceDto> Retrieve(IList<int> allTypeIds)
+        protected override async Task<IEnumerable<PriceDto>> RetrievePricesFromService(IList<int> allTypeIds)
         {
             List<PriceDto> priceDtos = new();
 
-            foreach (int systemId in systemsToGetPricesFor.Keys)
+            foreach (int systemId in SystemsToGetPricesFor.Keys)
             {
-                Dictionary<string, FuzzworkPricesJson> pricesPerItemForSystem = RetrievePricesAsJson(BuildUrl(allTypeIds, systemId));
+                Dictionary<string, FuzzworkPricesJson> pricesPerItemForSystem = await RetrievePricesAsJson(BuildUrl(allTypeIds, systemId));
 
                 priceDtos.AddRange(MapJsonToPriceDto(pricesPerItemForSystem, systemId));
             }
@@ -31,22 +32,33 @@ namespace SharpCrokite.Core.PriceUpdater.FuzzworkPriceRetrieval
             return priceDtos;
         }
 
-        private static Dictionary<string, FuzzworkPricesJson> RetrievePricesAsJson(string url)
+        private static async Task<Dictionary<string, FuzzworkPricesJson>> RetrievePricesAsJson(string url)
         {
             Dictionary<string, FuzzworkPricesJson> priceJson = new();
 
-            using HttpClient client = new();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage response = client.GetAsync(url).Result;
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                string responseString = response.Content.ReadAsStringAsync().Result;
+                using HttpClient client = new();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = await client.GetAsync(url);
 
-                return JsonSerializer.Deserialize<Dictionary<string, FuzzworkPricesJson>>(responseString);
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseString = await response.Content.ReadAsStringAsync();
+
+                    priceJson = JsonSerializer.Deserialize<Dictionary<string, FuzzworkPricesJson>>(responseString);
+                }
+                else
+                {
+                    throw new HttpRequestException(
+                        $"Something went wrong while retrieving prices.\nBase URL: {BaseUrl}\nResponse code: {response.StatusCode}\nReason: {response.ReasonPhrase}",
+                        null, response.StatusCode);
+                }
             }
-
-            _ = MessageBox.Show($"Something went wrong while calling Fuzzwork API:\n{url}");
+            catch (HttpRequestException ex)
+            {
+                _ = MessageBox.Show(ex.Message, nameof(HttpRequestException), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
             return priceJson;
         }

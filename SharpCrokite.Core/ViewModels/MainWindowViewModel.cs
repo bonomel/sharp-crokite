@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows;
 
 using JetBrains.Annotations;
 
 using SharpCrokite.Core.Commands;
-using SharpCrokite.Core.PriceUpdater;
+using SharpCrokite.Core.PriceRetrievalService;
 using SharpCrokite.Core.StaticDataUpdater;
 using SharpCrokite.Core.StaticDataUpdater.Esi;
 using SharpCrokite.Infrastructure.Repositories;
@@ -28,8 +29,8 @@ namespace SharpCrokite.Core.ViewModels
 
         [UsedImplicitly] public NavigatorViewModel NavigatorViewModel { get; set; }
 
-        [UsedImplicitly] public RelayCommand DeletePricesCommand { get; private set; }
-        [UsedImplicitly] public RelayCommand UpdatePricesCommand { get; private set; }
+        [UsedImplicitly] public AsyncRelayCommand DeletePricesCommand { get; private set; }
+        [UsedImplicitly] public AsyncRelayCommand UpdatePricesCommand { get; private set; }
         [UsedImplicitly] public RelayCommand UpdateStaticDataCommand { get; private set; }
         [UsedImplicitly] public RelayCommand DeleteStaticDataCommand { get; private set; }
 
@@ -44,21 +45,13 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
-        [UsedImplicitly] public IEnumerable<PriceRetrievalServiceOption> PriceRetrievalServiceOptions { get; set; }
+        [UsedImplicitly]
+        public IEnumerable<PriceRetrievalServiceOption> PriceRetrievalServiceOptions { get; set; } = PriceRetrievalOptionsProvider.Build();
 
         [UsedImplicitly]
         public PriceRetrievalServiceOption SelectedPriceRetrievalServiceOption
         {
-            get
-            {
-                if (selectedPriceRetrievalServiceServiceOption == null)
-                {
-                    selectedPriceRetrievalServiceServiceOption = PriceRetrievalServiceOptions.First();
-                    return selectedPriceRetrievalServiceServiceOption;
-                }
-
-                return selectedPriceRetrievalServiceServiceOption;
-            }
+            get => selectedPriceRetrievalServiceServiceOption ??= PriceRetrievalServiceOptions.First();
             set
             {
                 selectedPriceRetrievalServiceServiceOption = value;
@@ -66,13 +59,17 @@ namespace SharpCrokite.Core.ViewModels
             }
         }
 
+        [UsedImplicitly] public bool UpdatePricesButtonEnabled => !UpdatePricesCommand.IsExecuting;
+
+        [UsedImplicitly] public bool DeletePricesButtonEnabled => !DeletePricesCommand.IsExecuting;
+
         public MainWindowViewModel(HarvestableRepository harvestableRepository, MaterialRepository materialRepository,
             NavigatorViewModel navigatorViewModel, IskPerHourViewModel iskPerHourViewModel, SurveyCalculatorViewModel surveyCalculatorViewModel)
         {
-            UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData, CanUpdateStaticData);
-            DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData, CanDeleteStaticData);
-            UpdatePricesCommand = new RelayCommand(OnUpdatePrices, CanUpdatePrices);
-            DeletePricesCommand = new RelayCommand(OnDeletePrices, CanDeletePrices);
+            UpdateStaticDataCommand = new RelayCommand(OnUpdateStaticData);
+            DeleteStaticDataCommand = new RelayCommand(OnDeleteStaticData);
+            UpdatePricesCommand = new AsyncRelayCommand(OnUpdatePrices, () => NotifyPropertyChanged(nameof(UpdatePricesButtonEnabled)));
+            DeletePricesCommand = new AsyncRelayCommand(OnDeletePrices, () => NotifyPropertyChanged(nameof(DeletePricesButtonEnabled)));
 
             this.harvestableRepository = harvestableRepository;
             this.materialRepository = materialRepository;
@@ -85,35 +82,32 @@ namespace SharpCrokite.Core.ViewModels
 
             NavigatorViewModel = navigatorViewModel;
             NavigatorViewModel.CurrentViewModelChanged += OnCurrentViewModelChanged;
-
-            PriceRetrievalServiceOptions = PriceRetrievalOptionsBuilder.Build();
         }
 
-        private void OnCurrentViewModelChanged(Type parameter)
+        private void OnCurrentViewModelChanged(Type viewModelType)
         {
-            CurrentContentViewModel = contentViewModels.Single(viewmodel => viewmodel.GetType() == parameter);
+            CurrentContentViewModel = contentViewModels.Single(viewmodel => viewmodel.GetType() == viewModelType);
         }
 
-        private void OnUpdatePrices()
+        private async Task OnUpdatePrices()
         {
-            PriceUpdateController priceUpdateController = new((IPriceRetrievalService)Activator.CreateInstance(SelectedPriceRetrievalServiceOption.ServiceType), harvestableRepository, materialRepository);
-            priceUpdateController.UpdatePrices();
+            PriceUpdateHandler priceUpdateHandler = new((IPriceRetrievalService)Activator.CreateInstance(SelectedPriceRetrievalServiceOption.ServiceType), harvestableRepository, materialRepository);
 
-            iskPerHourViewModel.UpdatePrices();
+            await Task.Run(() => priceUpdateHandler.UpdatePrices());
+            await Task.Run(() => iskPerHourViewModel.UpdatePrices());
         }
 
-        private void OnDeletePrices()
+        private async Task OnDeletePrices()
         {
-            PriceUpdateController priceUpdateController = new((IPriceRetrievalService)Activator.CreateInstance(SelectedPriceRetrievalServiceOption.ServiceType), harvestableRepository, materialRepository);
-            priceUpdateController.DeleteAllPrices();
+            PriceUpdateHandler priceUpdateHandler = new((IPriceRetrievalService)Activator.CreateInstance(SelectedPriceRetrievalServiceOption.ServiceType), harvestableRepository, materialRepository);
 
-            iskPerHourViewModel.UpdatePrices();
+            await Task.Run(() => priceUpdateHandler.DeleteAllPrices());
+            await Task.Run(() => iskPerHourViewModel.UpdatePrices());
         }
 
         private void OnUpdateStaticData()
         {
-            var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(),
-                harvestableRepository, materialRepository);
+            StaticDataUpdateController staticDataUpdateController = new(new EsiStaticDataRetriever(), harvestableRepository, materialRepository);
 
             try
             {
@@ -135,32 +129,11 @@ namespace SharpCrokite.Core.ViewModels
 
         private void OnDeleteStaticData()
         {
-            var staticDataUpdateController = new StaticDataUpdateController(new EsiStaticDataRetriever(),
-                harvestableRepository, materialRepository);
+            StaticDataUpdateController staticDataUpdateController = new(new EsiStaticDataRetriever(), harvestableRepository, materialRepository);
 
             staticDataUpdateController.DeleteAllStaticData();
 
             iskPerHourViewModel.ReloadStaticData();
-        }
-
-        private static bool CanUpdatePrices()
-        {
-            return true;
-        }
-
-        private static bool CanDeletePrices()
-        {
-            return true;
-        }
-
-        private static bool CanUpdateStaticData()
-        {
-            return true;
-        }
-
-        private static bool CanDeleteStaticData()
-        {
-            return true;
         }
 
         private void NotifyPropertyChanged(string propertyName)

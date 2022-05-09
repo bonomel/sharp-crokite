@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace SharpCrokite.Infrastructure.Repositories
@@ -36,9 +36,19 @@ namespace SharpCrokite.Infrastructure.Repositories
             return dbContext.Find<T>(id);
         }
 
+        public virtual ValueTask<T> GetAsync(int id)
+        {
+            return dbContext.FindAsync<T>(id);
+        }
+
         public virtual void SaveChanges()
         {
             dbContext.SaveChanges();
+        }
+
+        public virtual async Task SaveChangesAsync()
+        {
+            await dbContext.SaveChangesAsync();
         }
 
         public virtual T Update(T entity)
